@@ -27,6 +27,12 @@
 *.lib
 
 # Executables
+out/main
 *.exe
 *.out
 *.app
+
+#IDE files
+.DS_Store
+.idea/*
+
