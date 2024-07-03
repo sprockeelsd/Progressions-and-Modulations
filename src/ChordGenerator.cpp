@@ -4,14 +4,25 @@
 
 #include "../headers/ChordGenerator.hpp"
 
+
+/**
+ * @brief ChordGenerator
+ * @param size the number of chords to be generated
+ * @param tonality the tonality of the piece
+ */
 ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
     this->size          = size;
     this->tonality      = tonality;
     chords              = IntVarArray(*this, size, FIRST_DEGREE, SEVENTH_DEGREE);
     states              = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
-    qualities           = IntVarArray(*this, size, MAJOR_CHORD, DOMINANT_SEVENTH_CHORD);
+    borrowedChords      = IntVarArray(*this, size-1, DIATONIC, BORROWED); /// the last chord cannot be borrowed
 
     /// constraints
+
+    /// borrowed chords resolution (V/X -> X)
+    for(int i = 0; i < size-1; i++){
+        borrowed_chords_resolution(*this, i, chords, borrowedChords);
+    }
 
     ///chord[i] -> chord[i+1] is possible
     for(int i = 0; i < size - 1; i++){
@@ -26,24 +37,37 @@ ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
 
     /// branching
     /// branch on states first because it is more restrictive
-    branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+    branch(*this, borrowedChords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
+/**
+ * @brief ChordGenerator
+ * @param s a ChordGenerator object
+ */
 ChordGenerator::ChordGenerator(ChordGenerator &s) : Space(s){
     size = s.size;
     tonality = s.tonality;
 
     chords.update(*this, s.chords);
     states.update(*this, s.states);
-    qualities.update(*this, s.qualities);
+    borrowedChords.update(*this, s.borrowedChords);
 }
 
+/**
+ * @brief copy
+ * @return a Space* object that is a copy of the current object
+ */
 Space* ChordGenerator::copy() {
     return new ChordGenerator(*this);
 }
 
+/**
+ * Returns a string with each of the object's field values as integers. For debugging
+ * @brief toString
+ * @return a string representation of the object
+ */
 string ChordGenerator::toString() const{
     string txt = "";
     txt += "Chord Generator Object. \n";
@@ -51,10 +75,16 @@ string ChordGenerator::toString() const{
     txt += "Tonality: " + tonality->get_name() + "\n";
     txt += "Chords: " + intVarArray_to_string(chords) + "\n";
     txt += "States: " + intVarArray_to_string(states) + "\n";
-    txt += "Qualities: " + intVarArray_to_string(qualities) + "\n";
+    txt += "Borrowed Chords: " + intVarArray_to_string(borrowedChords) + "\n";
     return txt;
 }
 
+/**
+ * Returns the object's representation in a more readable way, with degrees, state and whether the chord is borrowed
+ * as strings instead of integers.
+ * @brief pretty
+ * @return a string representation of the object
+ */
 string ChordGenerator::pretty() const{
     string txt = "Chord progresion: \n";
     for(int i = 0; i < size; i++){
@@ -63,9 +93,8 @@ string ChordGenerator::pretty() const{
     txt += "\n\n More details: \n";
     for(int i = 0; i < size; i++){
         txt += degreeNames.at(chords[i].val()) + "\tin " + stateNames.at(states[i].val());
-        if(qualities[i].val() != tonality->get_chord_quality(chords[i].val())){
-            txt += "\t(" + chordQualityNames.at(qualities[i].val()) + ")";
-        }
+        if(i != size-1 && borrowedChords[i].val() == BORROWED)
+            txt += "\t(Borrowed)";
         txt += "\n\n";
     }
     return txt;

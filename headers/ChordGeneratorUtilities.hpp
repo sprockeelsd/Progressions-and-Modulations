@@ -18,4 +18,9 @@ const IntArgs majorTonalityTransitions = {
         1,      0,      1,      0,      0,      0,      0     /// VII
 };
 
+enum borrowedChords{
+    DIATONIC,   //0
+    BORROWED,   //1
+};
+
 #endif //CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP
