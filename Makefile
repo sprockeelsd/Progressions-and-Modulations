@@ -28,6 +28,7 @@ MIDI_LIBRARY_FILES = $(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/Options.cp
                      $(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiFile.cpp
 
 CHORD_GENERATOR_FILES = 	$(SRC_DIR)/ChordGeneratorUtilities.cpp \
+							$(SRC_DIR)/Constraints.cpp \
 							$(SRC_DIR)/ChordGenerator.cpp
 
 compile: clean

@@ -17,4 +17,5 @@ const IntArgs majorTonalityTransitions = {
         1,      1,      0,      1,      1,      0,      0,    /// VI
         1,      0,      1,      0,      0,      0,      0     /// VII
 };
+
 #endif //CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP

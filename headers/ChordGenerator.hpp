@@ -6,18 +6,30 @@
 #define CHORDGENERATOR_CHORDGENERATOR_HPP
 
 #include "ChordGeneratorUtilities.hpp"
+#include "Constraints.hpp"
 
 class ChordGenerator : public Space{
 private:
     int size;
+    Tonality* tonality;
     IntVarArray chords;
+    IntVarArray states;
+    IntVarArray qualities;
 
 public:
-    ChordGenerator(int size);
+    ChordGenerator(int size, Tonality* tonality);
     ChordGenerator(ChordGenerator &s);
     virtual Space* copy();
 
-    IntVarArray getChords() { return chords; }
+    int getSize() const { return size; }
+    Tonality* getTonality() const { return tonality; }
+    IntVarArray getChords() const { return chords; }
+    IntVarArray getStates() const { return states; }
+
+    string toString() const;
+
+    string pretty() const;
+
 };
 
 
