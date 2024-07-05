@@ -23,4 +23,8 @@ enum borrowedChords{
     BORROWED,   //1
 };
 
+int* IntVarArray_to_int_pointer(IntVarArray vars);
+
+vector<int> IntVarArray_to_int_vector(IntVarArray vars);
+
 #endif //CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP

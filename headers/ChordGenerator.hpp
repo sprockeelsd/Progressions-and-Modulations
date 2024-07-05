@@ -19,6 +19,7 @@ private:
     Tonality* tonality;             /// the tonality of the piece
     IntVarArray chords;             /// the chords of the progression expressed as degrees (I -> VII)
     IntVarArray states;             /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
+    IntVarArray qualities;          /// todo link it with borrowed chords: if false, then default, else major/dominant 7
     IntVarArray borrowedChords;     /// wether the chord is borrowed. If borrowed, the chord is either major or dominant 7th and resolved in the next chord
 
 public:

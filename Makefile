@@ -19,6 +19,7 @@ DIATONY_FILES = $(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/Utilities.cpp \
 				$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/GeneralConstraints.cpp \
 				$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/Preferences.cpp \
 				$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/FourVoiceTexture.cpp \
+				$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/SolveDiatony.cpp
 
 MIDI_LIBRARY_FILES = $(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/Options.cpp \
                      $(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiMessage.cpp \
