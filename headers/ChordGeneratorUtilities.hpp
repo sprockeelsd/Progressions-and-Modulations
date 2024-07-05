@@ -6,6 +6,7 @@
 #define CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP
 
 #include "../Diatony/c++/headers/diatony/FourVoiceTexture.hpp"
+#include "../Diatony/c++/headers/diatony/SolveDiatony.hpp"
 
 const IntArgs majorTonalityTransitions = {
 ///     I,      II,     III,    IV,     V,      VI,     VII

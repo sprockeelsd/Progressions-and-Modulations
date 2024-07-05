@@ -4,22 +4,21 @@
 
 #include "../headers/ChordGeneratorUtilities.hpp"
 #include "../headers/ChordGenerator.hpp"
+#include "../headers/SolveChordGenerator.hpp"
 
 int main(int argc, char **argv) {
     Tonality* Gmajor = new MajorTonality(G);
 
-    auto cg = new ChordGenerator(4, Gmajor);
+    auto sols = solve_chord_progression_problem(4, Gmajor);
+    auto sol = sols.back();
+    auto chords = IntVarArray_to_int_vector(sol->getChords());
+    auto states = IntVarArray_to_int_vector(sol->getStates());
+    vector<int> qualities;
+    qualities.reserve(chords.size());
+    for(int i = 0; i < chords.size(); i++)
+        qualities.push_back(Gmajor->get_chord_quality(chords[i]));
 
-    BAB<ChordGenerator> engine(cg);
-    delete cg;
+    auto diatony_sols = solve_diatony_problem(4, Gmajor, chords, qualities, states); //todo segfault
 
-    int n_sols = 1;
-    while(ChordGenerator* sol = engine.next()) {
-        //if(n_sols == 10) break;
-        std::cout << "Solution n°" << to_string(n_sols) << ":\n" << sol->pretty() << std::endl;
-        delete sol;
-        n_sols++;
-    }
-    std::cout << "Number of solutions: " << n_sols << std::endl;
     return 0;
 }
