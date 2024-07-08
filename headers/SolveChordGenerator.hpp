@@ -10,4 +10,6 @@
 
 vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tonality);
 
+ChordGenerator* solve_chord_progression_problem_best(int size, Tonality* tonality);
+
 #endif //CHORDGENERATOR_SOLVE_CHORD_GENERATOR_HPP
