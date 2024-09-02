@@ -8,6 +8,7 @@
 #include "../Diatony/c++/headers/aux/MidiFileGeneration.hpp"
 
 int main(int argc, char **argv) {
+    string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
     Tonality* Gmajor = new MajorTonality(G);
 
     auto sol = solve_chord_progression_problem_best(4, Gmajor);
@@ -18,18 +19,15 @@ int main(int argc, char **argv) {
     for(int i = 0; i < chords.size(); i++)
         qualities.push_back(Gmajor->get_chord_quality(chords[i]));
 
-    std::cout << "chords" << int_vector_to_string(chords) << std::endl;
-    std::cout << sol->getChords() << std::endl;
+    if(four_voice == "true"){
+        auto diatony_sol = solve_diatony_problem_optimal(4, Gmajor, chords, qualities, states);
 
+        writeSolToMIDIFile(4, "output", diatony_sol);
 
-    auto diatony_sol = solve_diatony_problem_optimal(4, Gmajor, chords, qualities, states);
-
-    writeSolToMIDIFile(4, "output", diatony_sol);
-    
-    std::cout << "MIDI file created." << std::endl;
-    std::cout << "\n\n-----------------------------------------------------------------------------------------------------" <<
-    "Summary:\n\n" <<  "-----------------------------------------------------------------------------------------------------\n\n" <<
-    "Chord progression:\n" << sol->pretty() << std::endl << "Solution:\n" << diatony_sol->to_string() << std::endl;
-
+        std::cout << "MIDI file created." << std::endl;
+        std::cout << "\n\n-----------------------------------------------------------------------------------------------------" <<
+                  "\n\nSummary:\n\n" <<  "-----------------------------------------------------------------------------------------------------\n\n" <<
+                  sol->pretty() << std::endl << "Solution:\n" << diatony_sol->to_string() << std::endl;
+    }
     return 0;
 }

@@ -39,6 +39,9 @@ compile: clean
 	install_name_tool -change gecode.framework/Versions/49/gecode /Library/Frameworks/gecode.framework/Versions/49/gecode out/main
 
 run: compile
-	./out/main
+	./out/main false
+
+4voice: compile
+	./out/main true
 clean:
 	rm -f *.o main

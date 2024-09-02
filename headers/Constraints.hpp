@@ -17,15 +17,4 @@
  */
 void fifth_degree_appogiatura(const Home& home, int curPos, IntVarArray chords, IntVarArray states);
 
-
-/**
- * Post the constraint that borrowed chords must resolve. That is, they must be followed by a chord based on the relative "tonic".
- * For example, the V/III chord must be followed by a chord based on the III (either the III or the V/VI chord).
- * @param home the problem space
- * @param curPos the current position in the chord progression
- * @param chords the variables for the chords of the progression
- * @param borrowedChords the variables saying whether the chord is borrowed
- */
-void borrowed_chords_resolution(const Home& home, int curPos, IntVarArray chords, IntVarArray borrowedChords);
-
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

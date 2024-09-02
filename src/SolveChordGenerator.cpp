@@ -14,7 +14,7 @@ vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tona
 
     int n_sols = 1;
     while(ChordGenerator* sol = engine.next()) {
-        if (n_sols > 10) break;
+        if (n_sols > 100) break;
         sols.push_back((ChordGenerator*) sol->copy());
         std::cout << "Solution n°" << to_string(n_sols) << ":\n" << sol->pretty() << std::endl;
         delete sol;

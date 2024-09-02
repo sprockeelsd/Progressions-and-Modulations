@@ -19,8 +19,7 @@ private:
     Tonality* tonality;             /// the tonality of the piece
     IntVarArray chords;             /// the chords of the progression expressed as degrees (I -> VII)
     IntVarArray states;             /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
-    IntVarArray qualities;          /// todo link it with borrowed chords: if false, then default, else major/dominant 7
-    IntVarArray borrowedChords;     /// wether the chord is borrowed. If borrowed, the chord is either major or dominant 7th and resolved in the next chord
+    IntVarArray qualities;          /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
 
 public:
     /**
@@ -62,6 +61,12 @@ public:
      * @return the states of the chords
      */
     IntVarArray getStates() const { return states; }
+
+    /**
+     * @brief getQualities
+     * @return the qualities of the chords
+     */
+    IntVarArray getQualities() const { return qualities; }
 
     /**
      * Returns a string with each of the object's field values as integers. For debugging
