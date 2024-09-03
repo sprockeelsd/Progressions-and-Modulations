@@ -39,7 +39,7 @@ ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     //todo check that it is working correctly, especially for V/x chords
     for(int i = 0; i < size - 1; i++){
-        element(*this, majorTonalityTransitions, expr(*this, chords[i] * 7 + chords[i+1]), 1);
+        element(*this, majorTonalityTransitions, expr(*this, chords[i] * 16 + chords[i+1]), 1);
     }
 
     ///2. borrowed chords are major or dominant 7th
