@@ -13,7 +13,7 @@
 ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
     this->size                  = size;
     this->tonality              = tonality;
-    this->chords                = IntVarArray(*this, size, FIRST_DEGREE, SEVENTH_DEGREE);
+    this->chords                = IntVarArray(*this, size, FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
 
@@ -23,26 +23,32 @@ ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
     IntArgs t_q(t_qualities);
 
     /// constraints
-    //todo link qualities to chord degrees somehow
     //todo link states to qualities (3note chord cannot have 3rd inversion etc)
     //todo link states to degrees (/!\ to tritone resolution that can affect state in some cases (V+4->I6 for example))
-    //todo force tension chords to resolve
-    //todo allow anything that can go to V to go to Ida
-    //todo allow anything that can go to X to go to V/X unless X is VII
-    //todo force V/X to resolve to X
     //todo force I64 to go to V5/7+
     //todo force bII to be in first inversion
     //todo add control over borrowed chords (V/...) and chromatic chords (bII,6te aug,...) with cost and preferences
-
-
+    //todo borrowed chords are dominant seventh or major
+    //todo V degree chord can only be in 2nd or 3rd inversion if they are dominant 7th
+    //todo maybe make an array saying if the chord has a seventh or not
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
-    //todo check that it is working correctly, especially for V/x chords
-    for(int i = 0; i < size - 1; i++){
-        element(*this, majorTonalityTransitions, expr(*this, chords[i] * 16 + chords[i+1]), 1);
-    }
+    ///formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
+    for(int i = 0; i < size - 1; i++)
+        element(*this, tonalTransitions, expr(*this, chords[i] * nSupportedChords + chords[i + 1]), 1);
 
-    ///2. borrowed chords are major or dominant 7th
+
+    ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
+    ///formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
+    for(int i = 0; i < qualities.size(); i++)
+        element(*this,  majorDegreeQualities, expr(*this,chords[i] * nSupportedQualities + qualities[i]), 1);
+
+
+    ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
+    ///formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
+    for(int i = 0; i < states.size(); i++)
+        element(*this, majorDegreeStates, expr(*this, chords[i] * nSupportedStates + states[i]), 1);
+
 
     /// I64-> V5/7+ (same state) ///todo redo this with the new matrix
     ///for(int i = 0; i < size - 1; i++)
@@ -52,10 +58,9 @@ ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
 
 
     /// branching
-    /// branch on states first because it is more restrictive
+    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
 /**
@@ -102,13 +107,14 @@ string ChordGenerator::toString() const{
  * @return a string representation of the object
  */
 string ChordGenerator::pretty() const{
-    string txt = "Chord progresion: \n";
+    string txt = "Chord progression: \n";
     for(int i = 0; i < size; i++){
         txt += degreeNames.at(chords[i].val()) + " ";
     }
     txt += "\n\n More details: \n";
     for(int i = 0; i < size; i++){
-        txt += degreeNames.at(chords[i].val()) + "\tin " + stateNames.at(states[i].val());
+        txt += degreeNames.at(chords[i].val()) + "\tin " + stateNames.at(states[i].val()) + "\t (" +
+                chordQualityNames.at(qualities[i].val()) + ")";
         txt += "\n\n";
     }
     return txt;
