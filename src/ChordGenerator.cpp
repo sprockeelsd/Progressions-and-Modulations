@@ -34,20 +34,21 @@ ChordGenerator::ChordGenerator(int size, Tonality* tonality) {
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     ///formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
-    for(int i = 0; i < size - 1; i++)
-        element(*this, tonalTransitions, expr(*this, chords[i] * nSupportedChords + chords[i + 1]), 1);
+    chord_transitions(*this, size, chords);
 
 
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
     ///formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
-    for(int i = 0; i < qualities.size(); i++)
-        element(*this,  majorDegreeQualities, expr(*this,chords[i] * nSupportedQualities + qualities[i]), 1);
+    link_chords_to_qualities(*this, chords, qualities);
 
 
     ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
     ///formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
-    for(int i = 0; i < states.size(); i++)
-        element(*this, majorDegreeStates, expr(*this, chords[i] * nSupportedStates + states[i]), 1);
+    link_chords_to_states(*this, chords, states);
+
+    ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
+    ///formula: qualitiesToStates[qualities[i] * nSupportedStates + states[i]] = 1
+    link_states_to_qualities(*this, qualities, states);
 
 
     /// I64-> V5/7+ (same state) ///todo redo this with the new matrix
