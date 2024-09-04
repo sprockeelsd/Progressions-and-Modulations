@@ -5,7 +5,7 @@
 #include "../headers/SolveChordGenerator.hpp"
 
 vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tonality){
-    auto cg = new ChordGenerator(size, tonality);
+    auto cg = new ChordGenerator(size, tonality, 0.25);
 
     BAB<ChordGenerator> engine(cg);
     delete cg;
@@ -14,8 +14,8 @@ vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tona
 
     int n_sols = 0;
     while(ChordGenerator* sol = engine.next()) {
+        if (n_sols >= 10) break;
         n_sols++;
-        //if (n_sols > 100) break;
         sols.push_back((ChordGenerator*) sol->copy());
         std::cout << "Solution n°" << to_string(n_sols) << ":\n" << sol->pretty() << std::endl;
         delete sol;

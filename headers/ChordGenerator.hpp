@@ -16,10 +16,14 @@
 class ChordGenerator : public Space{
 private:
     int size;                       /// the number of chords to be generated
+    int nChromaticChords;           /// the number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
     Tonality* tonality;             /// the tonality of the piece
+
     IntVarArray chords;             /// the chords of the progression expressed as degrees (I -> VII)
     IntVarArray states;             /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
     IntVarArray qualities;          /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
+
+    IntVarArray isChromatic;        /// whether the chord is chromatic or not
 
 public:
     /**
@@ -27,7 +31,7 @@ public:
      * @param size the number of chords to be generated
      * @param tonality the tonality of the piece
      */
-    ChordGenerator(int size, Tonality* tonality);
+    ChordGenerator(int size, Tonality *tonality, double percentChromaticChords = 0.0);
 
     /**
      * @brief ChordGenerator

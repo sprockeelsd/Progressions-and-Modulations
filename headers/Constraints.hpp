@@ -7,19 +7,13 @@
 
 #include "ChordGeneratorUtilities.hpp"
 
-/**
- * Enforces that chord progression are valid
- * 1. chord[i] -> chord[i+1] is possible (matrix)
- * formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
- * @param home the problem space
- * @param size the number of chords
- * @param chords the array of chord degrees
- */
-void chord_transitions(const Home& home, int size, IntVarArray chords);
+/***********************************************************************************************************************
+ *                                        Linker functions                                                             *
+ ***********************************************************************************************************************/
 
 /**
  * Links chord qualities to the degrees
- * 2. The quality of each chord is linked to its degree (V is major/7, I is major,...)
+ * The quality of each chord is linked to its degree (V is major/7, I is major,...)
  * formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
  * @param home the problem space
  * @param chords the array of chord degrees
@@ -29,7 +23,7 @@ void link_chords_to_qualities(const Home& home, IntVarArray chords, IntVarArray 
 
 /**
  * Links chord states to the degrees
- * 3. The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
+ * The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
  * formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
  * @param home the problem space
  * @param chords the array of chord degrees
@@ -38,7 +32,7 @@ void link_chords_to_qualities(const Home& home, IntVarArray chords, IntVarArray 
 void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray states);
 
 /**
- * 4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
+ * The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
  * formula: qualitiesToStates[qualities[i] * nSupportedStates + states[i]] = 1
  * @param home the problem space
  * @param qualities the array of chord qualities
@@ -47,13 +41,39 @@ void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray sta
 void link_states_to_qualities(const Home& home, IntVarArray qualities, IntVarArray states);
 
 /**
- * Posts the constraint that the fifth degree appogiatura (V64-I in second inversion) must resolve to the fifth degree
- * chord in fundamental state (V5-V7+)
+ * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords
+ * formula: isChromatic[i] == 1 <=> chords[i] >= FIVE_OF_TWO
+ * formula: sum(isChromatic) == nChromaticChords
  * @param home the problem space
- * @param curPos the current position in the chord progression
- * @param chords the variables for the chords of the progression
- * @param states the variables for the state of the chords
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param isChromatic the array of chromatic chords
+ * @param nChromaticChords the number of chromatic chords we want
  */
-void fifth_degree_appogiatura(const Home& home, int curPos, IntVarArray chords, IntVarArray states);
+void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArray isChromatic, int nChromaticChords);
+
+/***********************************************************************************************************************
+ *                                                   Constraints                                                       *
+ ***********************************************************************************************************************/
+
+/**
+ * Enforces that chord progression are valid
+ * chord[i] -> chord[i+1] is possible (matrix)
+ * formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ */
+void chord_transitions(const Home& home, int size, IntVarArray chords);
+
+/**
+ * Force the last chord to be diatonic and not the seventh chord
+ * The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
+ * formula: chords[size - 1] < SEVENTH_DEGREE
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ */
+void last_chord_cst(const Home& home, int size, const IntVarArray& chords);
 
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP
