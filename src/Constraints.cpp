@@ -58,8 +58,10 @@ void link_states_to_qualities(const Home& home, IntVarArray qualities, IntVarArr
  * @param nChromaticChords the number of chromatic chords we want
  */
 void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArray isChromatic, int nChromaticChords) {
+    ///link the chromatic chords
     for (int i = 0; i < size; i++)
         rel(home, expr(home, isChromatic[i] == 1),BOT_EQV,expr(home, chords[i] >= FIVE_OF_TWO), true);
+    ///count the number of chromatic chords
     rel(home, sum(isChromatic) == nChromaticChords);
 }
 
@@ -90,4 +92,22 @@ void chord_transitions(const Home& home, int size, IntVarArray chords){
  */
 void last_chord_cst(const Home& home, int size, const IntVarArray& chords){
     rel(home, chords[size - 1] < SEVENTH_DEGREE);
+}
+
+/**
+ * Enforces that the fifth degree appogiatura (Vda) is followed by the fifth degree as a major or dominant seventh chord in fundamental state (V5/7+)
+ * formula: chords[i] == I => states[i+1] == fund && qualities[i+1] == M/7
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities){
+    for(int i = 0; i< size - 1; i++){
+        rel(home, expr(home,chords[i] == FIFTH_DEGREE_APPOGIATURA),
+            BOT_IMP,
+            expr(home, states[i+1] == FUNDAMENTAL_STATE &&
+                (qualities[i+1] == MAJOR_CHORD || qualities[i+1] == DOMINANT_SEVENTH_CHORD)), true);
+    }
 }

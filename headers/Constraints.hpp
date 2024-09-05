@@ -76,4 +76,15 @@ void chord_transitions(const Home& home, int size, IntVarArray chords);
  */
 void last_chord_cst(const Home& home, int size, const IntVarArray& chords);
 
+/**
+ * Enforces that the fifth degree appogiatura (Vda) is followed by the fifth degree as a major or dominant seventh chord in fundamental state (V5/7+)
+ * formula: chords[i] == I => states[i+1] == fund && qualities[i+1] == M/7
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

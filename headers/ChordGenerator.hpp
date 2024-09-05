@@ -28,10 +28,10 @@ private:
 public:
     /**
      * @brief ChordGenerator
-     * @param size the number of chords to be generated
+     * @param s the number of chords to be generated
      * @param tonality the tonality of the piece
      */
-    ChordGenerator(int size, Tonality *tonality, double percentChromaticChords = 0.0);
+    ChordGenerator(int s, Tonality *tonality, double percentChromaticChords = 0.0);
 
     /**
      * @brief ChordGenerator

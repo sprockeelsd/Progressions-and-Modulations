@@ -7,20 +7,21 @@
 
 /**
  * @brief ChordGenerator
- * @param size the number of chords to be generated
+ * @param s the number of chords to be generated
  * @param tonality the tonality of the piece
  */
-ChordGenerator::ChordGenerator(int size, Tonality *tonality, double percentChromaticChords) {
-    this->size                  = size;
+ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromaticChords) {
+    this->size                  = s;
     this->tonality              = tonality;
     this->nChromaticChords      = (int) (percentChromaticChords * size); /// converts the percentage into a number of chords
 
-    this->chords                = IntVarArray(*this, size, FIRST_DEGREE,        AUGMENTED_SIXTH);
-    this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
-    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
+    this->chords                = IntVarArray(*this, size, FIRST_DEGREE, AUGMENTED_SIXTH);
+    this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
+    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
 
     this->isChromatic           = IntVarArray(*this, size, 0, 1);
 
+    ///todo check if this is still used
     vector<int> t_qualities;
     for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
         t_qualities.push_back(tonality->get_chord_quality(i));
@@ -64,8 +65,7 @@ ChordGenerator::ChordGenerator(int size, Tonality *tonality, double percentChrom
 
 
     ///6. I64-> V5/7+ (same state)
-//    for(int i = 0; i < size - 1; i++)
-//        fifth_degree_appogiatura(*this, i, chords, states);
+    fifth_degree_appogiatura(*this, size, chords, states, qualities);
 
     /// 3 notes chords can be in fund, 1st or 2nd inversion and 4 note chords can be in fund, 1st, 2nd or 3rd inversion
 
