@@ -17,6 +17,7 @@ class ChordGenerator : public Space{
 private:
     int size;                       /// the number of chords to be generated
     int nChromaticChords;           /// the number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
+    int nSeventhChords;             /// the number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
     Tonality* tonality;             /// the tonality of the piece
 
     IntVarArray chords;             /// the chords of the progression expressed as degrees (I -> VII)
@@ -24,6 +25,7 @@ private:
     IntVarArray qualities;          /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
 
     IntVarArray isChromatic;        /// whether the chord is chromatic or not
+    IntVarArray hasSeventh;         /// whether the chord has a seventh or not
 
 public:
     /**
@@ -31,7 +33,7 @@ public:
      * @param s the number of chords to be generated
      * @param tonality the tonality of the piece
      */
-    ChordGenerator(int s, Tonality *tonality, double percentChromaticChords = 0.0);
+    ChordGenerator(int s, Tonality *tonality, double percentChromaticChords = 0.0, double percentSeventhChords = 0.0);
 
     /**
      * @brief ChordGenerator

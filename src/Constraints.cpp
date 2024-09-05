@@ -37,14 +37,15 @@ void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray sta
 /**
  * Links chord states to qualities
  * The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
- * formula: qualitiesToStates[qualities[i] * nSupportedStates + states[i]] = 1
+ * formula: hasSeventh[i] == 0 => states[i] < THIRD_INVERSION
  * @param home the problem space
  * @param qualities the array of chord qualities
  * @param states the array of chord states
  */
-void link_states_to_qualities(const Home& home, IntVarArray qualities, IntVarArray states) {
+void link_states_to_qualities(const Home &home, IntVarArray states, IntVarArray hasSeventh) {
     for(int i = 0; i < states.size(); i++)
-        element(home, qualitiesToStates, expr(home, qualities[i] * nSupportedStates + states[i]), 1);
+        rel(home, expr(home, hasSeventh[i] == 0), BOT_IMP, expr(home,states[i] < THIRD_INVERSION), true);
+//        element(home, qualitiesToStates, expr(home, qualities[i] * nSupportedStates + states[i]), 1);
 }
 
 /**
@@ -64,6 +65,25 @@ void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArra
     ///count the number of chromatic chords
     rel(home, sum(isChromatic) == nChromaticChords);
 }
+
+/**
+ * Link the seventh chords and count them so that there are exactly nSeventhChords
+ * formula: hasSeventh[i] == 1 <=> qualities[i] >= DOMINANT_SEVENTH_CHORD
+ * formula: sum(hasSeventh) == nSeventhChords
+ * @param home the problem space
+ * @param size the number of chords
+ * @param hasSeventh the array of seventh chords
+ * @param qualities the array of chord qualities
+ * @param nSeventhChords the number of seventh chords we want
+ */
+void seventh_chords(const Home& home, int size, IntVarArray hasSeventh, IntVarArray qualities, int nSeventhChords){
+    /// link the seventh chords
+    for (int i = 0; i < size; i++)
+        rel(home, expr(home, hasSeventh[i] == 1),BOT_EQV,expr(home, qualities[i] >= DOMINANT_SEVENTH_CHORD), true);
+    /// count the number of seventh chords
+    rel(home, sum(hasSeventh) == nSeventhChords);
+}
+
 
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *

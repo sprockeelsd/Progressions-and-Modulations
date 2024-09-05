@@ -10,57 +10,56 @@
  * @param s the number of chords to be generated
  * @param tonality the tonality of the piece
  */
-ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromaticChords) {
+ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromaticChords, double percentSeventhChords) {
     this->size                  = s;
     this->tonality              = tonality;
-    this->nChromaticChords      = (int) (percentChromaticChords * size); /// converts the percentage into a number of chords
+    this->nChromaticChords      = (int) (percentChromaticChords * size);    /// converts the percentage into a number of chords
+    this->nSeventhChords        = (int) (percentSeventhChords * size);      /// converts the percentage into a number of chords
 
     this->chords                = IntVarArray(*this, size, FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
 
     this->isChromatic           = IntVarArray(*this, size, 0, 1);
-
-    ///todo check if this is still used
-    vector<int> t_qualities;
-    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
-        t_qualities.push_back(tonality->get_chord_quality(i));
-    IntArgs t_q(t_qualities);
+    this->hasSeventh            = IntVarArray(*this, size, 0, 1);
 
     /// constraints
     //todo maybe make an array saying if the chord has a seventh or not. This can replace the need for dominant chords in chord qualities?
-    //todo link states to degrees (/!\ to tritone resolution that can affect state in some cases (V+4->I6 for example)) (do this for V/X as well)
-    //todo two successive chords cannot have the same state if they have the same degree
+    //todo /!\ tritone resolution that can affect state in some cases (V+4->I6 for example) (do this for V/X as well (only for dominant, VII and °VII chords)
+
+    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
+    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+    //todo check if we can get rid of qualities above augmented and only use M/m/... and hasSeventh
+    //todo add other chords (9, add6,...)?
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
-    ///formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
     chord_transitions(*this, size, chords);
 
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
-    ///formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
     link_chords_to_qualities(*this, chords, qualities);
 
     ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
-    ///formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
     link_chords_to_states(*this, chords, states);
 
     ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
-    ///formula: qualitiesToStates[qualities[i] * nSupportedStates + states[i]] = 1
-    link_states_to_qualities(*this, qualities, states);
+    link_states_to_qualities(*this, states, hasSeventh);
 
     ///5. Link the chromatic chords and count them so that there are exactly nChromaticChords
     chromatic_chords(*this, size, chords, isChromatic, nChromaticChords);
 
-    ///6. The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
+    ///6. Link the seventh chords and count them so that there are exactly nSeventhChords
+    seventh_chords(*this, size, hasSeventh, qualities, nSeventhChords);
+
+    ///7. The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
     last_chord_cst(*this, size, chords);
 
-    ///7. I64-> V5/7+ (same state)
+    ///8. I64-> V5/7+ (same state)
     fifth_degree_appogiatura(*this, size, chords, states, qualities);
 
-    ///8. bII should be in first inversion todo maybe make this a preference?
+    ///9. bII should be in first inversion todo maybe make this a preference?
     flat_II_cst(*this, size, chords, states);
 
-    ///9. If two successive chords are the same degree, they cannot have the same state or the same quality
+    ///10. If two successive chords are the same degree, they cannot have the same state or the same quality
     successive_chords_with_same_degree(*this, size, chords, states, qualities);
 
     /// branching
@@ -76,6 +75,7 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 ChordGenerator::ChordGenerator(ChordGenerator &s) : Space(s){
     size = s.size;
     nChromaticChords = s.nChromaticChords;
+    nSeventhChords = s.nSeventhChords;
     tonality = s.tonality;
 
     chords.update(*this, s.chords);
@@ -83,6 +83,7 @@ ChordGenerator::ChordGenerator(ChordGenerator &s) : Space(s){
     qualities.update(*this, s.qualities);
 
     isChromatic.update(*this, s.isChromatic);
+    hasSeventh.update(*this, s.hasSeventh);
 }
 
 /**
@@ -104,10 +105,12 @@ string ChordGenerator::toString() const{
     txt += "size: " + to_string(size) + "\n";
     txt += "Tonality: " + tonality->get_name() + "\n";
     txt += "Number of chromatic chords: " + to_string(nChromaticChords) + "\n";
+    txt += "Number of seventh chords: " + to_string(nSeventhChords) + "\n";
     txt += "Chords: " + intVarArray_to_string(chords) + "\n";
     txt += "States: " + intVarArray_to_string(states) + "\n";
     txt += "Qualities: " + intVarArray_to_string(qualities) + "\n";
     txt += "Chromatic chords: " + intVarArray_to_string(isChromatic) + "\n";
+    txt += "Seventh chords: " + intVarArray_to_string(hasSeventh) + "\n";
     return txt;
 }
 
@@ -126,6 +129,8 @@ string ChordGenerator::pretty() const{
     for(int i = 0; i < size; i++){
         txt += degreeNames.at(chords[i].val()) + "\tin " + stateNames.at(states[i].val()) + "\t (" +
                 chordQualityNames.at(qualities[i].val()) + ")";
+//        if(hasSeventh[i].val() == 1)
+//            txt += " with a seventh";
         txt += "\n\n";
     }
     return txt;

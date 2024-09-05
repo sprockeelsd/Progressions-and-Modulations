@@ -38,7 +38,7 @@ void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray sta
  * @param qualities the array of chord qualities
  * @param states the array of chord states
  */
-void link_states_to_qualities(const Home& home, IntVarArray qualities, IntVarArray states);
+void link_states_to_qualities(const Home &home, IntVarArray states, IntVarArray hasSeventh);
 
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords
@@ -51,6 +51,16 @@ void link_states_to_qualities(const Home& home, IntVarArray qualities, IntVarArr
  * @param nChromaticChords the number of chromatic chords we want
  */
 void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArray isChromatic, int nChromaticChords);
+
+/**
+ * Link the seventh chords and count them so that there are exactly nSeventhChords
+ * @param home the problem space
+ * @param size the number of chords
+ * @param hasSeventh the array of seventh chords
+ * @param qualities the array of chord qualities
+ * @param nSeventhChords the number of seventh chords we want
+ */
+void seventh_chords(const Home& home, int size, IntVarArray hasSeventh, IntVarArray qualities, int nSeventhChords);
 
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *

@@ -64,21 +64,6 @@ const IntArgs majorDegreeStates = {
                         1,                  1,                  0,                  0,    /// bII
                         1,                  0,                  0,                  0,    /// 6te_a   todo check
 };
-///Defines the states that can be taken by chords based on their quality
-const IntArgs qualitiesToStates = {
-        //todo if we do an array for 7th in chords, this has to be rewritten using that array. Also maybe it is more efficient to write an arithmetic constraint instead of an element
-///     fundamental state,    first inversion,   second inversion,    third inversion
-        1,                  1,                  1,                  0,    /// M
-        1,                  1,                  1,                  0,    /// m
-        1,                  1,                  1,                  0,    /// dim
-        1,                  1,                  1,                  0,    /// aug
-        1,                  1,                  1,                  1,    /// 7
-        1,                  1,                  1,                  1,    /// M7
-        1,                  1,                  1,                  1,    /// m7
-        1,                  1,                  1,                  1,    /// dim7
-        1,                  1,                  1,                  1,    /// mM7
-
-};
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
 const int nSupportedQualities = 9;
@@ -86,7 +71,7 @@ const int nSupportedQualities = 9;
 //todo unlock 7 chords when the basis for perfect chords is ok
 const IntArgs majorDegreeQualities = {
 ///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
-        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// I
+        1,  0,    0,      0,    0,   1,      0,        0,     0,    /// I
         0,  1,    0,      0,    0,   0,      0,        0,     0,    /// II
         0,  1,    0,      0,    0,   0,      0,        0,     0,    /// III
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// IV
