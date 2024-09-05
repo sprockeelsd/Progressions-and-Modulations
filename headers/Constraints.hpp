@@ -87,4 +87,24 @@ void last_chord_cst(const Home& home, int size, const IntVarArray& chords);
  */
 void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
 
+/**
+ * bII should be in first inversion todo maybe make this a preference?
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ */
+void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray states);
+
+/**
+ * If two successive chords are the same degree, they cannot have the same state or the same quality
+ * formula: chords[i] = chords[i+1] => states[i] != states[i+1] || qualities[i] != qualities[i+1]
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void successive_chords_with_same_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

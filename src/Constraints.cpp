@@ -111,3 +111,30 @@ void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, In
                 (qualities[i+1] == MAJOR_CHORD || qualities[i+1] == DOMINANT_SEVENTH_CHORD)), true);
     }
 }
+
+/**
+ * bII should be in first inversion todo maybe make this a preference?
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ */
+void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray states){
+    for(int i = 0; i < size; i++)
+        rel(home, expr(home, chords[i] == FLAT_TWO), BOT_IMP, expr(home,states[i] == FIRST_INVERSION), true);
+}
+
+/**
+ * If two successive chords are the same degree, they cannot have the same state or the same quality
+ * formula: chords[i] = chords[i+1] => states[i] != states[i+1] || qualities[i] != qualities[i+1]
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void successive_chords_with_same_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities) {
+    for (int i = 0; i < size - 1; i++)
+        rel(home, expr(home, chords[i] == chords[i + 1]), BOT_IMP,
+            expr(home, states[i] != states[i + 1] || qualities[i] != qualities[i + 1]), true);
+}

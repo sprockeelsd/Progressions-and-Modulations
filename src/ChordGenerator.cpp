@@ -28,26 +28,17 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     IntArgs t_q(t_qualities);
 
     /// constraints
-    //todo see if using a matrix interface is cleaner or not (it is not better for element constraints so probably not)
-    //todo link states to degrees (/!\ to tritone resolution that can affect state in some cases (V+4->I6 for example))
-    //todo force I64 to go to V5/7+
-    //todo force bII to be in first inversion
-    //todo add control over borrowed chords (V/...) and chromatic chords (bII,6te aug,...) with cost and preferences
-    //todo borrowed chords are dominant seventh or major
-    //todo V degree chord can only be in 2nd or 3rd inversion if they are dominant 7th
-    //todo maybe make an array saying if the chord has a seventh or not
-    //todo the chord progression cannot end on Ida nor on a V/x (basically, not on an "ornament" chord)
+    //todo maybe make an array saying if the chord has a seventh or not. This can replace the need for dominant chords in chord qualities?
+    //todo link states to degrees (/!\ to tritone resolution that can affect state in some cases (V+4->I6 for example)) (do this for V/X as well)
     //todo two successive chords cannot have the same state if they have the same degree
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     ///formula: tonalTransitions[chords[i] * nSupportedChords + chords[i + 1]] = 1
     chord_transitions(*this, size, chords);
 
-
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
     ///formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
     link_chords_to_qualities(*this, chords, qualities);
-
 
     ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
     ///formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
@@ -63,12 +54,14 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     ///6. The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
     last_chord_cst(*this, size, chords);
 
-
-    ///6. I64-> V5/7+ (same state)
+    ///7. I64-> V5/7+ (same state)
     fifth_degree_appogiatura(*this, size, chords, states, qualities);
 
-    /// 3 notes chords can be in fund, 1st or 2nd inversion and 4 note chords can be in fund, 1st, 2nd or 3rd inversion
+    ///8. bII should be in first inversion todo maybe make this a preference?
+    flat_II_cst(*this, size, chords, states);
 
+    ///9. If two successive chords are the same degree, they cannot have the same state or the same quality
+    successive_chords_with_same_degree(*this, size, chords, states, qualities);
 
     /// branching
     branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());

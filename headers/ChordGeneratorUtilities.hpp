@@ -19,6 +19,7 @@ const IntArgs tonalTransitions = {
         //todo check this matrix with karim and maybe a teacher from the conservatoire
         //todo can x go to V/x back to x? That is a perfect cadence, implying a modulation. For now it is not allowed, but might be in the future to allow modulations
         //todo (then that should be the last thing in this tonality, then a new phrase must start in the new tonality)
+        //todo check for bII and 6te aug
 ///     I,    II,   III,    IV,     V,    VI,   VII,   Ida,  V/II, V/III,  V/IV,   V/V,  V/VI,  VIId,   bII, 6te_a
         1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
         1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     1,     0,     0,    /// II
@@ -34,7 +35,7 @@ const IntArgs tonalTransitions = {
         0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
         0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
         1,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
-        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,     0,    ///bII
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
 };
 
