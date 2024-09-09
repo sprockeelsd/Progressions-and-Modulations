@@ -5,7 +5,7 @@
 #include "../headers/SolveChordGenerator.hpp"
 
 vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tonality){
-    auto cg = new ChordGenerator(size, tonality, 0.25, 0.0);
+    auto cg = new ChordGenerator(size, tonality, 1.0, 1.0);
 
     BAB<ChordGenerator> engine(cg);
     delete cg;

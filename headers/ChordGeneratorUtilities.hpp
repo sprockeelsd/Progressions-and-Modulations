@@ -71,7 +71,7 @@ const int nSupportedQualities = 9;
 //todo unlock 7 chords when the basis for perfect chords is ok
 const IntArgs majorDegreeQualities = {
 ///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
-        1,  0,    0,      0,    0,   1,      0,        0,     0,    /// I
+        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// I
         0,  1,    0,      0,    0,   0,      0,        0,     0,    /// II
         0,  1,    0,      0,    0,   0,      0,        0,     0,    /// III
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// IV

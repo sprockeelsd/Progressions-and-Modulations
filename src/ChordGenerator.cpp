@@ -24,12 +24,9 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     this->hasSeventh            = IntVarArray(*this, size, 0, 1);
 
     /// constraints
-    //todo maybe make an array saying if the chord has a seventh or not. This can replace the need for dominant chords in chord qualities?
-    //todo /!\ tritone resolution that can affect state in some cases (V+4->I6 for example) (do this for V/X as well (only for dominant, VII and °VII chords)
 
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
-    //todo check if we can get rid of qualities above augmented and only use M/m/... and hasSeventh
     //todo add other chords (9, add6,...)?
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
@@ -61,6 +58,10 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 
     ///10. If two successive chords are the same degree, they cannot have the same state or the same quality
     successive_chords_with_same_degree(*this, size, chords, states, qualities);
+
+    ///11. Tritone resolutions should be allowed with the states
+    tritone_resolutions(*this, size, chords, states);
+    //rel(*this, chords[0] == FIFTH_DEGREE && states[0] == FIRST_INVERSION);
 
     /// branching
     branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());

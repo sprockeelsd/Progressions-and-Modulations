@@ -117,4 +117,15 @@ void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray sta
  */
 void successive_chords_with_same_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
 
+/**
+ * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
+ * cases handeld for now:
+ *      - V65/-> I5 or V/IV5 (formula: chords[i] = V & states[i] = 1st) => chords[i+1] = I || V/IV & states[i+1] = fund)
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ */
+void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarArray states);
+
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

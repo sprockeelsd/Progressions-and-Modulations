@@ -63,7 +63,7 @@ void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArra
     for (int i = 0; i < size; i++)
         rel(home, expr(home, isChromatic[i] == 1),BOT_EQV,expr(home, chords[i] >= FIVE_OF_TWO), true);
     ///count the number of chromatic chords
-    rel(home, sum(isChromatic) == nChromaticChords);
+    rel(home, sum(isChromatic) <= nChromaticChords);
 }
 
 /**
@@ -81,7 +81,7 @@ void seventh_chords(const Home& home, int size, IntVarArray hasSeventh, IntVarAr
     for (int i = 0; i < size; i++)
         rel(home, expr(home, hasSeventh[i] == 1),BOT_EQV,expr(home, qualities[i] >= DOMINANT_SEVENTH_CHORD), true);
     /// count the number of seventh chords
-    rel(home, sum(hasSeventh) == nSeventhChords);
+    rel(home, sum(hasSeventh) <= nSeventhChords);
 }
 
 
@@ -157,4 +157,21 @@ void successive_chords_with_same_degree(const Home& home, int size, IntVarArray 
     for (int i = 0; i < size - 1; i++)
         rel(home, expr(home, chords[i] == chords[i + 1]), BOT_IMP,
             expr(home, states[i] != states[i + 1] || qualities[i] != qualities[i + 1]), true);
+}
+
+/**
+ * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
+ * cases handeld for now:
+ *      - V65/-> I5 or V/IV5 (formula: chords[i] = V & states[i] = 1st) => chords[i+1] = I || V/IV & states[i+1] = fund)
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ */
+void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarArray states) {
+    for(int i = 0; i < size - 1; i++){
+        ///V65/-> I5
+        rel(home, expr(home, chords[i] == FIFTH || states[i] == FIRST_INVERSION), BOT_IMP,
+            expr(home, (chords[i+1] == FIRST_DEGREE || chords[i+1] == FIVE_OF_FOUR) && states[i+1] == FUNDAMENTAL_STATE), true);
+    }
 }
