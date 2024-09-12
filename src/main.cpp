@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 3;
+    int size = 1;
     Tonality* Gmajor = new MajorTonality(G);
 
     auto sol = solve_chord_progression_problem_best(size, Gmajor);

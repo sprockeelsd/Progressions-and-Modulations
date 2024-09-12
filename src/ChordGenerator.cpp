@@ -66,6 +66,9 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     ///12. Tritone resolutions should be allowed with the states todo test this for all possible cases (V65, V+4, V/X 65/, ...)
     tritone_resolutions(*this, size, chords, states);
 
+    ///13. Fifth degree chord cannot be in second inversion if it is not dominant seventh
+    fifth_degree(*this, size, chords, states, qualities);
+
     /// branching
     branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());

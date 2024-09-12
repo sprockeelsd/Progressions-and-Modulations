@@ -128,4 +128,15 @@ void successive_chords_with_same_degree(const Home& home, int size, IntVarArray 
  */
 void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarArray states);
 
+/**
+ * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
+ * formula: chords[i] == V && qualities[i] < DOMINANT_SEVENTH_CHORD => states[i] != SECOND_INVERSION
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void fifth_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

@@ -199,3 +199,17 @@ void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarA
         ///V/x->V/y
     }
 }
+
+/**
+ * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
+ * formula: chords[i] == V && qualities[i] < DOMINANT_SEVENTH_CHORD => states[i] != SECOND_INVERSION
+ * @param home the problem space
+ * @param size the number of chords
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param qualities the array of chord qualities
+ */
+void fifth_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities){
+    for(int i = 0; i < size; i++)
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP, expr(home, states[i] != SECOND_INVERSION), true);
+}
