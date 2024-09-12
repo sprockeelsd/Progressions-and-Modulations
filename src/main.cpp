@@ -9,9 +9,10 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
+    int size = 3;
     Tonality* Gmajor = new MajorTonality(G);
 
-    auto sol = solve_chord_progression_problem_best(2, Gmajor);
+    auto sol = solve_chord_progression_problem_best(size, Gmajor);
     auto chords = IntVarArray_to_int_vector(sol->getChords());
     auto states = IntVarArray_to_int_vector(sol->getStates());
     vector<int> qualities;
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
     if(four_voice == "true"){
         auto diatony_sol = solve_diatony_problem_optimal(4, Gmajor, chords, qualities, states);
 
-        writeSolToMIDIFile(4, "output", diatony_sol);
+        writeSolToMIDIFile(size, "output", diatony_sol);
 
         std::cout << "MIDI file created." << std::endl;
         std::cout << "\n\n-----------------------------------------------------------------------------------------------------" <<

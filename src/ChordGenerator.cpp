@@ -27,7 +27,10 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+
     //todo add other chords (9, add6,...)?
+    //todo V-> VI can only happen in fund state
+    //todo if the V degree chord is major and not dominant seventh, it cannot be in second inversion
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(*this, size, chords);
@@ -57,11 +60,11 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     flat_II_cst(*this, size, chords, states);
 
     ///10. If two successive chords are the same degree, they cannot have the same state or the same quality
+    ///11. The same degree cannot happen more than twice successively
     successive_chords_with_same_degree(*this, size, chords, states, qualities);
 
-    ///11. Tritone resolutions should be allowed with the states
+    ///12. Tritone resolutions should be allowed with the states todo test this for all possible cases (V65, V+4, V/X 65/, ...)
     tritone_resolutions(*this, size, chords, states);
-    //rel(*this, chords[0] == FIFTH_DEGREE && states[0] == FIRST_INVERSION);
 
     /// branching
     branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());

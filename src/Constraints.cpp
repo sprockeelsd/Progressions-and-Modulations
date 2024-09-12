@@ -147,6 +147,8 @@ void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray sta
 /**
  * If two successive chords are the same degree, they cannot have the same state or the same quality
  * formula: chords[i] = chords[i+1] => states[i] != states[i+1] || qualities[i] != qualities[i+1]
+ * The same degree cannot happen more than twice successively
+ * formula: chords[i] == chords[i+1] => chords[i+2] != chords[i]
  * @param home the problem space
  * @param size the number of chords
  * @param chords the array of chord degrees
@@ -154,15 +156,22 @@ void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray sta
  * @param qualities the array of chord qualities
  */
 void successive_chords_with_same_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities) {
+    ///If two successive chords are the same degree, they cannot have the same state or the same quality
     for (int i = 0; i < size - 1; i++)
         rel(home, expr(home, chords[i] == chords[i + 1]), BOT_IMP,
             expr(home, states[i] != states[i + 1] || qualities[i] != qualities[i + 1]), true);
+    ///The same degree cannot happen more than twice successively
+    for(int i = 0; i < size-2; i++)
+        rel(home, expr(home, chords[i] == chords[i+1]), BOT_IMP, expr(home, chords[i+2] != chords[i]), true);
 }
 
 /**
  * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
  * cases handeld for now:
- *      - V65/-> I5 or V/IV5 (formula: chords[i] = V & states[i] = 1st) => chords[i+1] = I || V/IV & states[i+1] = fund)
+ *      - V65/-> I5 (formula: chords[i] = V & states[i] = 1st) => chords[i+1] = I & states[i+1] = fund)
+ *      - V+4->I6 (formula: chords[i] = V & states[i] = 3rd) => chords[i+1] = I & states[i+1] = 1st)
+ * todo maybe allow them to go to V/x as well
+ * todo test this a lot, for all kinds of variations (also with borrowed chords)
  * @param home the problem space
  * @param size the number of chords
  * @param chords the array of chord degrees
@@ -171,7 +180,22 @@ void successive_chords_with_same_degree(const Home& home, int size, IntVarArray 
 void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarArray states) {
     for(int i = 0; i < size - 1; i++){
         ///V65/-> I5
-        rel(home, expr(home, chords[i] == FIFTH || states[i] == FIRST_INVERSION), BOT_IMP,
-            expr(home, (chords[i+1] == FIRST_DEGREE || chords[i+1] == FIVE_OF_FOUR) && states[i+1] == FUNDAMENTAL_STATE), true);
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && states[i] == FIRST_INVERSION), BOT_IMP,
+            expr(home, chords[i+1] == FIRST_DEGREE && states[i+1] == FUNDAMENTAL_STATE), true);
+        ///V+4->I6
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && states[i] == THIRD_INVERSION), BOT_IMP,
+            expr(home, chords[i+1] == FIRST_DEGREE && states[i+1] == FIRST_INVERSION), true);
+        ///V/x65/->x5
+        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == FIRST_INVERSION
+                            && chords[i+1] <= SIXTH_DEGREE), BOT_IMP,
+            expr(home, states[i+1] == FUNDAMENTAL_STATE), true);
+        ///V/x+4->x6
+        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == THIRD_INVERSION
+                             && chords[i+1] <= SIXTH_DEGREE), BOT_IMP,
+            expr(home, states[i+1] == FIRST_INVERSION), true);
+        ///V/x5/7+ -> x5 / V/y 5/7+
+        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == FUNDAMENTAL_STATE),
+            BOT_IMP,expr(home, states[i+1] == FUNDAMENTAL_STATE), true);
+        ///V/x->V/y
     }
 }
