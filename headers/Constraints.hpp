@@ -139,4 +139,19 @@ void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarA
  */
 void fifth_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
 
+/***********************************************************************************************************************
+ *                                            Optional Constraints (preferences)                                       *
+ ***********************************************************************************************************************/
+
+/**
+ * Enforces different cadence types at a given position
+ * @param home the problem space
+ * @param position the position of the first chord of the cadence
+ * @param type the type of cadence
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param hasSeventh the array of seventh chords
+ */
+void cadence(const Home& home, int position, int type, IntVarArray chords, IntVarArray states, IntVarArray hasSeventh);
+
 #endif //CHORDGENERATOR_CONSTRAINTS_HPP

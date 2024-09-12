@@ -86,7 +86,7 @@ void seventh_chords(const Home& home, int size, IntVarArray hasSeventh, IntVarAr
 
 
 /***********************************************************************************************************************
- *                                                   Constraints                                                       *
+ *                                            General Constraints                                                      *
  ***********************************************************************************************************************/
 
 /**
@@ -212,4 +212,40 @@ void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarA
 void fifth_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities){
     for(int i = 0; i < size; i++)
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP, expr(home, states[i] != SECOND_INVERSION), true);
+}
+
+
+/***********************************************************************************************************************
+ *                                            Optional Constraints (preferences)                                       *
+ ***********************************************************************************************************************/
+
+/**
+ * Enforces different cadence types at a given position
+ * @param home the problem space
+ * @param position the position of the first chord of the cadence
+ * @param type the type of cadence
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param hasSeventh the array of seventh chords
+ */
+void cadence(const Home& home, int position, int type, IntVarArray chords, IntVarArray states, IntVarArray hasSeventh){
+    switch (type){
+        case PERFECT_CADENCE:        /// V7+/9-I5. The dominant chord can have a 7th but it is not mandatory, the I chord cannot
+            rel(home, (chords[position] == FIFTH_DEGREE || chords[position] == SEVEN_DIMINISHED) && states[position] == FUNDAMENTAL_STATE);
+            rel(home, chords[position + 1] == FIRST_DEGREE && states[position + 1] == FUNDAMENTAL_STATE && hasSeventh[position + 1] == 0);
+            break;
+        case PLAGAL_CADENCE:         /// IV-I without a seventh on both chords
+            rel(home, chords[position] == FOURTH_DEGREE && states[position] == FUNDAMENTAL_STATE && hasSeventh[position] == 0);
+            rel(home, chords[position + 1] == FIRST_DEGREE && states[position + 1] == FUNDAMENTAL_STATE && hasSeventh[position + 1] == 0);
+            break;
+        case HALF_CADENCE:           /// V5/7+. The dominant chord can have a 7th but it is not mandatory
+            rel(home, chords[position] == FIFTH_DEGREE && states[position] == FUNDAMENTAL_STATE);
+            break;
+        case DECEPTIVE_CADENCE:      /// V-VI. The dominant chord can have a 7th but it is not mandatory, the VI chord cannot
+            rel(home, (chords[position] == FIFTH_DEGREE || chords[position] == SEVEN_DIMINISHED) && states[position] == FUNDAMENTAL_STATE);
+            rel(home, chords[position + 1] == SIXTH_DEGREE && states[position + 1] == FUNDAMENTAL_STATE && hasSeventh[position + 1] == 0);
+            break;
+        default:                     ///ignore unknown types
+            break;
+    }
 }

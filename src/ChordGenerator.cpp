@@ -30,7 +30,7 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
-    //todo if the V degree chord is major and not dominant seventh, it cannot be in second inversion
+    //todo create a constraint that allows to force cadences at a parameter position
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(*this, size, chords);
@@ -69,8 +69,19 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     ///13. Fifth degree chord cannot be in second inversion if it is not dominant seventh
     fifth_degree(*this, size, chords, states, qualities);
 
+
+    /*******************************************************************************************************************
+     *                                            Preference constraints                                               *
+     ******************************************************************************************************************/
+
+    /// cadences
+    int position = 2;
+    ///perfect cadence
+    cadence(*this, position, DECEPTIVE_CADENCE, chords, states, hasSeventh);
+
     /// branching
-    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+    Rnd r(1U);
+    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }

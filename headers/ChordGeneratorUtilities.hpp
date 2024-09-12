@@ -35,7 +35,7 @@ const IntArgs tonalTransitions = {
         0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/IV
         0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
         0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
-        1,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
+        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,     0,    ///bII
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
 };
@@ -68,7 +68,7 @@ const IntArgs majorDegreeStates = {
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
 const int nSupportedQualities = 9;
 ///Defines which qualities can be taken by chords based on their degree
-//todo unlock 7 chords when the basis for perfect chords is ok
+//todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
 const IntArgs majorDegreeQualities = {
 ///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// I
