@@ -92,9 +92,8 @@ const IntArgs majorDegreeQualities = {
 
 };
 
-
 int* IntVarArray_to_int_pointer(IntVarArray vars);
 
-vector<int> IntVarArray_to_int_vector(IntVarArray vars);
+vector<int> IntVarArray_to_int_vector(const IntVarArray& vars);
 
 #endif //CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP

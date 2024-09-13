@@ -6,9 +6,11 @@
 
 
 /**
- * @brief ChordGenerator
+ *
  * @param s the number of chords to be generated
  * @param tonality the tonality of the piece
+ * @param percentChromaticChords upper bound on the percentage of chromatic chords in the progression
+ * @param percentSeventhChords upper bound on the percentage of seventh chords in the progression
  */
 ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromaticChords, double percentSeventhChords) {
     this->size                  = s;
@@ -30,7 +32,6 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
-    //todo create a constraint that allows to force cadences at a parameter position
 
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(*this, size, chords);
@@ -75,9 +76,10 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
      ******************************************************************************************************************/
 
     /// cadences
-    int position = 2;
-    ///perfect cadence
-    cadence(*this, position, DECEPTIVE_CADENCE, chords, states, hasSeventh);
+    cadence(*this, size / 2, HALF_CADENCE, chords, states, hasSeventh);
+    cadence(*this, size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
+
+    rel(*this, chords[0] == FIRST_DEGREE);
 
     /// branching
     Rnd r(1U);

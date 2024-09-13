@@ -32,6 +32,9 @@ out/main
 *.out
 *.app
 
+# Generated files
+*.mid
+
 #IDE files
 .DS_Store
 .idea/*

@@ -17,7 +17,7 @@ int* IntVarArray_to_int_pointer(IntVarArray vars){
     }
 }
 
-vector<int> IntVarArray_to_int_vector(IntVarArray vars){
+vector<int> IntVarArray_to_int_vector(const IntVarArray& vars){
     try{
         vector<int> res;
         for(const auto & var : vars)
