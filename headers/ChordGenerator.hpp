@@ -9,23 +9,29 @@
 #include "Constraints.hpp"
 
 /**
- * @brief The ChordGenerator class
- * This class models the harmonic problem of writing a tonal chord progression. It takes as argument a size and a tonality,
- * and generates a chord progression in that tonality.
+ * Chord generator constructor
+ * @param s the number of chords to be generated
+ * @param tonality the tonality of the piece
+ * @param maxPercentChromaticChords lower bound on the percentage of chromatic chords in the progression
+ * @param maxPercentChromaticChords upper bound on the percentage of chromatic chords in the progression
+ * @param minPercentSeventhChords lower bound on the percentage of seventh chords in the progression
+ * @param maxPercentSeventhChords upper bound on the percentage of seventh chords in the progression
  */
 class ChordGenerator : public Space{
 private:
-    int size;                       /// the number of chords to be generated
-    int nChromaticChords;           /// the number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
-    int nSeventhChords;             /// the number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
-    Tonality* tonality;             /// the tonality of the piece
+    int size;                        /// the number of chords to be generated
+    int minChromaticChords;          /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
+    int maxChromaticChords;          /// the max number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
+    int minSeventhChords;            /// the min number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
+    int maxSeventhChords;            /// the max number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
+    Tonality* tonality;              /// the tonality of the piece
 
-    IntVarArray chords;             /// the chords of the progression expressed as degrees (I -> VII)
-    IntVarArray states;             /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
-    IntVarArray qualities;          /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
+    IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII)
+    IntVarArray states;              /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
+    IntVarArray qualities;           /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
 
-    IntVarArray isChromatic;        /// whether the chord is chromatic or not
-    IntVarArray hasSeventh;         /// whether the chord has a seventh or not
+    IntVarArray isChromatic;         /// whether the chord is chromatic or not
+    IntVarArray hasSeventh;          /// whether the chord has a seventh or not
 
 public:
     /**
@@ -33,7 +39,9 @@ public:
      * @param s the number of chords to be generated
      * @param tonality the tonality of the piece
      */
-    ChordGenerator(int s, Tonality *tonality, double percentChromaticChords = 0.0, double percentSeventhChords = 0.0);
+    ChordGenerator(int s, Tonality *tonality, double minPercentChromaticChords = 0.0,
+                   double maxPercentChromaticChords = 1.0, double minPercentSeventhChords = 0.0,
+                   double maxPercentSeventhChords = 1.0);
 
     /**
      * @brief ChordGenerator

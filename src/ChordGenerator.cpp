@@ -6,17 +6,23 @@
 
 
 /**
- *
+ * Chord generator constructor
  * @param s the number of chords to be generated
  * @param tonality the tonality of the piece
- * @param percentChromaticChords upper bound on the percentage of chromatic chords in the progression
- * @param percentSeventhChords upper bound on the percentage of seventh chords in the progression
+ * @param maxPercentChromaticChords lower bound on the percentage of chromatic chords in the progression
+ * @param maxPercentChromaticChords upper bound on the percentage of chromatic chords in the progression
+ * @param minPercentSeventhChords lower bound on the percentage of seventh chords in the progression
+ * @param maxPercentSeventhChords upper bound on the percentage of seventh chords in the progression
  */
-ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromaticChords, double percentSeventhChords) {
+ChordGenerator::ChordGenerator(int s, Tonality *tonality, double minPercentChromaticChords,
+                               double maxPercentChromaticChords, double minPercentSeventhChords,
+                               double maxPercentSeventhChords) {
     this->size                  = s;
     this->tonality              = tonality;
-    this->nChromaticChords      = (int) (percentChromaticChords * size);    /// converts the percentage into a number of chords
-    this->nSeventhChords        = (int) (percentSeventhChords * size);      /// converts the percentage into a number of chords
+    this->minChromaticChords    = (int) (minPercentChromaticChords * size);    /// converts the percentage into a number of chords
+    this->maxChromaticChords    = (int) (maxPercentChromaticChords * size);    /// converts the percentage into a number of chords
+    this->minSeventhChords      = (int) (minPercentSeventhChords * size);      /// converts the percentage into a number of chords
+    this->maxSeventhChords      = (int) (maxPercentSeventhChords * size);      /// converts the percentage into a number of chords
 
     this->chords                = IntVarArray(*this, size, FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
@@ -29,6 +35,8 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
 
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+    //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
+    //todo test the chromatic and seventh chords constraints
 
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
@@ -46,10 +54,10 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     link_states_to_qualities(*this, states, hasSeventh);
 
     ///5. Link the chromatic chords and count them so that there are exactly nChromaticChords
-    chromatic_chords(*this, size, chords, isChromatic, nChromaticChords);
+    chromatic_chords(*this, size, chords, isChromatic, minChromaticChords, maxChromaticChords);
 
     ///6. Link the seventh chords and count them so that there are exactly nSeventhChords
-    seventh_chords(*this, size, hasSeventh, qualities, nSeventhChords);
+    seventh_chords(*this, size, hasSeventh, qualities, minSeventhChords, maxSeventhChords);
 
     ///7. The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
     last_chord_cst(*this, size, chords);
@@ -65,7 +73,7 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
     successive_chords_with_same_degree(*this, size, chords, states, qualities);
 
     ///12. Tritone resolutions should be allowed with the states todo test this for all possible cases (V65, V+4, V/X 65/, ...)
-    tritone_resolutions(*this, size, chords, states);
+    //tritone_resolutions(*this, size, chords, states);
 
     ///13. Fifth degree chord cannot be in second inversion if it is not dominant seventh
     fifth_degree(*this, size, chords, states, qualities);
@@ -76,10 +84,8 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
      ******************************************************************************************************************/
 
     /// cadences
-    cadence(*this, size / 2, HALF_CADENCE, chords, states, hasSeventh);
-    cadence(*this, size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
-
-    rel(*this, chords[0] == FIRST_DEGREE);
+//    cadence(*this, size / 2, HALF_CADENCE, chords, states, hasSeventh);
+//    cadence(*this, size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
 
     /// branching
     Rnd r(1U);
@@ -93,17 +99,19 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double percentChromati
  * @param s a ChordGenerator object
  */
 ChordGenerator::ChordGenerator(ChordGenerator &s) : Space(s){
-    size = s.size;
-    nChromaticChords = s.nChromaticChords;
-    nSeventhChords = s.nSeventhChords;
-    tonality = s.tonality;
+    size                    = s.size;
+    minChromaticChords      = s.minChromaticChords;
+    maxChromaticChords      = s.maxChromaticChords;
+    minSeventhChords        = s.minSeventhChords;
+    maxSeventhChords        = s.maxSeventhChords;
+    tonality                = s.tonality;
 
-    chords.update(*this, s.chords);
-    states.update(*this, s.states);
-    qualities.update(*this, s.qualities);
+    chords                  .update(*this, s.chords);
+    states                  .update(*this, s.states);
+    qualities               .update(*this, s.qualities);
 
-    isChromatic.update(*this, s.isChromatic);
-    hasSeventh.update(*this, s.hasSeventh);
+    isChromatic             .update(*this, s.isChromatic);
+    hasSeventh              .update(*this, s.hasSeventh);
 }
 
 /**
@@ -120,12 +128,12 @@ Space* ChordGenerator::copy() {
  * @return a string representation of the object
  */
 string ChordGenerator::toString() const{
-    string txt = "";
-    txt += "Chord Generator Object. \n";
+    string txt;
+    txt += "------------------ Chord Generator Object. Parameters: ------------------\n\n";
     txt += "size: " + to_string(size) + "\n";
     txt += "Tonality: " + tonality->get_name() + "\n";
-    txt += "Number of chromatic chords: " + to_string(nChromaticChords) + "\n";
-    txt += "Number of seventh chords: " + to_string(nSeventhChords) + "\n";
+    txt += "Number of chromatic chords between " + to_string(minChromaticChords) + " and " + to_string(maxChromaticChords) + "\n";
+    txt += "Number of seventh chords between " + to_string(minSeventhChords) + " and " + to_string(maxSeventhChords) + "\n";
     txt += "Chords: " + intVarArray_to_string(chords) + "\n";
     txt += "States: " + intVarArray_to_string(states) + "\n";
     txt += "Qualities: " + intVarArray_to_string(qualities) + "\n";

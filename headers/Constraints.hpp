@@ -43,24 +43,30 @@ void link_states_to_qualities(const Home &home, IntVarArray states, IntVarArray 
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords
  * formula: isChromatic[i] == 1 <=> chords[i] >= FIVE_OF_TWO
- * formula: sum(isChromatic) == nChromaticChords
+ * formula: minChromaticChords <= sum(isChromatic) <= maxChromaticChords
  * @param home the problem space
  * @param size the number of chords
  * @param chords the array of chord degrees
  * @param isChromatic the array of chromatic chords
- * @param nChromaticChords the number of chromatic chords we want
+ * @param minChromaticChords the min number of chromatic chords we want
+ * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home& home, int size, IntVarArray chords, IntVarArray isChromatic, int nChromaticChords);
+void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
+                      int maxChromaticChords);
 
 /**
  * Link the seventh chords and count them so that there are exactly nSeventhChords
+ * formula: hasSeventh[i] == 1 <=> qualities[i] >= DOMINANT_SEVENTH_CHORD
+ * formula: minSeventhChords <= sum(hasSeventh) <= maxSeventhChords
  * @param home the problem space
  * @param size the number of chords
  * @param hasSeventh the array of seventh chords
  * @param qualities the array of chord qualities
- * @param nSeventhChords the number of seventh chords we want
+ * @param minSeventhChords the min number of seventh chords we want
+ * @param maxSeventhChords the max number of seventh chords we want
  */
-void seventh_chords(const Home& home, int size, IntVarArray hasSeventh, IntVarArray qualities, int nSeventhChords);
+void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, int minSeventhChords,
+                    int maxSeventhChords);
 
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *
