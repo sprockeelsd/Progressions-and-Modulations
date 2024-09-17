@@ -26,3 +26,5 @@ The pink box shows what chromatic chords can be reached from diatonic chords, th
 
 The grey box shows the transitions between borrowed chords and chromatic chords, while the red box shows the transition between chromatic chords, but both of these are not possible.
 ![transition matrix](TransitionMatrixExplanation.png)
+
+![global structure](global_structure.png) 
