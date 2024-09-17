@@ -21,6 +21,7 @@ const IntArgs tonalTransitions = {
         //todo (then that should be the last thing in this tonality, then a new phrase must start in the new tonality)
         //todo check for bII and 6te aug
         //todo add the rules that are enforced with this
+        //todo move this to tonality
 ///     I,    II,   III,    IV,     V,    VI,   VII,   Ida,  V/II, V/III,  V/IV,   V/V,  V/VI,  VIId,   bII, 6te_a
         1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
         1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     1,     0,     0,    /// II
@@ -45,6 +46,7 @@ const int nSupportedStates = 4;
 ///Defines which states can be taken by chords based on their degree
 //todo modify this to allow seventh chords in the future
 //todo check with karim
+//todo move this to majorTonality and do the same for minor tonality
 const IntArgs majorDegreeStates = {
 ///     fundamental state,    first inversion,   second inversion,    third inversion
                         1,                  1,                  0,                  0,    /// I
@@ -69,6 +71,7 @@ const IntArgs majorDegreeStates = {
 const int nSupportedQualities = 9;
 ///Defines which qualities can be taken by chords based on their degree
 //todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
+//todo move this to major tonality and do the same for minor tonality
 const IntArgs majorDegreeQualities = {
 ///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// I
