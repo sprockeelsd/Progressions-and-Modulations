@@ -19,7 +19,7 @@
  * @param chords the array of chord degrees
  * @param qualities the array of chord qualities
  */
-void link_chords_to_qualities(const Home& home, IntVarArray chords, IntVarArray qualities);
+void link_chords_to_qualities(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray qualities);
 
 /**
  * Links chord states to the degrees
@@ -29,7 +29,7 @@ void link_chords_to_qualities(const Home& home, IntVarArray chords, IntVarArray 
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray states);
+void link_chords_to_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states);
 
 /**
  * The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
@@ -38,7 +38,8 @@ void link_chords_to_states(const Home& home, IntVarArray chords, IntVarArray sta
  * @param qualities the array of chord qualities
  * @param states the array of chord states
  */
-void link_states_to_qualities(const Home &home, IntVarArray states, IntVarArray hasSeventh);
+void
+link_states_to_qualities(const Home &home, int size, int startPosition, IntVarArray states, IntVarArray hasSeventh);
 
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords
@@ -51,8 +52,8 @@ void link_states_to_qualities(const Home &home, IntVarArray states, IntVarArray 
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
-                      int maxChromaticChords);
+void chromatic_chords(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray isChromatic,
+                      int minChromaticChords, int maxChromaticChords);
 
 /**
  * Link the seventh chords and count them so that there are exactly nSeventhChords
@@ -65,8 +66,8 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
  * @param minSeventhChords the min number of seventh chords we want
  * @param maxSeventhChords the max number of seventh chords we want
  */
-void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, int minSeventhChords,
-                    int maxSeventhChords);
+void seventh_chords(const Home &home, int size, int startPosition, IntVarArray hasSeventh, IntVarArray qualities,
+                    int minSeventhChords, int maxSeventhChords);
 
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *
@@ -80,7 +81,7 @@ void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarAr
  * @param size the number of chords
  * @param chords the array of chord degrees
  */
-void chord_transitions(const Home& home, int size, IntVarArray chords);
+void chord_transitions(const Home &home, int size, int startPosition, IntVarArray chords);
 
 /**
  * Force the last chord to be diatonic and not the seventh chord
@@ -101,7 +102,8 @@ void last_chord_cst(const Home& home, int size, const IntVarArray& chords);
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+void fifth_degree_appogiatura(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states,
+                              IntVarArray qualities);
 
 /**
  * bII should be in first inversion todo maybe make this a preference?
@@ -110,7 +112,7 @@ void fifth_degree_appogiatura(const Home& home, int size, IntVarArray chords, In
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray states);
+void flat_II_cst(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states);
 
 /**
  * If two successive chords are the same degree, they cannot have the same state or the same quality
@@ -121,7 +123,8 @@ void flat_II_cst(const Home& home, int size, IntVarArray chords, IntVarArray sta
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void successive_chords_with_same_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+void successive_chords_with_same_degree(const Home &home, int size, int startPosition, IntVarArray chords,
+                                        IntVarArray states, IntVarArray qualities);
 
 /**
  * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
@@ -132,7 +135,7 @@ void successive_chords_with_same_degree(const Home& home, int size, IntVarArray 
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarArray states);
+void tritone_resolutions(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states);
 
 /**
  * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
@@ -143,7 +146,8 @@ void tritone_resolutions(const Home& home, int size, IntVarArray chords, IntVarA
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void fifth_degree(const Home& home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities);
+void fifth_degree(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states,
+                  IntVarArray qualities);
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *

@@ -41,7 +41,8 @@ ChordGenerator::ChordGenerator(int s, vector<Tonality *> tonalities, vector<int>
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
 
-    tonal_progression(*this, size, chords, states, qualities, isChromatic, hasSeventh, minChromaticChords,
+    ///todo change startPosition
+    tonal_progression(*this, size, 0, chords, states, qualities, isChromatic, hasSeventh, minChromaticChords,
                       maxChromaticChords, minSeventhChords, maxSeventhChords);
 
 
