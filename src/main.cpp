@@ -9,10 +9,11 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 2;
+    int size = 10;
     Tonality* Cmajor = new MajorTonality(C);
+    vector<Tonality*> tonalities = {Cmajor};
 
-    auto sol   = solve_chord_progression_problem_best(size, Cmajor);
+    auto sol   = solve_chord_progression_problem_best(size, tonalities);
 
     auto chords     = IntVarArray_to_int_vector(sol->getChords());
     auto states     = IntVarArray_to_int_vector(sol->getStates());

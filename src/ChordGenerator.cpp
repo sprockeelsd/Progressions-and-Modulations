@@ -8,17 +8,18 @@
 /**
  * Chord generator constructor
  * @param s the number of chords to be generated
- * @param tonality the tonality of the piece
+ * @param tonalities the tonality of the piece
  * @param maxPercentChromaticChords lower bound on the percentage of chromatic chords in the progression
  * @param maxPercentChromaticChords upper bound on the percentage of chromatic chords in the progression
  * @param minPercentSeventhChords lower bound on the percentage of seventh chords in the progression
  * @param maxPercentSeventhChords upper bound on the percentage of seventh chords in the progression
  */
-ChordGenerator::ChordGenerator(int s, Tonality *tonality, double minPercentChromaticChords,
-                               double maxPercentChromaticChords, double minPercentSeventhChords,
-                               double maxPercentSeventhChords) {
+ChordGenerator::ChordGenerator(int s, vector<Tonality *> tonalities, vector<int> tonalities_starts,
+                               double minPercentChromaticChords, double maxPercentChromaticChords,
+                               double minPercentSeventhChords, double maxPercentSeventhChords) {
     this->size                  = s;
-    this->tonality              = tonality;
+    this->tonalities            = tonalities; ///todo check the moving thing later
+    this->tonalities_starts     = tonalities_starts;
     this->minChromaticChords    = (int) (minPercentChromaticChords * size);    /// converts the percentage into a number of chords
     this->maxChromaticChords    = (int) (maxPercentChromaticChords * size);    /// converts the percentage into a number of chords
     this->minSeventhChords      = (int) (minPercentSeventhChords * size);      /// converts the percentage into a number of chords
@@ -40,42 +41,8 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double minPercentChrom
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
 
-    ///1. chord[i] -> chord[i+1] is possible (matrix)
-    chord_transitions(*this, size, chords);
-
-    ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
-    link_chords_to_qualities(*this, chords, qualities);
-
-    ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
-    link_chords_to_states(*this, chords, states);
-
-    ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
-    link_states_to_qualities(*this, states, hasSeventh);
-
-    ///5. Link the chromatic chords and count them so that there are exactly nChromaticChords
-    chromatic_chords(*this, size, chords, isChromatic, minChromaticChords, maxChromaticChords);
-
-    ///6. Link the seventh chords and count them so that there are exactly nSeventhChords
-    seventh_chords(*this, size, hasSeventh, qualities, minSeventhChords, maxSeventhChords);
-
-    ///7. The chord progression cannot end on something other than a diatonic chord (also not seventh degree)
-    last_chord_cst(*this, size, chords);
-
-    ///8. I64-> V5/7+ (same state)
-    fifth_degree_appogiatura(*this, size, chords, states, qualities);
-
-    ///9. bII should be in first inversion todo maybe make this a preference?
-    flat_II_cst(*this, size, chords, states);
-
-    ///10. If two successive chords are the same degree, they cannot have the same state or the same quality
-    ///11. The same degree cannot happen more than twice successively
-    successive_chords_with_same_degree(*this, size, chords, states, qualities);
-
-    ///12. Tritone resolutions should be allowed with the states todo test this for all possible cases (V65, V+4, V/X 65/, ...)
-    //tritone_resolutions(*this, size, chords, states);
-
-    ///13. Fifth degree chord cannot be in second inversion if it is not dominant seventh
-    fifth_degree(*this, size, chords, states, qualities);
+    tonal_progression(*this, size, chords, states, qualities, isChromatic, hasSeventh, minChromaticChords,
+                      maxChromaticChords, minSeventhChords, maxSeventhChords);
 
 
     /*******************************************************************************************************************
@@ -83,8 +50,9 @@ ChordGenerator::ChordGenerator(int s, Tonality *tonality, double minPercentChrom
      ******************************************************************************************************************/
 
     /// cadences
-//    cadence(*this, size / 2, HALF_CADENCE, chords, states, hasSeventh);
-//    cadence(*this, size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
+    rel(*this, chords[0], IRT_EQ, FIRST_DEGREE);
+    cadence(*this, size / 2, HALF_CADENCE, chords, states, hasSeventh);
+    cadence(*this, size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
 
     /// branching
     Rnd r(1U);
@@ -103,7 +71,8 @@ ChordGenerator::ChordGenerator(ChordGenerator &s) : Space(s){
     maxChromaticChords      = s.maxChromaticChords;
     minSeventhChords        = s.minSeventhChords;
     maxSeventhChords        = s.maxSeventhChords;
-    tonality                = s.tonality;
+    tonalities              = s.tonalities;
+    tonalities_starts       = s.tonalities_starts;
 
     chords                  .update(*this, s.chords);
     states                  .update(*this, s.states);
@@ -130,7 +99,7 @@ string ChordGenerator::toString() const{
     string txt;
     txt += "------------------ Chord Generator Object. Parameters: ------------------\n\n";
     txt += "size: " + to_string(size) + "\n";
-    txt += "Tonality: " + tonality->get_name() + "\n";
+    //txt += "Tonality: " + tonality->get_name() + "\n"; todo add the tonalities and starting chord numbers here
     txt += "Number of chromatic chords between " + to_string(minChromaticChords) + " and " + to_string(maxChromaticChords) + "\n";
     txt += "Number of seventh chords between " + to_string(minSeventhChords) + " and " + to_string(maxSeventhChords) + "\n";
     txt += "Chords: " + intVarArray_to_string(chords) + "\n";
