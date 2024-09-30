@@ -8,6 +8,13 @@
 #include "../Diatony/c++/headers/diatony/FourVoiceTexture.hpp"
 #include "../Diatony/c++/headers/diatony/SolveDiatony.hpp"
 
+enum modulations{
+    PERFECT_CADENCE_MODULATION,         ///0
+    PIVOT_CHORD_MODULATION,             ///1
+    ALTERATION_MODULATION,              ///2, sudden change of the tonality by using a chord from the new key that contains a note that is not in the previous key
+    SECONDARY_DOMINANT_MODULATION,      ///3, introducing the sensitive note of the new tonality
+};
+
 ///The number of supported chords, which is the size of the tonalTransitions matrix
 const int nSupportedChords = 16;
 ///Defines possible chord successions. This enforces the following rules:
@@ -93,6 +100,26 @@ const IntArgs majorDegreeQualities = {
 
 
 
+};
+
+const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient this way or with a formula (degree + state*2)%7. Though that would cause problems for non diatonic chords
+///     fundamental state,    first inversion,   second inversion,    third inversion
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// I
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// II
+             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// III
+            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,        /// IV
+             FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,        /// V
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// VI
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VII
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// Ida
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// V/II
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// V/III
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// V/IV
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// V/V
+             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// V/VI
+           SEVENTH_DEGREE,     SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// bII
+             FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,        /// 6te_a todo check this, it is wrong
 };
 
 int* IntVarArray_to_int_pointer(IntVarArray vars);

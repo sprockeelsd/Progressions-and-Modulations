@@ -8,7 +8,8 @@ using namespace Gecode;
 
 void tonal_progression(const Home &home, int size, int startPosition, IntVarArray &chords, IntVarArray &states,
                        IntVarArray &qualities, IntVarArray &isChromatic, IntVarArray &hasSeventh,
-                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords) {
+                       IntVarArray &bassNotes, int minChromaticChords, int maxChromaticChords, int minSeventhChords,
+                       int maxSeventhChords) {
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(home, size, startPosition, chords);
 
@@ -20,6 +21,10 @@ void tonal_progression(const Home &home, int size, int startPosition, IntVarArra
 
     ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
     link_states_to_qualities(home, size, startPosition, states, hasSeventh);
+
+    ///link root note to chord + degree;
+    for(int i = startPosition; i < startPosition + size; i++)
+        element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + states[i]), bassNotes[i]);
 
     ///5. Link the chromatic chords and count them so that there are exactly nChromaticChords
     chromatic_chords(home, size, startPosition, chords, isChromatic, minChromaticChords, maxChromaticChords);
@@ -45,4 +50,9 @@ void tonal_progression(const Home &home, int size, int startPosition, IntVarArra
 
     ///13. Fifth degree chord cannot be in second inversion if it is not dominant seventh
     fifth_degree(home, size, startPosition, chords, states, qualities);
+
+    /// cadences
+    rel(home, chords[startPosition], IRT_EQ, FIRST_DEGREE);
+    cadence(home, startPosition + size / 2, HALF_CADENCE, chords, states, hasSeventh);
+    //cadence(home, startPosition + size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
 }
