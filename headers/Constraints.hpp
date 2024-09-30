@@ -42,6 +42,17 @@ void
 link_states_to_qualities(const Home &home, int size, int startPosition, IntVarArray states, IntVarArray hasSeventh);
 
 /**
+ * Links the bass note to the corresponding degree and state.
+ * @param home the problem space
+ * @param size the number of chords in the tonality
+ * @param startPosition the starting position of the tonality
+ * @param chords the array of chord degrees
+ * @param states the array of chord states
+ * @param bassNotes the array of bass notes
+ */
+void link_bass_note_to_degrees_and_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states, IntVarArray bassNotes);
+
+/**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords
  * formula: isChromatic[i] == 1 <=> chords[i] >= FIVE_OF_TWO
  * formula: minChromaticChords <= sum(isChromatic) <= maxChromaticChords
