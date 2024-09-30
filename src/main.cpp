@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
         std::cout << "Chords: "     << int_vector_to_string(chords)     << std::endl;
         std::cout << "States: "     << int_vector_to_string(states)     << std::endl;
         std::cout << "Qualities: "  << int_vector_to_string(qualities)  << std::endl;
+        //todo split the output from ChordGenerator based on the tonalities and the modulations
 
         auto diatony_sol = solve_diatony_problem_optimal(size, Cmajor, chords, qualities, states);
 
