@@ -6,7 +6,7 @@
 #define CHORDGENERATOR_CHORDGENERATOR_HPP
 
 #include "ChordGeneratorUtilities.hpp"
-#include "Constraints.hpp"
+#include "MusicalParts.hpp"
 
 /**
  * Chord generator constructor
@@ -24,11 +24,17 @@ private:
     int maxChromaticChords;          /// the max number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
     int minSeventhChords;            /// the min number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
     int maxSeventhChords;            /// the max number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
-    Tonality* tonality;              /// the tonality of the piece
+
+    vector<Tonality*> tonalities;    /// the tonality of the piece
+    vector<int> tonalitiesStarts;    /// the starting degree of each tonality
+    vector<int> tonalitiesDurations; /// the duration of each tonality
+    vector<int> modulationTypes;     /// the type of modulations that occur
+    vector<int> modulationStarts;    /// the starting position of each modulation
 
     IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII)
     IntVarArray states;              /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
     IntVarArray qualities;           /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
+    IntVarArray bassNotes;           /// the bass notes corresponding to the chord degrees
 
     IntVarArray isChromatic;         /// whether the chord is chromatic or not
     IntVarArray hasSeventh;          /// whether the chord has a seventh or not
@@ -37,11 +43,13 @@ public:
     /**
      * @brief ChordGenerator
      * @param s the number of chords to be generated
-     * @param tonality the tonality of the piece
+     * @param tonalities the tonality of the piece
      */
-    ChordGenerator(int s, Tonality *tonality, double minPercentChromaticChords = 0.0,
-                   double maxPercentChromaticChords = 1.0, double minPercentSeventhChords = 0.0,
-                   double maxPercentSeventhChords = 1.0);
+    ChordGenerator(int s, vector<Tonality *> tonalities, vector<int> tonalitiesStarts,
+                   vector<int> tonalitiesDurations, vector<int> modulationTypes,
+                   vector<int> modulationStarts, double minPercentChromaticChords,
+                   double maxPercentChromaticChords, double minPercentSeventhChords,
+                   double maxPercentSeventhChords);
 
     /**
      * @brief ChordGenerator
@@ -60,11 +68,6 @@ public:
      * @return the size of the chord progression
      */
     int getSize() const { return size; }
-    /**
-     * @brief getTonality
-     * @return the tonality of the chord progression
-     */
-    Tonality* getTonality() const { return tonality; }
     /**
      * @brief getChords
      * @return the chords of the progression

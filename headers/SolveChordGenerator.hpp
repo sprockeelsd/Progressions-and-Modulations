@@ -8,8 +8,14 @@
 #include "ChordGeneratorUtilities.hpp"
 #include "ChordGenerator.hpp"
 
-vector<ChordGenerator*> solve_chord_progression_problem(int size, Tonality* tonality);
+vector<ChordGenerator *>
+solve_chord_progression_problem(int size, vector<Tonality *> tonalities, vector<int> tonalitiesStarts,
+                                vector<int> tonalitiesDurations, vector<int> modulationTypes,
+                                vector<int> modulationStarts);
 
-ChordGenerator* solve_chord_progression_problem_best(int size, Tonality* tonality);
+ChordGenerator *
+solve_chord_progression_problem_best(int size, vector<Tonality *> tonalities, vector<int> tonalitiesStarts,
+                                     vector<int> tonalitiesDurations, vector<int> modulationTypes,
+                                     vector<int> modulationStarts);
 
 #endif //CHORDGENERATOR_SOLVE_CHORD_GENERATOR_HPP
