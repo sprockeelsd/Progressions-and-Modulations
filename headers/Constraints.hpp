@@ -29,7 +29,7 @@ void link_chords_to_qualities(const Home &home, int size, IntVarArray chords, In
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void link_chords_to_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states);
+void link_chords_to_states(const Home &home, int size, IntVarArray chords, IntVarArray states);
 
 /**
  * The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)

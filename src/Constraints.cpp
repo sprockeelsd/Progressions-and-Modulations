@@ -30,8 +30,8 @@ link_chords_to_qualities(const Home &home, int size, IntVarArray chords, IntVarA
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void link_chords_to_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states) {
-    for(int i = startPosition; i < startPosition + size; i++)
+void link_chords_to_states(const Home &home, int size, IntVarArray chords, IntVarArray states) {
+    for(int i = 0; i < size; i++)
         element(home, majorDegreeStates, expr(home, chords[i] * nSupportedStates + states[i]), 1);
 }
 

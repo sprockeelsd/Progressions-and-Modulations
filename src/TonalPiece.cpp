@@ -29,7 +29,7 @@ TonalPiece::TonalPiece(int size, const vector<Tonality *>& tonalities, vector<in
     }
 
     //todo branch on degrees in each tonality, not on these
-//    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 //    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     //todo move sevenths here because it is not tonality dependent

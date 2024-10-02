@@ -15,9 +15,9 @@ void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarAr
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
     link_chords_to_qualities(home, size, chords, qualities);
 
-//    ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
-//    link_chords_to_states(home, size, startPosition, chords, states);
-//
+    ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
+    link_chords_to_states(home, size, chords, states);
+
 //    ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
 //    link_states_to_qualities(home, size, startPosition, states, hasSeventh);
 //
