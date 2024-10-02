@@ -43,8 +43,8 @@ void link_chords_to_states(const Home &home, int size, IntVarArray chords, IntVa
  * @param qualities the array of chord qualities
  * @param states the array of chord states
  */
-void link_states_to_qualities(const Home &home, int size, int startPosition, IntVarArray states, IntVarArray hasSeventh) {
-    for(int i = startPosition; i < startPosition + size; i++)
+void link_states_to_qualities(const Home &home, int size, IntVarArray states, IntVarArray hasSeventh) {
+    for(int i = 0; i < size; i++)
         rel(home, expr(home, hasSeventh[i] == 0), BOT_IMP,expr(home,states[i] < THIRD_INVERSION), true);
 //        element(home, qualitiesToStates, expr(home, qualities[i] * nSupportedStates + states[i]), 1);
 }
@@ -58,8 +58,9 @@ void link_states_to_qualities(const Home &home, int size, int startPosition, Int
  * @param states the array of chord states
  * @param bassNotes the array of bass notes
  */
-void link_bass_note_to_degrees_and_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states, IntVarArray bassNotes) {
-    for (int i = startPosition; i < startPosition + size; i++)
+void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarArray chords, IntVarArray states,
+                                             IntVarArray bassNotes) {
+    for (int i = 0; i < size; i++)
         element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + states[i]), bassNotes[i]);
 }
 

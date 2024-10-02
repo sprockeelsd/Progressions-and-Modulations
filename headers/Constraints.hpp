@@ -39,7 +39,7 @@ void link_chords_to_states(const Home &home, int size, IntVarArray chords, IntVa
  * @param states the array of chord states
  */
 void
-link_states_to_qualities(const Home &home, int size, int startPosition, IntVarArray states, IntVarArray hasSeventh);
+link_states_to_qualities(const Home &home, int size, IntVarArray states, IntVarArray hasSeventh);
 
 /**
  * Links the bass note to the corresponding degree and state.
@@ -50,7 +50,8 @@ link_states_to_qualities(const Home &home, int size, int startPosition, IntVarAr
  * @param states the array of chord states
  * @param bassNotes the array of bass notes
  */
-void link_bass_note_to_degrees_and_states(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states, IntVarArray bassNotes);
+void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarArray chords, IntVarArray states,
+                                             IntVarArray bassNotes);
 
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be equal to nChromaticChords

@@ -18,12 +18,12 @@ void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarAr
     ///3. The state of each chord is linked to the degree it is (I can be in fund/1st inversion, VI can be in fund,...)
     link_chords_to_states(home, size, chords, states);
 
-//    ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
-//    link_states_to_qualities(home, size, startPosition, states, hasSeventh);
-//
-//    ///link root note to chord + degree;
-//    link_bass_note_to_degrees_and_states(home, size, startPosition, chords, states, bassNotes);
-//
+    ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
+    link_states_to_qualities(home, size, states, hasSeventh);
+
+    ///5. link root note to chord + degree;
+    link_bass_degrees_to_degrees_and_states(home, size, chords, states, bassNotes);
+
 //    ///5. Link the chromatic chords and count them so that there are exactly nChromaticChords
 //    chromatic_chords(home, size, startPosition, chords, isChromatic, minChromaticChords, maxChromaticChords);
 //
