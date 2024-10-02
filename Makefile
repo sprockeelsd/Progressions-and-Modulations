@@ -31,8 +31,9 @@ MIDI_LIBRARY_FILES = 	$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/Options.c
 CHORD_GENERATOR_FILES = $(SRC_DIR)/ChordGeneratorUtilities.cpp \
 						$(SRC_DIR)/Constraints.cpp \
 						$(SRC_DIR)/MusicalParts.cpp \
-						$(SRC_DIR)/ChordGenerator.cpp \
-						$(SRC_DIR)/SolveChordGenerator.cpp
+						$(SRC_DIR)/ChordProgression.cpp \
+						$(SRC_DIR)/SolveChordGenerator.cpp \
+						$(SRC_DIR)/TonalPiece.cpp
 
 compile: clean
 	g++ -std=c++11 -F/Library/Frameworks -framework gecode -o out/main \

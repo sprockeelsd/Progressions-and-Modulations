@@ -2,8 +2,8 @@
 // Created by Damien Sprockeels on 02/07/2024.
 //
 
-#ifndef CHORDGENERATOR_CHORDGENERATOR_HPP
-#define CHORDGENERATOR_CHORDGENERATOR_HPP
+#ifndef CHORDGENERATOR_CHORDPROGRESSION_HPP
+#define CHORDGENERATOR_CHORDPROGRESSION_HPP
 
 #include "ChordGeneratorUtilities.hpp"
 #include "MusicalParts.hpp"
@@ -17,57 +17,64 @@
  * @param minPercentSeventhChords lower bound on the percentage of seventh chords in the progression
  * @param maxPercentSeventhChords upper bound on the percentage of seventh chords in the progression
  */
-class ChordGenerator : public Space{
+class ChordProgression {
 private:
-    int size;                        /// the number of chords to be generated
+    int duration;                    /// the number of chords to be generated in this tonality
     int minChromaticChords;          /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
     int maxChromaticChords;          /// the max number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
     int minSeventhChords;            /// the min number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
     int maxSeventhChords;            /// the max number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
 
-    vector<Tonality*> tonalities;    /// the tonality of the piece
-    vector<int> tonalitiesStarts;    /// the starting degree of each tonality
-    vector<int> tonalitiesDurations; /// the duration of each tonality
-    vector<int> modulationTypes;     /// the type of modulations that occur
-    vector<int> modulationStarts;    /// the starting position of each modulation
+    Tonality* tonality;    /// the tonality of the piece
 
     IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII)
     IntVarArray states;              /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
     IntVarArray qualities;           /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
-    IntVarArray bassNotes;           /// the bass notes corresponding to the chord degrees
+    IntVarArray bassDegrees;           /// the bass notes corresponding to the chord degrees
+    IntVarArray rootNotes;           /// the root notes corresponding to the chord degrees
 
     IntVarArray isChromatic;         /// whether the chord is chromatic or not
     IntVarArray hasSeventh;          /// whether the chord has a seventh or not
 
 public:
     /**
-     * @brief ChordGenerator
-     * @param s the number of chords to be generated
-     * @param tonalities the tonality of the piece
+     * Chord generator constructor
+     * @param home
+     * @param tonality
+     * @param start
+     * @param duration
+     * @param chordDegrees
+     * @param states
+     * @param qualities
+     * @param bassDegrees
+     * @param rootNotes
+     * @param minPercentChromaticChords
+     * @param maxPercentChromaticChords
+     * @param minPercentSeventhChords
+     * @param maxPercentSeventhChords
      */
-    ChordGenerator(int s, vector<Tonality *> tonalities, vector<int> tonalitiesStarts,
-                   vector<int> tonalitiesDurations, vector<int> modulationTypes,
-                   vector<int> modulationStarts, double minPercentChromaticChords,
-                   double maxPercentChromaticChords, double minPercentSeventhChords,
-                   double maxPercentSeventhChords);
+    ChordProgression(Home home, Tonality *tonality, int start, int duration, IntVarArray states, IntVarArray qualities,
+                     IntVarArray bassDegrees, IntVarArray rootNotes, double minPercentChromaticChords,
+                     double maxPercentChromaticChords, double minPercentSeventhChords, double maxPercentSeventhChords);
 
     /**
-     * @brief ChordGenerator
-     * @param s a ChordGenerator object
+     * Copy constructor
+     * @param home
+     * @param s
      */
-    ChordGenerator(ChordGenerator &s);
+    ChordProgression(Home home, ChordProgression &s);
 
-    /**
-     * @brief copy
-     * @return a Space* object that is a copy of the current object
-     */
-    virtual Space* copy();
+//    /**
+//     * @brief copy
+//     * @return a Space* object that is a copy of the current object
+//     */
+//    virtual Space* copy();
 
     /**
      * @brief getSize
      * @return the size of the chord progression
      */
-    int getSize() const { return size; }
+    int getSize() const { return duration; }
     /**
      * @brief getChords
      * @return the chords of the progression
@@ -103,4 +110,4 @@ public:
 };
 
 
-#endif //CHORDGENERATOR_CHORDGENERATOR_HPP
+#endif //CHORDGENERATOR_CHORDPROGRESSION_HPP
