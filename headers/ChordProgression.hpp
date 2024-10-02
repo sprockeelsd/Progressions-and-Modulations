@@ -53,9 +53,10 @@ public:
      * @param minPercentSeventhChords
      * @param maxPercentSeventhChords
      */
-    ChordProgression(Home home, Tonality *tonality, int start, int duration, IntVarArray states, IntVarArray qualities,
-                     IntVarArray bassDegrees, IntVarArray rootNotes, double minPercentChromaticChords,
-                     double maxPercentChromaticChords, double minPercentSeventhChords, double maxPercentSeventhChords);
+    ChordProgression(Home home, Tonality *tonality, int start, int duration, IntVarArray states,
+                     IntVarArray qualities, IntVarArray rootNotes, double minPercentChromaticChords,
+                     double maxPercentChromaticChords, double minPercentSeventhChords,
+                     double maxPercentSeventhChords);
 
     /**
      * Copy constructor

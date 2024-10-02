@@ -24,13 +24,9 @@ private:
     /// These are general, not tonality specific. This is what the modulation constraints will influence
     IntVarArray states;                      /// the states of the chords (fundamental, first inversion, second inversion, third inversion)
     IntVarArray qualities;                   /// the quality of the chords todo link it with borrowed chords: if false, then default, else major/dominant 7
-    IntVarArray bassDegrees;                 /// the degree of the note at the bass. It is linked to states but is useful to enforce preferences on the bass
     IntVarArray rootNotes;                   /// the root notes corresponding to the chord degrees. It is useful to enforce modulations
 
     vector<ChordProgression *> progressions; /// the chord progression objects for each tonality
-
-    //vector<IntVarArray> isChromatic;         /// whether the chord is chromatic or not
-    //vector<IntVarArray> hasSeventh;          /// whether the chord has a seventh or not
 
 public:
     TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitiesStarts,

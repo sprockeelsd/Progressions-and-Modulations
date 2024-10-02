@@ -13,17 +13,14 @@
  * @param chordDegrees
  * @param states
  * @param qualities
- * @param bassDegrees
  * @param rootNotes
  * @param minPercentChromaticChords
  * @param maxPercentChromaticChords
  * @param minPercentSeventhChords
  * @param maxPercentSeventhChords
- * todo remove start
  */
 ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int duration, IntVarArray states,
-                                   IntVarArray qualities,
-                                   IntVarArray bassDegrees, IntVarArray rootNotes, double minPercentChromaticChords,
+                                   IntVarArray qualities, IntVarArray rootNotes, double minPercentChromaticChords,
                                    double maxPercentChromaticChords, double minPercentSeventhChords,
                                    double maxPercentSeventhChords) {
     this->duration                  = duration;
@@ -37,7 +34,7 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     this->chords                    = IntVarArray(home, duration, FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                    = IntVarArray(home, states          .slice(start, 1, duration));
     this->qualities                 = IntVarArray(home, qualities       .slice(start, 1, duration));
-    this->bassDegrees               = IntVarArray(home, bassDegrees     .slice(start, 1, duration));
+    this->bassDegrees               = IntVarArray(home, duration, FIRST_DEGREE, SEVENTH_DEGREE);
     this->rootNotes                 = IntVarArray(home, rootNotes       .slice(start, 1, duration));
 
     this->isChromatic               = IntVarArray (home, duration, 0, 1);
@@ -46,6 +43,7 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     /// constraints
 
     //todo make an options object that has a field for every parameter
+    //todo link root notes with chords
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
     //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
@@ -53,9 +51,9 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
 
-//    tonal_progression(*this, duration, start,
-//                      chords, states, qualities, isChromatic, hasSeventh, bassDegrees, minChromaticChords,
-//                      maxChromaticChords, minSeventhChords, maxSeventhChords);
+    tonal_progression(home, this->duration,
+                      chords, this->states, this->qualities, isChromatic, hasSeventh, bassDegrees, minChromaticChords,
+                      maxChromaticChords, minSeventhChords, maxSeventhChords);
 
 
     /*******************************************************************************************************************
@@ -65,8 +63,10 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
 
 
     /// branching
+    Rnd r(1U);
+    branch(home,    chords,     INT_VAR_SIZE_MIN(),     INT_VAL_RND(r));
 //    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
-//    branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+//    branch(home,    this->qualities,  INT_VAR_SIZE_MIN(),     INT_VAL_MIN());
 //    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
@@ -105,7 +105,6 @@ string ChordProgression::toString() const{ //todo change the representation so t
     txt += "Tonality: " + tonality->get_name() + "\n";
     txt += "Chromatic chords number between " + to_string(minChromaticChords) + " and " + to_string(maxChromaticChords) + "\n";
     txt += "Seventh chords number between " + to_string(minSeventhChords) + " and " + to_string(maxSeventhChords) + "\n";
-    std::cout << "Here: " << chords << std::endl;
 
     txt += "\n--------------------------Solution--------------------------\n";
     txt += "Details: \n";

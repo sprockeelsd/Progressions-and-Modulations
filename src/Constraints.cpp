@@ -17,8 +17,8 @@
  * @param qualities the array of chord qualities
  */
 void
-link_chords_to_qualities(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray qualities) {
-    for (int i = startPosition; i < startPosition + size; i++)
+link_chords_to_qualities(const Home &home, int size, IntVarArray chords, IntVarArray qualities) {
+    for (int i = 0; i < size; i++)
         element(home, majorDegreeQualities, expr(home, chords[i] * nSupportedQualities + qualities[i]), 1);
 }
 
@@ -118,8 +118,8 @@ void seventh_chords(const Home &home, int size, int startPosition, IntVarArray h
  * @param size the number of chords
  * @param chords the array of chord degrees
  */
-void chord_transitions(const Home &home, int size, int startPosition, IntVarArray chords) {
-    for(int i = startPosition; i < startPosition + size - 1; i++)
+void chord_transitions(const Home &home, int size, IntVarArray chords) {
+    for(int i = 0; i < size - 1; i++)
         element(home, tonalTransitions, expr(home, chords[i] * nSupportedChords + chords[i + 1]), 1);
 }
 

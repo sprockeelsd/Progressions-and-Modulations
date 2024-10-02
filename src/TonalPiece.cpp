@@ -19,22 +19,19 @@ TonalPiece::TonalPiece(int size, const vector<Tonality *>& tonalities, vector<in
 
     this->states = IntVarArray(*this, size, FUNDAMENTAL_STATE, THIRD_INVERSION);
     this->qualities = IntVarArray(*this, size, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
-    this->bassDegrees = IntVarArray(*this, size, FIRST_DEGREE, SEVENTH_DEGREE);
     this->rootNotes = IntVarArray(*this, size, C, B);
 
     progressions.reserve(tonalities.size());
     for (int i = 0; i < tonalities.size(); i++){
         progressions.push_back(new ChordProgression(*this, tonalities[i], tonalitiesStarts[i], tonalitiesDurations[i],
-                                               states, qualities, bassDegrees, rootNotes, 0,
-                                               0, 0, 0));
+                                                    states, qualities, rootNotes, 0,
+                                                    1, 0, 1));
     }
-    std::cout << "Progressions size: " << progressions.size() << std::endl;
 
     //todo branch on degrees in each tonality, not on these
-    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+//    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    branch(*this, bassDegrees, INT_VAR_SIZE_MIN(), INT_VAL_MIN()); //todo move this to each tonality
-    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+//    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     //todo move sevenths here because it is not tonality dependent
 }
 
@@ -64,7 +61,6 @@ string TonalPiece::toString() const {
 
     txt += "States: " + intVarArray_to_string(states) + "\n";
     txt += "Qualities: " + intVarArray_to_string(qualities) + "\n";
-    txt += "Bass degrees: " + intVarArray_to_string(bassDegrees) + "\n";
     txt += "Root notes: " + intVarArray_to_string(rootNotes) + "\n";
 
     txt += "Progressions: \n";
@@ -87,7 +83,6 @@ TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
     modulationStarts        = s.modulationStarts;
     states                  .update(*this, s.states);
     qualities               .update(*this, s.qualities);
-    bassDegrees             .update(*this, s.bassDegrees);
     rootNotes               .update(*this, s.rootNotes);
     for (auto p : s.progressions)
         progressions.push_back(new ChordProgression(*this, *p));

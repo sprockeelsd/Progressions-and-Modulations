@@ -19,7 +19,7 @@
  * @param chords the array of chord degrees
  * @param qualities the array of chord qualities
  */
-void link_chords_to_qualities(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray qualities);
+void link_chords_to_qualities(const Home &home, int size, IntVarArray chords, IntVarArray qualities);
 
 /**
  * Links chord states to the degrees
@@ -92,7 +92,7 @@ void seventh_chords(const Home &home, int size, int startPosition, IntVarArray h
  * @param size the number of chords
  * @param chords the array of chord degrees
  */
-void chord_transitions(const Home &home, int size, int startPosition, IntVarArray chords);
+void chord_transitions(const Home &home, int size, IntVarArray chords);
 
 /**
  * Force the last chord to be diatonic and not the seventh chord

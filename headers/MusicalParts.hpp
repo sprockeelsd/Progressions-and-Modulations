@@ -7,9 +7,8 @@
 
 #include "Constraints.hpp"
 
-void tonal_progression(const Home &home, int size, int startPosition, IntVarArray &chords, IntVarArray &states,
-                       IntVarArray &qualities, IntVarArray &isChromatic, IntVarArray &hasSeventh,
-                       IntVarArray &bassNotes, int minChromaticChords, int maxChromaticChords, int minSeventhChords,
-                       int maxSeventhChords);
+void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarArray &states, IntVarArray &qualities,
+                       IntVarArray &isChromatic, IntVarArray &hasSeventh, IntVarArray &bassNotes,
+                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords);
 
 #endif //CHORDGENERATOR_MUSICALPARTS_HPP
