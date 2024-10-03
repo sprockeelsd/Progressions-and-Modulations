@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
         std::cout << "Solution:\n" << sol->toString() << std::endl;
-        if(n_sols >= 10) break;
+        if(n_sols >= 1) break;
         delete sol;
     }
     if (n_sols == 0)
