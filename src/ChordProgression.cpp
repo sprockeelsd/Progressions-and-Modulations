@@ -52,8 +52,9 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     //todo V-> VI can only happen in fund state
 
     tonal_progression(home, this->duration,
-                      chords, this->states, this->qualities, isChromatic, hasSeventh, bassDegrees, minChromaticChords,
-                      maxChromaticChords, minSeventhChords, maxSeventhChords);
+                      chords, this->states, this->qualities, isChromatic, hasSeventh, bassDegrees,
+                      this->rootNotes, this->tonality, minChromaticChords, maxChromaticChords, minSeventhChords,
+                      maxSeventhChords);
 
 
     /*******************************************************************************************************************
@@ -65,8 +66,6 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     /// branching
     Rnd r(1U);
     branch(home, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
-//    branch(home,    this->qualities,  INT_VAR_SIZE_MIN(),     INT_VAL_MIN());
-//    branch(home, this->states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
 /**

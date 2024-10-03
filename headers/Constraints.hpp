@@ -81,6 +81,8 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
 void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, int minSeventhChords,
                     int maxSeventhChords);
 
+void root_notes(const Home &home, int size, IntVarArray chords, IntVarArray rootNotes, Tonality *tonality);
+
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *
  ***********************************************************************************************************************/

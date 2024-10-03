@@ -9,6 +9,7 @@
 
 void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarArray &states, IntVarArray &qualities,
                        IntVarArray &isChromatic, IntVarArray &hasSeventh, IntVarArray &bassNotes,
-                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords);
+                       IntVarArray &rootNotes, Tonality *tonality, int minChromaticChords, int maxChromaticChords,
+                       int minSeventhChords, int maxSeventhChords);
 
 #endif //CHORDGENERATOR_MUSICALPARTS_HPP

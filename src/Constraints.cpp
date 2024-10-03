@@ -106,6 +106,15 @@ void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarAr
     rel(home, sum(hasSeventh) >= minSeventhChords);
 }
 
+void root_notes(const Home &home, int size, IntVarArray chords, IntVarArray rootNotes, Tonality *tonality) {
+    vector<int> notes;
+    for (int i = FIRST_DEGREE; i <= AUGMENTED_SIXTH; i++)
+        notes.push_back(tonality->get_degree_note(i));
+    IntArgs tonality_notes(notes);
+    for (int i = 0; i < size; i++)
+        element(home, tonality_notes, chords[i], rootNotes[i]);
+}
+
 
 /***********************************************************************************************************************
  *                                            General Constraints                                                      *

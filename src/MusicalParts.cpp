@@ -8,7 +8,8 @@ using namespace Gecode;
 
 void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarArray &states, IntVarArray &qualities,
                        IntVarArray &isChromatic, IntVarArray &hasSeventh, IntVarArray &bassNotes,
-                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords) {
+                       IntVarArray &rootNotes, Tonality *tonality, int minChromaticChords, int maxChromaticChords,
+                       int minSeventhChords, int maxSeventhChords) {
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(home, size, chords);
 
@@ -20,6 +21,9 @@ void tonal_progression(const Home &home, int size, IntVarArray &chords, IntVarAr
 
     ///4. The state of each chord is linked to its quality (7th chords can be in 3rd inversion, etc)
     link_states_to_qualities(home, size, states, hasSeventh);
+
+    /// Link root notes
+    root_notes(home, size, chords, rootNotes, tonality);
 
     ///5. link root note to chord + degree;
     link_bass_degrees_to_degrees_and_states(home, size, chords, states, bassNotes);

@@ -33,7 +33,7 @@ TonalPiece::TonalPiece(int size, const vector<Tonality *>& tonalities, vector<in
      * it has to be done differently because the chord degrees are not available in this main class. */
     branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-//    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     //todo move sevenths here because it is not tonality dependent
 }
 
