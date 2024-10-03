@@ -28,7 +28,9 @@ TonalPiece::TonalPiece(int size, const vector<Tonality *>& tonalities, vector<in
                                                     1, 0, 1));
     }
 
-    //todo branch on degrees in each tonality, not on these
+    /** The branching on chord degrees is performed first, then on the global arrays if it is necessary. That means that
+     * the branching on degrees is done in order of appearance of the tonalities. Maybe this needs to change? But then
+     * it has to be done differently because the chord degrees are not available in this main class. */
     branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 //    branch(*this, rootNotes, INT_VAR_SIZE_MIN(), INT_VAL_MIN());

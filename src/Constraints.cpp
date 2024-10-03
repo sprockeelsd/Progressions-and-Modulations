@@ -75,10 +75,10 @@ void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarA
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray isChromatic,
-                      int minChromaticChords, int maxChromaticChords) {
+void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
+                      int maxChromaticChords) {
     ///link the chromatic chords
-    for (int i = startPosition; i < startPosition + size; i++)
+    for (int i = 0; i < size; i++)
         rel(home, expr(home, isChromatic[i] == 1),BOT_EQV,expr(home, chords[i] >= FIVE_OF_TWO), true);
     ///count the number of chromatic chords
     rel(home, sum(isChromatic) <= maxChromaticChords);
@@ -96,10 +96,10 @@ void chromatic_chords(const Home &home, int size, int startPosition, IntVarArray
  * @param minSeventhChords the min number of seventh chords we want
  * @param maxSeventhChords the max number of seventh chords we want
  */
-void seventh_chords(const Home &home, int size, int startPosition, IntVarArray hasSeventh, IntVarArray qualities,
-                    int minSeventhChords, int maxSeventhChords) {
+void seventh_chords(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, int minSeventhChords,
+                    int maxSeventhChords) {
     /// link the seventh chords
-    for (int i = startPosition; i < startPosition + size; i++)
+    for (int i = 0; i < size; i++)
         rel(home, expr(home, hasSeventh[i] == 1),BOT_EQV,expr(home, qualities[i] >= DOMINANT_SEVENTH_CHORD), true);
     /// count the number of seventh chords
     rel(home, sum(hasSeventh) <= maxSeventhChords);
@@ -145,9 +145,9 @@ void last_chord_cst(const Home& home, int size, const IntVarArray& chords){
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void fifth_degree_appogiatura(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states,
-                              IntVarArray qualities) {
-    for(int i = startPosition; i< startPosition + size - 1; i++){
+void
+fifth_degree_appogiatura(const Home &home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities) {
+    for(int i = 0; i< size - 1; i++){
         rel(home, expr(home,chords[i] == FIFTH_DEGREE_APPOGIATURA),
             BOT_IMP,
             expr(home, states[i+1] == FUNDAMENTAL_STATE &&
@@ -162,8 +162,8 @@ void fifth_degree_appogiatura(const Home &home, int size, int startPosition, Int
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void flat_II_cst(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states) {
-    for(int i = startPosition; i < startPosition + size; i++)
+void flat_II_cst(const Home &home, int size, IntVarArray chords, IntVarArray states) {
+    for(int i = 0; i < size; i++)
         rel(home, expr(home, chords[i] == FLAT_TWO), BOT_IMP,expr(home,states[i] == FIRST_INVERSION), true);
 }
 
@@ -178,10 +178,10 @@ void flat_II_cst(const Home &home, int size, int startPosition, IntVarArray chor
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void successive_chords_with_same_degree(const Home &home, int size, int startPosition, IntVarArray chords,
-                                        IntVarArray states, IntVarArray qualities) {
+void successive_chords_with_same_degree(const Home &home, int size, IntVarArray chords, IntVarArray states,
+                                        IntVarArray qualities) {
     ///If two successive chords are the same degree, they cannot have the same state or the same quality
-    for (int i = startPosition; i < startPosition + size - 1; i++)
+    for (int i = 0; i < size - 1; i++)
         rel(home, expr(home, chords[i] == chords[i + 1]), BOT_IMP,expr(home, states[i] != states[i + 1] || qualities[i] != qualities[i + 1]), true);
     ///The same degree cannot happen more than twice successively
     for(int i = 0; i < size-2; i++)
@@ -201,8 +201,8 @@ void successive_chords_with_same_degree(const Home &home, int size, int startPos
  * @param chords the array of chord degrees
  * @param states the array of chord states
  */
-void tritone_resolutions(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states) {
-    for(int i = startPosition; i < startPosition + size - 1; i++){
+void tritone_resolutions(const Home &home, int size, IntVarArray chords, IntVarArray states) {
+    for(int i = 0; i < size - 1; i++){
         ///V65/-> I5
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && states[i] == FIRST_INVERSION), BOT_IMP,
             expr(home, chords[i+1] == FIRST_DEGREE && states[i+1] == FUNDAMENTAL_STATE), true);
@@ -233,8 +233,8 @@ void tritone_resolutions(const Home &home, int size, int startPosition, IntVarAr
  * @param states the array of chord states
  * @param qualities the array of chord qualities
  */
-void fifth_degree(const Home &home, int size, int startPosition, IntVarArray chords, IntVarArray states, IntVarArray qualities) {
-    for(int i = startPosition; i < startPosition + size; i++)
+void fifth_degree(const Home &home, int size, IntVarArray chords, IntVarArray states, IntVarArray qualities) {
+    for(int i = 0; i < size; i++)
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP,
             expr(home, states[i] != SECOND_INVERSION), true);
 }

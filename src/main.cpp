@@ -32,6 +32,10 @@ int main(int argc, char **argv) {
         if(n_sols >= 10) break;
         delete sol;
     }
+    if (n_sols == 0)
+        std::cout << "No solution found." << std::endl;
+    else
+        std::cout << "Number of solutions: " << n_sols << std::endl;
 
 //    auto sol   = solve_chord_progression_problem_best(size, tonalities, tonalitiesStarts, tonalitiesDurations,
 //                                                      modulationTypes, modulationStarts);

@@ -64,10 +64,9 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
 
     /// branching
     Rnd r(1U);
-    branch(home,    chords,     INT_VAR_SIZE_MIN(),     INT_VAL_RND(r));
-//    branch(*this, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
+    branch(home, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
 //    branch(home,    this->qualities,  INT_VAR_SIZE_MIN(),     INT_VAL_MIN());
-//    branch(*this, states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+//    branch(home, this->states, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
 /**
