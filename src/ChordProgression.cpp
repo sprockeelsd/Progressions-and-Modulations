@@ -43,6 +43,7 @@ ChordProgression::ChordProgression(Home home, Tonality *tonality, int start, int
     /// constraints
 
     //todo make an options object that has a field for every parameter
+    //todo link with Diatony
     //todo link root notes with chords
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)

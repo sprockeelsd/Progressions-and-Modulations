@@ -4,7 +4,6 @@
 
 #include "../headers/ChordGeneratorUtilities.hpp"
 #include "../headers/ChordProgression.hpp"
-#include "../headers/SolveChordGenerator.hpp"
 #include "../Diatony/c++/headers/aux/MidiFileGeneration.hpp"
 #include "../headers/TonalPiece.hpp"
 
