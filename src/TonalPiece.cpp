@@ -8,7 +8,8 @@
 
 /**
  * Constructor for TonalPiece objects. It initializes the object with the given parameters, as well as the other
- * objects that post constraints
+ * objects that post constraints. It also posts the branching for the global arrays. That branching is posted after
+ * the ChordProgression objects have posted theirs.
  * @param size the total size of the piece in terms of number of chords
  * @param tonalities a vector of Tonality objects for each tonality of the piece
  * @param tonalitiesStarts a vector of integers representing the starting position of each tonality. They can overlap (modulations)
@@ -38,11 +39,11 @@ TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitie
     for (int i = 0; i < tonalities.size(); i++){
         progressions.push_back(
                 new ChordProgression(*this,
-                                     this->tonalities[i],
                                      this->tonalitiesStarts[i],
                                      this->tonalitiesDurations[i],
+                                     this->tonalities[i],
                                      states, qualities, rootNotes,
-                                     0,1,
+                                     0, 1,
                                      0, 1)
                 );
     }
@@ -57,6 +58,26 @@ TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitie
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     //todo move sevenths here because it is not tonality dependent
+}
+
+/**
+ * @brief Copy constructor
+ * @param s a ChordProgression object pointer
+ * Returns a TonalPiece object that is equivalent to s
+ */
+TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
+    size                        = s.size;
+    tonalities                  = s.tonalities;
+    tonalitiesStarts            = s.tonalitiesStarts;
+    tonalitiesDurations         = s.tonalitiesDurations;
+    modulationTypes             = s.modulationTypes;
+    modulationStarts            = s.modulationStarts;
+    states                      .update(*this, s.states);
+    qualities                   .update(*this, s.qualities);
+    rootNotes                   .update(*this, s.rootNotes);
+
+    for (auto p : s.progressions)
+        progressions.push_back(new ChordProgression(*this, *p));
 }
 
 /**
@@ -96,28 +117,7 @@ string TonalPiece::toString() const {
     txt += "\nChord Progressions for each tonality:\n";
     for(auto p : progressions)
         txt += p->toString() + "\n\n"; //todo maybe use pretty?
-
     return txt;
-}
-
-/**
- * @brief Copy constructor
- * @param s a ChordProgression object pointer
- * Returns a TonalPiece object that is equivalent to s
- */
-TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
-    size                        = s.size;
-    tonalities                  = s.tonalities;
-    tonalitiesStarts            = s.tonalitiesStarts;
-    tonalitiesDurations         = s.tonalitiesDurations;
-    modulationTypes             = s.modulationTypes;
-    modulationStarts            = s.modulationStarts;
-    states                      .update(*this, s.states);
-    qualities                   .update(*this, s.qualities);
-    rootNotes                   .update(*this, s.rootNotes);
-
-    for (auto p : s.progressions)
-        progressions.push_back(new ChordProgression(*this, *p));
 }
 
 /**

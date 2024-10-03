@@ -39,7 +39,8 @@ private:
 public:
     /**
      * Constructor for TonalPiece objects. It initializes the object with the given parameters, as well as the other
-     * objects that post constraints
+     * objects that post constraints. It also posts the branching for the global arrays. That branching is posted after
+     * the ChordProgression objects have posted theirs.
      * @param size the total size of the piece in terms of number of chords
      * @param tonalities a vector of Tonality objects for each tonality of the piece
      * @param tonalitiesStarts a vector of integers representing the starting position of each tonality. They can overlap (modulations)
@@ -53,17 +54,17 @@ public:
                vector<int> modulationStarts);
 
     /**
+     * @brief Copy constructor
+     * @param s a ChordProgression object
+     */
+    TonalPiece(TonalPiece &s);
+
+    /**
      * Returns a string with each of the object's field values as integers. For debugging
      * @brief toString
      * @return a string representation of the object
      */
     string toString() const;
-
-    /**
-     * @brief Copy constructor
-     * @param s a ChordProgression object
-     */
-    TonalPiece(TonalPiece &s);
 
     /**
      * @brief copy function
