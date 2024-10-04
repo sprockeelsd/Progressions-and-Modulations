@@ -92,22 +92,26 @@ string ChordProgression::toString() const{
     string txt;
     txt += "-------------------------------- Chord Progression Object. -------------------------------------------\n\n";
     txt += "Parameters: \n";
-    txt += "size: " + to_string(duration) + "\n";
-    txt += "Tonality: " + tonality->get_name() + "\n";
-    txt += "Chromatic chords number between " + to_string(minChromaticChords) + " and " + to_string(maxChromaticChords) + "\n";
-    txt += "Seventh chords number between " + to_string(minSeventhChords) + " and " + to_string(maxSeventhChords) + "\n";
+    txt += "size: "                                 + to_string(duration)                   + "\n";
+    txt += "Tonality: "                             + tonality->get_name()                      + "\n";
+    txt += "Chromatic chords number between "       + to_string(minChromaticChords)         +
+            " and "                                 + to_string(maxChromaticChords)         + "\n";
+    txt += "Seventh chords number between "         + to_string(minSeventhChords)           +
+            " and "                                 + to_string(maxSeventhChords)           + "\n";
 
     txt += "\n--------------------------Solution--------------------------\n";
     txt += "Details: \n";
-    txt += "Number of chromatic chords between " + to_string(minChromaticChords) + " and " + to_string(maxChromaticChords) + "\n";
-    txt += "Number of seventh chords between " + to_string(minSeventhChords) + " and " + to_string(maxSeventhChords) + "\n";
-    txt += "Chords:\t\t\t" + intVarArray_to_string(chords) + "\n";
-    txt += "States:\t\t\t" + intVarArray_to_string(states) + "\n";
-    txt += "Qualities:\t\t" + intVarArray_to_string(qualities) + "\n";
-    txt += "Bass notes:\t\t" + intVarArray_to_string(bassDegrees) + "\n";
-    txt += "Root notes:\t\t" + intVarArray_to_string(rootNotes) + "\n";
-    txt += "Chromatic chords:\t" + intVarArray_to_string(isChromatic) + "\n";
-    txt += "Seventh chords:\t\t" + intVarArray_to_string(hasSeventh) + "\n";
+    txt += "Number of chromatic chords between "    + to_string(minChromaticChords)         +
+            " and "                                 + to_string(maxChromaticChords)         + "\n";
+    txt += "Number of seventh chords between "      + to_string(minSeventhChords)           +
+            " and "                                 + to_string(maxSeventhChords)           + "\n";
+    txt += "Chords:\t\t\t"                          + intVarArray_to_string(chords)         + "\n";
+    txt += "States:\t\t\t"                          + intVarArray_to_string(states)         + "\n";
+    txt += "Qualities:\t\t"                         + intVarArray_to_string(qualities)      + "\n";
+    txt += "Bass notes:\t\t"                        + intVarArray_to_string(bassDegrees)    + "\n";
+    txt += "Root notes:\t\t"                        + intVarArray_to_string(rootNotes)      + "\n";
+    txt += "Chromatic chords:\t"                    + intVarArray_to_string(isChromatic)    + "\n";
+    txt += "Seventh chords:\t\t"                    + intVarArray_to_string(hasSeventh)     + "\n";
     return txt;
 }
 
@@ -122,10 +126,10 @@ string ChordProgression::pretty() const{ //todo change the representation so tha
     try{
         string degs, stas;
         for(int i = 0; i < duration; i++){
-            degs += degreeNames.at(chords[i].val()) + "\t";
-            stas += stateNames.at(states[i].val()) + "\t";
+            degs += degreeNames     .at(chords[i].val())    + "\t";
+            stas += stateNames      .at(states[i].val())    + "\t";
         }
-        txt += "Chords: " + degs + "\n" + "States: " + stas + "\n";
+        txt += "Chords: " + degs + "\nStates: " + stas + "\n";
     }
     catch(exception &e){
         std::cout << "Some variables are unbound" << std::endl;
