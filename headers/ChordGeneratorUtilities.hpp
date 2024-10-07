@@ -101,7 +101,7 @@ const IntArgs majorDegreeQualities = {
 
 
 };
-
+//todo put this in Tonality
 const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient this way or with a formula (degree + state*2)%7. Though that would cause problems for non diatonic chords
 ///     fundamental state,    first inversion,   second inversion,    third inversion
              FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// I

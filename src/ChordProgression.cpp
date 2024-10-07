@@ -51,9 +51,9 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
     //todo V-> VI can only happen in fund state
 
     /// constraints
-    tonal_progression(home, this->duration,chords, this->states, this->qualities, isChromatic,
-                      hasSeventh, bassDegrees,this->rootNotes, this->tonality, minChromaticChords,
-                      maxChromaticChords, minSeventhChords,maxSeventhChords);
+    tonal_progression(home, this->duration, this->tonality, this->states, this->qualities, this->rootNotes,
+                      chords,bassDegrees, isChromatic,hasSeventh,
+                      minChromaticChords, maxChromaticChords, minSeventhChords, maxSeventhChords);
 
     /// branching
     Rnd r(1U);
@@ -108,7 +108,7 @@ string ChordProgression::toString() const{
     txt += "Chords:\t\t\t"                          + intVarArray_to_string(chords)         + "\n";
     txt += "States:\t\t\t"                          + intVarArray_to_string(states)         + "\n";
     txt += "Qualities:\t\t"                         + intVarArray_to_string(qualities)      + "\n";
-    txt += "Bass notes:\t\t"                        + intVarArray_to_string(bassDegrees)    + "\n";
+    txt += "Bass degrees:\t\t"                        + intVarArray_to_string(bassDegrees)    + "\n";
     txt += "Root notes:\t\t"                        + intVarArray_to_string(rootNotes)      + "\n";
     txt += "Chromatic chords:\t"                    + intVarArray_to_string(isChromatic)    + "\n";
     txt += "Seventh chords:\t\t"                    + intVarArray_to_string(hasSeventh)     + "\n";
