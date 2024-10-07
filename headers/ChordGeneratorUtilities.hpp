@@ -101,7 +101,7 @@ const IntArgs majorDegreeQualities = {
 
 
 };
-
+//todo put this in Tonality
 const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient this way or with a formula (degree + state*2)%7. Though that would cause problems for non diatonic chords
 ///     fundamental state,    first inversion,   second inversion,    third inversion
              FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// I
@@ -117,9 +117,9 @@ const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient
              FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// V/IV
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// V/V
              THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// V/VI
-           SEVENTH_DEGREE,     SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// bII
-             FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,        /// 6te_a todo check this, it is wrong
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// 6te_a todo check this, it is wrong
 };
 
 int* IntVarArray_to_int_pointer(IntVarArray vars);
