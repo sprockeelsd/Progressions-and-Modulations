@@ -19,12 +19,10 @@
  * @return a TonalPiece object
  */
 TonalPiece::
-TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
-           vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
-           vector<int> modulationEnds) :
-           size(size), tonalities(tonalities), tonalitiesStarts(tonalitiesStarts),
-           tonalitiesDurations(tonalitiesDurations), modulationTypes(modulationTypes), modulationStarts(modulationStarts),
-           modulationEnds(modulationEnds){
+TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
+           vector<int> modulationStarts, vector<int> modulationEnds) :
+           size(size), tonalities(tonalities),
+           modulationTypes(modulationTypes), modulationStarts(modulationStarts), modulationEnds(modulationEnds){
 
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
@@ -39,13 +37,51 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitie
     //todo V-> VI can only happen in fund state
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
 
+    if(modulationTypes.size() != tonalities.size()-1)
+        throw std::invalid_argument("The number of modulations should be equal to the number of tonalities minus one.");
+
+    ///Compute tonality starts and durations
+    tonalitiesStarts.reserve(tonalities.size());
+    tonalitiesDurations.reserve(tonalities.size());
+
+    tonalitiesStarts.push_back(0);
+
+    for(int i = 0; i < modulationTypes.size(); i++){
+        switch (modulationTypes[i]){
+            case PERFECT_CADENCE_MODULATION:    /// The modulation lasts 2 chords, and the next tonality starts on the next chord
+                tonalitiesStarts        .push_back(this->modulationEnds[i] + 1);                       ///start of the next tonality
+                tonalitiesDurations     .push_back(this->modulationEnds[i] - tonalitiesStarts[i] + 1); ///duration of the current tonality
+                break;
+            case PIVOT_CHORD_MODULATION:        /// The modulation lasts at least 3 chords, and the next tonality starts on the first chord
+                tonalitiesStarts        .push_back( this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationEnds[i] -2 - tonalitiesStarts[i] + 1);
+                break;
+            case ALTERATION_MODULATION:         /// The modulation lasts 2 chords, and the next tonality starts on the first chord
+                tonalitiesStarts        .push_back(this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]);
+                break;
+            case SECONDARY_DOMINANT_MODULATION: /// The modulation lasts 2 chords, and the next tonality starts on the second chord
+                tonalitiesStarts        .push_back(this->modulationEnds[i]);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i] + 1);
+                //modulationEnds[i] = this->modulationStarts[i] + 1; ///always size 2 todo check for others + warning
+                break;
+            default:
+                throw std::invalid_argument("The modulation type is not recognized.");
+        }
+    }
+    ///last duration
+    tonalitiesDurations.push_back(size - tonalitiesStarts[tonalitiesStarts.size()-1]);
+
+    std::cout << "tonalitiesStarts: " << int_vector_to_string(tonalitiesStarts) << std::endl;
+    std::cout << "tonalitiesDurations: " << int_vector_to_string(tonalitiesDurations) << std::endl;
+
+
     /// Create the ChordProgression objects for each tonality, and post the constraints
     progressions.reserve(tonalities.size());
     for (int i = 0; i < tonalities.size(); i++){
         progressions.push_back(
                 new ChordProgression(*this,
-                                     this->tonalitiesStarts[i],
-                                     this->tonalitiesDurations[i],
+                                     tonalitiesStarts[i],tonalitiesDurations[i],
                                      this->tonalities[i],
                                      states, qualities, rootNotes,
                                      0, 1,

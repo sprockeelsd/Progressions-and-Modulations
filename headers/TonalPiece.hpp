@@ -51,9 +51,8 @@ public:
      * @param modulationStarts a vector of integers representing the starting position of each modulation
      * @return a TonalPiece object
      */
-    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
-               vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
-               vector<int> modulationEnds);
+    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
+               vector<int> modulationStarts, vector<int> modulationEnds);
 
     /**
      * @brief Copy constructor

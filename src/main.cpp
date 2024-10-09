@@ -9,17 +9,15 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
+    int size = 20;
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> tonalitiesStarts = {0, 9};
-    vector<int> tonalitiesDurations = {10, 11};
-    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
     vector<int> modulationStarts = {9};
-    vector<int> modulationEnds = {11};
-    int size = tonalitiesStarts[tonalitiesStarts.size()-1] + tonalitiesDurations[tonalitiesDurations.size()-1];
+    vector<int> modulationEnds = {10}; //todo change into duration instead of end
 
-    auto tonalPiece = new TonalPiece(size, tonalities, tonalitiesStarts, tonalitiesDurations, modulationTypes,
+    auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
 
     DFS<TonalPiece> engine(tonalPiece);
@@ -28,8 +26,8 @@ int main(int argc, char **argv) {
     int n_sols = 0;
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
-        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << std::endl;
-        if(n_sols >= 100) break;
+        std::cout << "Solution:" << n_sols<< "\n" << sol->pretty() << std::endl;
+        if(n_sols >= 1) break;
         delete sol;
     }
     if (n_sols == 0)
