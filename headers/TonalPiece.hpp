@@ -6,7 +6,7 @@
 #define CHORDGENERATOR_TONALPIECE_HPP
 
 #include "ChordGeneratorUtilities.hpp"
-#include "ChordProgression.hpp"
+#include "Modulation.hpp"
 
 /**
  * This class represents a tonal piece. It can have multiple tonalities, with modulations between them. It extends
@@ -27,7 +27,8 @@ private:
     vector<int>                 tonalitiesStarts;    /// the starting position of each tonality
     vector<int>                 tonalitiesDurations; /// the duration of each tonality
     vector<int>                 modulationTypes;     /// the type of modulations that occurs between tonalities
-    vector<int>                 modulationStarts;    /// the starting position of each modulation todo maybe not necessary
+    vector<int>                 modulationStarts;    /// the starting position of each modulation
+    vector<int>                 modulationEnds;      /// the ending position of each modulation
 
     /// These are general, not tonality specific.
     IntVarArray                 states;              /// the states of the chords (fundamental, first inversion, ...)
@@ -35,6 +36,7 @@ private:
     IntVarArray                 rootNotes;           /// the root notes corresponding to the chord degrees
 
     vector<ChordProgression *>  progressions;        /// the chord progression objects for each tonality
+    vector<Modulation *>        modulations;         /// the modulation objects for each modulation
 
 public:
     /**
@@ -49,9 +51,9 @@ public:
      * @param modulationStarts a vector of integers representing the starting position of each modulation
      * @return a TonalPiece object
      */
-    TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitiesStarts,
-               vector<int> tonalitiesDurations, vector<int> modulationTypes,
-               vector<int> modulationStarts);
+    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
+               vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
+               vector<int> modulationEnds);
 
     /**
      * @brief Copy constructor

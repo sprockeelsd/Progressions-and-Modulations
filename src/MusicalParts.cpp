@@ -71,9 +71,4 @@ void tonal_progression(const Home &home, int size, Tonality *tonality,
 
     ///14. Fifth degree chord cannot be in second inversion if it is not dominant seventh
     fifth_degree(home, size, states, qualities, chords);
-
-    /// cadences
-    rel(home, chords[0], IRT_EQ, FIRST_DEGREE);
-    cadence(home, size / 2, HALF_CADENCE, states, chords, hasSeventh);
-    //cadence(home, startPosition + size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
 }

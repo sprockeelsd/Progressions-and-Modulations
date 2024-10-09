@@ -18,6 +18,7 @@
  */
 class ChordProgression {
 private:
+    int start;                       /// the starting position of the progression in the global piece
     int duration;                    /// the number of chords to be generated in this tonality
     int minChromaticChords;          /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
     int maxChromaticChords;          /// the max number of chromatic chords that are allowed in the progression
@@ -63,6 +64,29 @@ public:
      * @param s a ChordProgression object
      */
     ChordProgression(Home home, ChordProgression &s);
+
+    /**
+     * getters
+     * @return the attributes of the object
+     */
+
+    int getStart() const { return start; }
+
+    Tonality *getTonality() const { return tonality; }
+
+    IntVarArray getChords() { return chords; }
+
+    IntVarArray getStates() { return states; }
+
+    IntVarArray getQualities() { return qualities; }
+
+    IntVarArray getRootNotes() { return rootNotes; }
+
+    IntVarArray getBassDegrees() { return bassDegrees; }
+
+    IntVarArray getIsChromatic() { return isChromatic; }
+
+    IntVarArray getHasSeventh() { return hasSeventh; }
 
     /**
      * Returns a string with each of the object's field values as integers. For debugging

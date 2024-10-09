@@ -14,11 +14,13 @@ int main(int argc, char **argv) {
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
     vector<int> tonalitiesStarts = {0, 9};
     vector<int> tonalitiesDurations = {10, 11};
-    vector<int> modulationTypes = {PERFECT_CADENCE_MODULATION};
-    vector<int> modulationStarts = {8};
+    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<int> modulationStarts = {9};
+    vector<int> modulationEnds = {11};
     int size = tonalitiesStarts[tonalitiesStarts.size()-1] + tonalitiesDurations[tonalitiesDurations.size()-1];
 
-    auto tonalPiece = new TonalPiece(size, tonalities, tonalitiesStarts, tonalitiesDurations, modulationTypes, modulationStarts);
+    auto tonalPiece = new TonalPiece(size, tonalities, tonalitiesStarts, tonalitiesDurations, modulationTypes,
+                                     modulationStarts, modulationEnds);
     std::cout << tonalPiece->toString() << std::endl;
 
     DFS<TonalPiece> engine(tonalPiece);

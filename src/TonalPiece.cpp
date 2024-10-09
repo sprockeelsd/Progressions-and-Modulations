@@ -19,16 +19,12 @@
  * @return a TonalPiece object
  */
 TonalPiece::
-TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitiesStarts,
-           vector<int> tonalitiesDurations, vector<int> modulationTypes,
-           vector<int> modulationStarts) {
-    ///parameters
-    this->size                  = size;
-    this->tonalities            = tonalities;
-    this->tonalitiesStarts      = tonalitiesStarts;
-    this->tonalitiesDurations   = tonalitiesDurations;
-    this->modulationTypes       = modulationTypes;
-    this->modulationStarts      = modulationStarts;
+TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
+           vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
+           vector<int> modulationEnds) :
+           size(size), tonalities(tonalities), tonalitiesStarts(tonalitiesStarts),
+           tonalitiesDurations(tonalitiesDurations), modulationTypes(modulationTypes), modulationStarts(modulationStarts),
+           modulationEnds(modulationEnds){
 
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
@@ -48,12 +44,24 @@ TonalPiece(int size, const vector<Tonality *>& tonalities, vector<int> tonalitie
                 );
     }
 
+    modulations.reserve(modulationTypes.size());
+    for(int i = 0; i < modulationTypes.size(); i++){
+        modulations.push_back(
+                new Modulation(*this, modulationTypes[i], modulationStarts[i], modulationEnds[i],
+                               progressions[i], progressions[i+1])
+                );
+    }
+
     /// Create the Modulation objects for each modulation, and post the constraints
 
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done
      * in order of appearance of the tonalities. Maybe this needs to change? But then it has to be done differently
      * because the chord degrees are not available in this main class. */
+
+    Rnd r(1U);
+    for(auto p : progressions)
+        branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
     branch(*this, states,       INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
@@ -72,12 +80,16 @@ TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
     tonalitiesDurations         = s.tonalitiesDurations;
     modulationTypes             = s.modulationTypes;
     modulationStarts            = s.modulationStarts;
+    modulationEnds              = s.modulationEnds;
     states                      .update(*this, s.states);
     qualities                   .update(*this, s.qualities);
     rootNotes                   .update(*this, s.rootNotes);
 
     for (auto p : s.progressions)
         progressions.push_back(new ChordProgression(*this, *p));
+
+    for (auto m : s.modulations)
+        modulations.push_back(new Modulation(*this, *m));
 }
 
 /**
@@ -117,6 +129,11 @@ string TonalPiece::toString() const {
     txt += "\nChord Progressions for each tonality:\n";
     for(auto p : progressions)
         txt += p->toString() + "\n\n"; //todo maybe use pretty?
+
+    txt += "\nModulations:\n";
+    for(auto m : modulations)
+        txt += m->toString() + "\n\n";
+
     return txt;
 }
 

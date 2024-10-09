@@ -25,6 +25,8 @@
 ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
 IntVarArray rootNotes, double minPercentChromaticChords, double maxPercentChromaticChords,
 double minPercentSeventhChords, double maxPercentSeventhChords) {
+
+    this->start                     = start;
     this->duration                  = duration;
     this->minChromaticChords        = (int) (minPercentChromaticChords  * duration);    /// converts % into a number
     this->maxChromaticChords        = (int) (maxPercentChromaticChords  * duration);
@@ -55,9 +57,15 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
                       chords,bassDegrees, isChromatic,hasSeventh,
                       minChromaticChords, maxChromaticChords, minSeventhChords, maxSeventhChords);
 
+    /// Optional constraints
+    /// cadences
+//    rel(home, chords[0], IRT_EQ, SECOND_DEGREE);
+//    cadence(home, duration / 2, HALF_CADENCE, states, chords, hasSeventh);
+    //cadence(home, startPosition + size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
+
     /// branching
     Rnd r(1U);
-    branch(home, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
+    //branch(home, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
 }
 
 /**
@@ -66,6 +74,7 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
  * @param s a ChordProgression object
  */
 ChordProgression::ChordProgression(Home home, ChordProgression &s){
+    start                       = s.start;
     duration                    = s.duration;
     minChromaticChords          = s.minChromaticChords;
     maxChromaticChords          = s.maxChromaticChords;

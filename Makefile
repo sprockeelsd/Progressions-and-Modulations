@@ -32,6 +32,7 @@ CHORD_GENERATOR_FILES = $(SRC_DIR)/ChordGeneratorUtilities.cpp \
 						$(SRC_DIR)/Constraints.cpp \
 						$(SRC_DIR)/MusicalParts.cpp \
 						$(SRC_DIR)/ChordProgression.cpp \
+						$(SRC_DIR)/Modulation.cpp \
 						$(SRC_DIR)/TonalPiece.cpp
 
 compile: clean
