@@ -30,6 +30,15 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitie
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
     this->rootNotes             = IntVarArray(*this, size, C,                   B);
 
+    //todo make an options object that has a field for every parameter
+    //todo link with Diatony
+    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
+    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+    //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
+    //todo add other chords (9, add6,...)?
+    //todo V-> VI can only happen in fund state
+    //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
+
     /// Create the ChordProgression objects for each tonality, and post the constraints
     progressions.reserve(tonalities.size());
     for (int i = 0; i < tonalities.size(); i++){
@@ -52,7 +61,8 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitie
                 );
     }
 
-    /// Create the Modulation objects for each modulation, and post the constraints
+    ///add here any optional constraints
+    rel(*this, progressions[0]->getChords()[tonalitiesDurations[0]-1] != FIFTH_DEGREE);
 
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done

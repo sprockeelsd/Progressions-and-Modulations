@@ -44,14 +44,6 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
     this->isChromatic               = IntVarArray (home, duration, 0, 1);
     this->hasSeventh                = IntVarArray (home, duration, 0, 1);
 
-    //todo make an options object that has a field for every parameter
-    //todo link with Diatony
-    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
-    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
-    //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
-    //todo add other chords (9, add6,...)?
-    //todo V-> VI can only happen in fund state
-
     /// constraints
     tonal_progression(home, this->duration, this->tonality, this->states, this->qualities, this->rootNotes,
                       chords,bassDegrees, isChromatic,hasSeventh,

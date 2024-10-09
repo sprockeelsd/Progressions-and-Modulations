@@ -72,6 +72,8 @@ public:
 
     int getStart() const { return start; }
 
+    int getDuration() const { return duration; }
+
     Tonality *getTonality() const { return tonality; }
 
     IntVarArray getChords() { return chords; }
