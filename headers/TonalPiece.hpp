@@ -68,6 +68,8 @@ public:
      */
     string toString() const;
 
+    string pretty() const;
+
     /**
      * @brief copy function
      * @return a Space* object that is a copy of the current object

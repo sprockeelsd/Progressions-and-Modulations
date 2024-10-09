@@ -39,6 +39,7 @@ compile: clean
 	g++ -std=c++11 -F/Library/Frameworks -framework gecode -o out/main \
 		$(DIATONY_FILES) $(MIDI_LIBRARY_FILES) $(CHORD_GENERATOR_FILES) $(SRC_DIR)/main.cpp
 	install_name_tool -change gecode.framework/Versions/49/gecode /Library/Frameworks/gecode.framework/Versions/49/gecode out/main
+	clear
 
 run: compile
 	./out/main false

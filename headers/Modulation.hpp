@@ -24,6 +24,8 @@ public:
     Modulation(const Home &home, const Modulation& m);
 
     string toString();
+
+    string pretty();
 };
 
 #endif //CHORDGENERATOR_MODULATION_HPP

@@ -30,3 +30,14 @@ string Modulation::toString() {
 
     return txt;
 }
+
+string Modulation::pretty() {
+    string txt;
+    try{
+        txt += "from " + from->getTonality()->get_name() + " to " + to->getTonality()->get_name() + " (" + modulation_type_names[type] + ")";
+    }
+    catch(exception& e){
+        std::cout << "Some variables are unbound in the modulation object" << std::endl;
+    }
+    return txt;
+}

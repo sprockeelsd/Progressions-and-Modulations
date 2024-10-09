@@ -131,7 +131,6 @@ string ChordProgression::toString() const{
  */
 string ChordProgression::pretty() const{ //todo change the representation so that the different tonalities are visible
     string txt;
-    txt += "-------------------------------- Chord Progression Object. -------------------------------------------\n\n";
     try{
         string degs, stas;
         for(int i = 0; i < duration; i++){
@@ -141,7 +140,7 @@ string ChordProgression::pretty() const{ //todo change the representation so tha
         txt += "Chords: " + degs + "\nStates: " + stas + "\n";
     }
     catch(exception &e){
-        std::cout << "Some variables are unbound" << std::endl;
+        std::cout << "Some variables are unbound in the chord progression object" << std::endl;
     }
-    return txt + "\n\n";
+    return txt;
 }

@@ -15,6 +15,13 @@ enum modulations{
     SECONDARY_DOMINANT_MODULATION,      ///3, introducing the sensitive note of the new tonality
 };
 
+const vector<string> modulation_type_names = {
+        "Perfect Cadence",
+        "Pivot Chord",
+        "Alteration",
+        "Secondary Dominant",
+};
+
 ///The number of supported chords, which is the size of the tonalTransitions matrix
 const int nSupportedChords = 16;
 ///Defines possible chord successions. This enforces the following rules:

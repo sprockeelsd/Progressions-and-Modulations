@@ -128,12 +128,22 @@ string TonalPiece::toString() const {
 
     txt += "\nChord Progressions for each tonality:\n";
     for(auto p : progressions)
-        txt += p->toString() + "\n\n"; //todo maybe use pretty?
-
+        txt += p->toString() + "\n\n";
     txt += "\nModulations:\n";
     for(auto m : modulations)
         txt += m->toString() + "\n\n";
 
+    return txt;
+}
+
+string TonalPiece::pretty() const {
+    string txt;
+    for(int i = 0; i < progressions.size(); i++){
+        txt += progressions[i]->pretty() + "\n";
+        if(i < modulations.size())
+            txt += modulations[i]->pretty() + "\n";
+        txt += "\n";
+    }
     return txt;
 }
 
