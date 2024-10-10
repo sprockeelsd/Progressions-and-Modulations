@@ -2,8 +2,6 @@
 // Created by Damien Sprockeels on 30/09/2024.
 //
 
-#include <utility>
-
 #include "../headers/TonalPiece.hpp"
 
 /**
@@ -48,11 +46,20 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 
     for(int i = 0; i < modulationTypes.size(); i++){
         switch (modulationTypes[i]){
+                /**
+                 * The modulation lasts 2 chords, and the next tonality starts on the chord after the modulation
+                 * example: C Major (I ... V I) (I ...) G Major
+                 */
             case PERFECT_CADENCE_MODULATION:    /// The modulation lasts 2 chords, and the next tonality starts on the next chord
                 tonalitiesStarts        .push_back(this->modulationEnds[i] + 1);                       ///start of the next tonality
                 tonalitiesDurations     .push_back(this->modulationEnds[i] - tonalitiesStarts[i] + 1); ///duration of the current tonality
                 break;
-            case PIVOT_CHORD_MODULATION:        /// The modulation lasts at least 3 chords, and the next tonality starts on the first chord
+                /**
+                 * The modulation lasts at least 3 chords, and the next tonality starts on the first chord while the
+                 * first tonality ends just before the perfect cadence, so there is an overlap of the tonalities
+                 * example: C Major (I ... (VI) V I ...) G Major
+                 */
+            case PIVOT_CHORD_MODULATION:
                 tonalitiesStarts        .push_back( this->modulationStarts[i]);
                 tonalitiesDurations     .push_back(this->modulationEnds[i] -2 - tonalitiesStarts[i] + 1);
                 break;

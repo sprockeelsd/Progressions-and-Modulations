@@ -8,10 +8,23 @@ Modulation::Modulation(const Home &home, int type, int start, int end, ChordProg
                         type(type), start(start), end(end), from(from), to(to){
 
     switch(type){
+            /**
+             * The first tonality ends on a perfect cadence. Then the next tonality starts
+             */
         case PERFECT_CADENCE_MODULATION:
-
+            if(end - start != 1)
+                throw std::invalid_argument("A perfect cadence modulation must last exactly 2 chords");
+            ///Add a perfect cadence constraint to the end of the first tonality
+            cadence(home, start, PERFECT_CADENCE, from->getStates(), from->getChords(),
+                    from->getHasSeventh());
             break;
+            /**
+             * A pivot chord (common to both tonalities) is introduced in the first tonality. Then, the rules for both
+             * tonalities are applied until there is a perfect cadence in the new tonality
+             */
         case PIVOT_CHORD_MODULATION: //todo check that chromatic chords are accepted as well)
+            if(end - start < 2)
+                throw std::invalid_argument("A pivot chord modulation must last at least 3 chords");
             /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
             rel(home, from->getChords()[from->getDuration()-1] != SEVENTH_DEGREE);
             rel(home, from->getChords()[from->getDuration()-1] <= FIVE_OF_SIX);

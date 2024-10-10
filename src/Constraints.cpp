@@ -279,7 +279,7 @@ void fifth_degree(const Home &home, int size, IntVarArray states, IntVarArray qu
 void cadence(const Home &home, int position, int type, IntVarArray states, IntVarArray chords, IntVarArray hasSeventh) {
     switch (type){
         case PERFECT_CADENCE:        /// V7+/9-I5. The dominant chord can have a 7th but it is not mandatory, the I chord cannot
-            rel(home, (chords[position] == FIFTH_DEGREE || chords[position] == SEVEN_DIMINISHED) && states[position] == FUNDAMENTAL_STATE);
+            rel(home, chords[position] == FIFTH_DEGREE && states[position] == FUNDAMENTAL_STATE);
             rel(home, chords[position + 1] == FIRST_DEGREE && states[position + 1] == FUNDAMENTAL_STATE && hasSeventh[position + 1] == 0);
             break;
         case PLAGAL_CADENCE:         /// IV-I without a seventh on both chords
