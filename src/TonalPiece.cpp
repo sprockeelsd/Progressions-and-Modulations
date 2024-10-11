@@ -68,9 +68,8 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]);
                 break;
             case SECONDARY_DOMINANT_MODULATION: /// The modulation lasts 2 chords, and the next tonality starts on the second chord
-                tonalitiesStarts        .push_back(this->modulationEnds[i]);
-                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i] + 1);
-                //modulationEnds[i] = this->modulationStarts[i] + 1; ///always size 2 todo check for others + warning
+                tonalitiesStarts        .push_back(this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationEnds[i] - tonalitiesStarts[i] + 1);
                 break;
             default:
                 throw std::invalid_argument("The modulation type is not recognized.");

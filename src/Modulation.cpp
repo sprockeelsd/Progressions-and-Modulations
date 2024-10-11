@@ -35,6 +35,8 @@ Modulation::Modulation(const Home &home, int type, int start, int end, ChordProg
         case ALTERATION_MODULATION:
             break;
         case SECONDARY_DOMINANT_MODULATION:
+            if(end - start != 1)
+                throw std::invalid_argument("A secondary dominant modulation must last exactly 2 chords");
             break;
         default:
             throw std::invalid_argument("Invalid modulation type");

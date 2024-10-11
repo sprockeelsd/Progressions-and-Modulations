@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> modulationTypes = {PERFECT_CADENCE_MODULATION};
+    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
     vector<int> modulationStarts = {8};
     vector<int> modulationEnds = {9}; //todo change into duration instead of end
 
