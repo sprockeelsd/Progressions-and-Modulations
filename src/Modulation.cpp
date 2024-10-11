@@ -6,6 +6,13 @@
 
 Modulation::Modulation(const Home &home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
                         type(type), start(start), end(end), from(from), to(to){
+    vector<int> t1degreeNotes;
+    t1degreeNotes.reserve(SEVENTH_DEGREE+1);
+    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
+        t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
+    IntArgs t1notes(t1degreeNotes);
+
+    //BoolVar test(home, 0, 1);
 
     switch(type){
             /**
