@@ -19,7 +19,7 @@ private:
     ChordProgression* to;
 
 public:
-    Modulation(const Home &home, int type, int start, int end, ChordProgression *from, ChordProgression *to);
+    Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to);
 
     Modulation(const Home &home, const Modulation& m);
 

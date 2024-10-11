@@ -4,7 +4,7 @@
 
 #include "../headers/Modulation.hpp"
 
-Modulation::Modulation(const Home &home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
+Modulation::Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
                         type(type), start(start), end(end), from(from), to(to){
     vector<int> t1degreeNotes;
     t1degreeNotes.reserve(SEVENTH_DEGREE+1);
@@ -12,7 +12,9 @@ Modulation::Modulation(const Home &home, int type, int start, int end, ChordProg
         t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
     IntArgs t1notes(t1degreeNotes);
 
-    //BoolVar test(home, 0, 1);
+    IntArgs qualityForDegreeInT1{};
+
+    BoolVar isRootNoteInT1(home, 0, 1);
 
     switch(type){
             /**
@@ -39,7 +41,14 @@ Modulation::Modulation(const Home &home, int type, int start, int end, ChordProg
             cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
                     to->getChords(), to->getHasSeventh());
             break;
+            /**
+             * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
+             * It must be followed by the V chord in the new tonality
+             */
         case ALTERATION_MODULATION:
+            /// If the root note of the first chord in the new tonality is in the first tonality, isRootNoteInT1 is true. Otherwise, it is false
+            dom(home, to->getRootNotes()[0], IntSet(t1notes), isRootNoteInT1);
+
             break;
         case SECONDARY_DOMINANT_MODULATION:
             if(end - start != 1)

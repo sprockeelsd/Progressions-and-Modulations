@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
-    vector<int> modulationStarts = {10};
+    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<int> modulationStarts = {8};
     vector<int> modulationEnds = {11}; //todo change into duration instead of end
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
