@@ -12,9 +12,15 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
         t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
     IntArgs t1Notes(t1degreeNotes);
 
+    vector<int> t1QualitiesDegrees;
+    t1QualitiesDegrees.reserve(SEVENTH_DEGREE+1);
+    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
+        t1QualitiesDegrees.push_back(from->getTonality()->get_chord_quality(i));
+    IntArgs t1Qualities(t1QualitiesDegrees);
+
     BoolVar isRootNoteInT1(home, 0, 1);
     IntVar degreeInT1(home, FIRST_DEGREE, SEVENTH_DEGREE);
-    IntVar qualityInT1(home, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
+    IntVar qualityInT1(home, MAJOR_CHORD, AUGMENTED_CHORD);
 
     switch(type){
             /**
@@ -24,7 +30,7 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
             if(end - start != 1)
                 throw std::invalid_argument("A perfect cadence modulation must last exactly 2 chords");
             ///Add a perfect cadence constraint to the end of the first tonality
-            cadence(home, start, PERFECT_CADENCE, from->getStates(), from->getChords(),
+            cadence(home, from->getDuration()-2, PERFECT_CADENCE, from->getStates(), from->getChords(),
                     from->getHasSeventh());
             break;
             /**
@@ -46,12 +52,17 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
              * It must be followed by the V chord in the new tonality
              */
         case ALTERATION_MODULATION:
+            if(end - start != 1)
+                throw std::invalid_argument("An alteration modulation must last exactly 2 chords");
+            /// The first chord of the modulation must be diatonic
+            rel(home, from->getChords()[0] <= SIXTH_DEGREE);
             /// Whether the root note of the first chord in the new tonality is in the first tonality
-            //dom(home, to->getRootNotes()[0], IntSet(t1Notes), isRootNoteInT1);
+            dom(home, to->getRootNotes()[0], IntSet(t1Notes), isRootNoteInT1);
             /// degreeInT1 is the degree corresponding to the note in the first tonality (might not exist!) todo check how to handle that
-            //element(home, t1Notes, degreeInT1, to->getRootNotes()[0]);
+            element(home, t1Notes, degreeInT1, to->getRootNotes()[0]);
             //todo link quality and degreeInT1
-            //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
+            element(home, t1Qualities, degreeInT1, qualityInT1);
+            element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
 
             break;
         case SECONDARY_DOMINANT_MODULATION:

@@ -9,13 +9,13 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 20;
+    int size = 10;
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
-    vector<int> modulationStarts = {8};
-    vector<int> modulationEnds = {11}; //todo change into duration instead of end
+    vector<int> modulationTypes = {PERFECT_CADENCE_MODULATION};
+    vector<int> modulationStarts = {5};
+    vector<int> modulationEnds = {6}; //todo change into duration instead of end
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     int n_sols = 0;
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
-        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << std::endl;
+        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\n" << sol->pretty() << std::endl;
         if(n_sols >= 1) break;
         delete sol;
     }
