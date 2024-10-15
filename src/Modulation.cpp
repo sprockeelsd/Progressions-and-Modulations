@@ -10,11 +10,11 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
     t1degreeNotes.reserve(SEVENTH_DEGREE+1);
     for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
         t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
-    IntArgs t1notes(t1degreeNotes);
-
-    IntArgs qualityForDegreeInT1{};
+    IntArgs t1Notes(t1degreeNotes);
 
     BoolVar isRootNoteInT1(home, 0, 1);
+    IntVar degreeInT1(home, FIRST_DEGREE, SEVENTH_DEGREE);
+    IntVar qualityInT1(home, MAJOR_CHORD, MINOR_MAJOR_SEVENTH_CHORD);
 
     switch(type){
             /**
@@ -46,8 +46,12 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
              * It must be followed by the V chord in the new tonality
              */
         case ALTERATION_MODULATION:
-            /// If the root note of the first chord in the new tonality is in the first tonality, isRootNoteInT1 is true. Otherwise, it is false
-            dom(home, to->getRootNotes()[0], IntSet(t1notes), isRootNoteInT1);
+            /// Whether the root note of the first chord in the new tonality is in the first tonality
+            //dom(home, to->getRootNotes()[0], IntSet(t1Notes), isRootNoteInT1);
+            /// degreeInT1 is the degree corresponding to the note in the first tonality (might not exist!) todo check how to handle that
+            //element(home, t1Notes, degreeInT1, to->getRootNotes()[0]);
+            //todo link quality and degreeInT1
+            //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
 
             break;
         case SECONDARY_DOMINANT_MODULATION:

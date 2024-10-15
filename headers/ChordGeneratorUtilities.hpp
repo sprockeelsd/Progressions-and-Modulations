@@ -44,7 +44,7 @@ const IntArgs tonalTransitions = {
         1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     1,     0,     0,     0,    /// V
         1,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     1,     0,    /// VI
         1,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     1,     0,     0,    /// VII
-        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Ida
+        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
         0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/II
         0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/III
         0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/IV
@@ -61,7 +61,8 @@ const int nSupportedStates = 4;
 //todo modify this to allow seventh chords in the future
 //todo check with karim
 //todo move this to majorTonality and do the same for minor tonality
-const IntArgs majorDegreeStates = {
+//todo add bVII
+const IntArgs majorDegreeStates = { //todo probably this is also good for minor chords, to check
 ///     fundamental state,    first inversion,   second inversion,    third inversion
                         1,                  1,                  0,                  0,    /// I
                         1,                  1,                  0,                  0,    /// II
@@ -70,7 +71,7 @@ const IntArgs majorDegreeStates = {
                         1,                  1,                  1,                  1,    /// V
                         1,                  0,                  0,                  0,    /// VI
                         1,                  1,                  1,                  0,    /// VII
-                        0,                  0,                  1,                  0,    /// Ida
+                        0,                  0,                  1,                  0,    /// Vda
                         1,                  1,                  1,                  1,    /// V/II
                         1,                  1,                  1,                  1,    /// V/III
                         1,                  1,                  1,                  1,    /// V/IV
@@ -95,7 +96,7 @@ const IntArgs majorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V
         0,  1,    0,      0,    0,   0,      0,        0,     0,    /// VI
         0,  0,    1,      0,    0,   0,      0,        0,     0,    /// VII
-        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// Ida
+        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// Vda
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/II
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/III
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
@@ -104,10 +105,27 @@ const IntArgs majorDegreeQualities = {
         0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
-
-
-
 };
+
+const IntArgs minorDegreeQualities = {
+///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
+        0,  1,    0,      0,    0,   0,      0,        0,     0,    /// I
+        0,  0,    1,      0,    0,   0,      0,        0,     0,    /// II
+        1,  0,    0,      1,    0,   0,      0,        0,     0,    /// III
+        0,  1,    0,      0,    0,   0,      0,        0,     0,    /// IV
+        1,  1,    0,      0,    1,   0,      0,        0,     0,    /// V
+        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// VI
+        0,  0,    1,      0,    0,   0,      0,        0,     0,    /// VII
+        0,  1,    0,      0,    0,   0,      0,        0,     0,    /// IVda
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/II
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/III
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/V
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VI
+        0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
+        0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
+};
+
 //todo put this in Tonality
 const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient this way or with a formula (degree + state*2)%7. Though that would cause problems for non diatonic chords
 ///     fundamental state,    first inversion,   second inversion,    third inversion
@@ -118,7 +136,7 @@ const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient
              FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,        /// V
              SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// VI
            SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VII
-             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// Ida
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// Vda
              SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// V/II
            SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// V/III
              FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// V/IV
