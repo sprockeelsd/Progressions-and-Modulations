@@ -25,6 +25,11 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
     this->rootNotes             = IntVarArray(*this, size, C,                   B);
+    this->hasSeventh            = IntVarArray(*this, size, 0,                   1);
+    this->qualityWithoutSeventh = IntVarArray(*this, size, MAJOR_CHORD,         AUGMENTED_CHORD);
+
+    ///constraint
+    link_qualities_to_3note_version(*this, size, qualities, qualityWithoutSeventh);
 
     //todo make an options object that has a field for every parameter
     //todo link with Diatony
@@ -87,9 +92,9 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     for (int i = 0; i < tonalities.size(); i++){
         progressions.push_back(
                 new ChordProgression(*this,
-                                     tonalitiesStarts[i],tonalitiesDurations[i],
+                                     tonalitiesStarts[i], tonalitiesDurations[i],
                                      this->tonalities[i],
-                                     states, qualities, rootNotes,
+                                     states, qualities, rootNotes, hasSeventh,
                                      0, 1,
                                      0, 1)
                 );
@@ -104,7 +109,6 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
-    rel(*this, progressions[0]->getChords()[tonalitiesDurations[0]-1] != FIFTH_DEGREE);
 
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done
@@ -116,8 +120,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
         branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
     branch(*this, states,       INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    //todo move sevenths here because it is not tonality dependent
+//    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
 /**
@@ -136,6 +139,8 @@ TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
     states                      .update(*this, s.states);
     qualities                   .update(*this, s.qualities);
     rootNotes                   .update(*this, s.rootNotes);
+    hasSeventh                  .update(*this, s.hasSeventh);
+    qualityWithoutSeventh       .update(*this, s.qualityWithoutSeventh);
 
     for (auto p : s.progressions)
         progressions.push_back(new ChordProgression(*this, *p));
@@ -174,9 +179,11 @@ string TonalPiece::toString() const {
         txt += to_string(t) + " ";
     txt += "\n";
 
-    txt += "States:\t\t" + intVarArray_to_string(states) + "\n";
-    txt += "Qualities:\t" + intVarArray_to_string(qualities) + "\n";
-    txt += "Root notes:\t" + intVarArray_to_string(rootNotes) + "\n";
+    txt += "States:\t\t\t"              + intVarArray_to_string(states) + "\n";
+    txt += "Qualities:\t\t"             + intVarArray_to_string(qualities) + "\n";
+    txt += "Quality (no seventh):\t"    + intVarArray_to_string(qualityWithoutSeventh) + "\n";
+    txt += "Root notes:\t\t"            + intVarArray_to_string(rootNotes) + "\n";
+    txt += "Has seventh:\t\t"           + intVarArray_to_string(hasSeventh) + "\n";
 
     txt += "\nChord Progressions for each tonality:\n";
     for(auto p : progressions)

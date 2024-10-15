@@ -129,6 +129,26 @@ void seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArr
     rel(home, sum(hasSeventh) >= minSeventhChords);
 }
 
+/**
+ * Links the qualities array to the quality_without_seventh array. This is useful when you need to know the general
+ * quality of the chord but don't need to know if it has a seventh
+ * @param home the problem space
+ * @param size the number of chords in the progression
+ * @param qualities the array of chord qualities
+ * @param qualityWithoutSeventh the array of chord qualities without the seventh
+ */
+void link_qualities_to_3note_version(const Home &home, int size, IntVarArray qualities, IntVarArray qualityWithoutSeventh) {
+    for (int i = 0; i < size; i++) {
+        IntArgs qualities_to_simple_version = {
+                ///Major            Minor       Diminished        Augmented    Dominant7
+                MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, AUGMENTED_CHORD, MAJOR_CHORD,
+                ///  Major7       Minor7       Diminished7        MinorMajor
+                MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, MINOR_CHORD,
+        };
+        element(home, qualities_to_simple_version, qualities[i], qualityWithoutSeventh[i]);
+    }
+}
+
 /***********************************************************************************************************************
  *                                            General Constraints                                                      *
  ***********************************************************************************************************************/

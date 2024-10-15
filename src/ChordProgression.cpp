@@ -21,10 +21,11 @@
  * @param maxPercentSeventhChords the maximum percentage of seventh chords in the progression
  * @return a ChordProgression object
  */
- ChordProgression::
-ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
-IntVarArray rootNotes, double minPercentChromaticChords, double maxPercentChromaticChords,
-double minPercentSeventhChords, double maxPercentSeventhChords) {
+ChordProgression::
+ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states,
+                 IntVarArray qualities, IntVarArray rootNotes, IntVarArray hasSeventh,
+                 double minPercentChromaticChords, double maxPercentChromaticChords,
+                 double minPercentSeventhChords, double maxPercentSeventhChords) {
 
     this->start                     = start;
     this->duration                  = duration;
@@ -42,14 +43,15 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
     this->rootNotes                 = IntVarArray(home, rootNotes       .slice(start, 1, duration));
 
     this->isChromatic               = IntVarArray (home, duration, 0, 1);
-    this->hasSeventh                = IntVarArray (home, duration, 0, 1);
+    this->hasSeventh                = IntVarArray (home, hasSeventh.slice(start, 1, duration));
 
     /// constraints
     tonal_progression(home, this->duration, this->tonality, this->states, this->qualities, this->rootNotes,
-                      chords,bassDegrees, isChromatic,hasSeventh,
+                      chords,bassDegrees, isChromatic,this->hasSeventh,
                       minChromaticChords, maxChromaticChords, minSeventhChords, maxSeventhChords);
 
     /// Optional constraints
+//    rel(home, qualities[3] == DOMINANT_SEVENTH_CHORD);
     /// cadences
 //    rel(home, chords[0], IRT_EQ, SECOND_DEGREE);
 //    cadence(home, duration / 2, HALF_CADENCE, states, chords, hasSeventh);

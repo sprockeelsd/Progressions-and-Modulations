@@ -98,6 +98,16 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
 void seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray hasSeventh, int minSeventhChords,
                     int maxSeventhChords);
 
+/**
+ * Links the qualities array to the quality_without_seventh array. This is useful when you need to know the general
+ * quality of the chord but don't need to know if it has a seventh
+ * @param home the problem space
+ * @param size the number of chords in the progression
+ * @param qualities the array of chord qualities
+ * @param qualityWithoutSeventh the array of chord qualities without the seventh
+ */
+void link_qualities_to_3note_version(const Home &home, int size, IntVarArray qualities, IntVarArray qualityWithoutSeventh);
+
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *
  ***********************************************************************************************************************/

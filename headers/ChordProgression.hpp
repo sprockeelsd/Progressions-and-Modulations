@@ -54,8 +54,9 @@ public:
      * @param maxPercentSeventhChords the maximum percentage of seventh chords in the progression
      * @return a ChordProgression object
      */
-    ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
-                     IntVarArray rootNotes, double minPercentChromaticChords, double maxPercentChromaticChords,
+    ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states,
+                     IntVarArray qualities, IntVarArray rootNotes, IntVarArray hasSeventh,
+                     double minPercentChromaticChords, double maxPercentChromaticChords,
                      double minPercentSeventhChords, double maxPercentSeventhChords);
 
     /**
