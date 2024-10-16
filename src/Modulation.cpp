@@ -6,19 +6,29 @@
 
 Modulation::Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
                         type(type), start(start), end(end), from(from), to(to){
+    //todo make subclasses for each modulation type
+    ///this is ok
     vector<int> t1degreeNotes;
     t1degreeNotes.reserve(SEVENTH_DEGREE+1);
     for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
         t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
+    for(int i = C; i <= B; i++){
+        if(std::find(t1degreeNotes.begin(), t1degreeNotes.end(), i) == t1degreeNotes.end())
+            t1degreeNotes.push_back(i);
+    }
     IntArgs t1Notes(t1degreeNotes);
+    std::cout << t1Notes << std::endl;
 
+    ///this is ok
     vector<int> t1QualitiesDegrees;
     t1QualitiesDegrees.reserve(SEVENTH_DEGREE+1);
     for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
         t1QualitiesDegrees.push_back(from->getTonality()->get_chord_quality(i));
+    while(t1QualitiesDegrees.size() < t1degreeNotes.size())
+        t1QualitiesDegrees.push_back(-1); /// fake qualities to have the right number of elements
     IntArgs t1Qualities(t1QualitiesDegrees);
+    std::cout << t1Qualities << std::endl;
 
-    BoolVar isRootNoteInT1(home, 0, 1);
     IntVar degreeInT1(home, FIRST_DEGREE, SEVENTH_DEGREE);
     IntVar qualityInT1(home, MAJOR_CHORD, AUGMENTED_CHORD);
 
@@ -54,15 +64,20 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
         case ALTERATION_MODULATION:
             if(end - start != 1)
                 throw std::invalid_argument("An alteration modulation must last exactly 2 chords");
-            /// The first chord of the modulation must be diatonic
-            rel(home, from->getChords()[0] <= SIXTH_DEGREE);
-            /// Whether the root note of the first chord in the new tonality is in the first tonality
-            dom(home, to->getRootNotes()[0], IntSet(t1Notes), isRootNoteInT1);
-            /// degreeInT1 is the degree corresponding to the note in the first tonality (might not exist!) todo check how to handle that
-            element(home, t1Notes, degreeInT1, to->getRootNotes()[0]);
-            //todo link quality and degreeInT1
+            /// The first chord of the modulation must be diatonic and not the fifth degree
+            rel(home, to->getChords()[0] <= SIXTH_DEGREE);
+            rel(home, to->getChords()[0] != FIFTH_DEGREE);
+            //todo add the constraint that the V must be heard after the altered chord (maybe not directly but shortly(2 chords max))
+            /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
+            /// it has a fake degree value (above seventh degree)
+            element(home, t1Notes, degreeInT1, expr(home, to->getRootNotes()[0] % PERFECT_OCTAVE));
+            /// link quality and degreeInT1. If the degree is fake, the quality is -1
             element(home, t1Qualities, degreeInT1, qualityInT1);
-            element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
+            /// the quality of the chord in the new tonality cannot be the same as the quality for the same note in t1.
+            /// if the note is not in t1, it is always true because quality is -1. Otherwise the constraint is enforced.
+            rel(home, qualityInT1 != to->getQualities()[0]);
+            ///put everything together
+            //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
 
             break;
         case SECONDARY_DOMINANT_MODULATION:
