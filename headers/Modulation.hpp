@@ -23,6 +23,14 @@ public:
 
     Modulation(const Home &home, const Modulation& m);
 
+    void perfect_cadence_modulation(const Home &home);
+
+    void pivot_chord_modulation(const Home &home);
+
+    void alteration_modulation(Home home);
+
+    void secondary_dominant_modulation(Home home);
+
     string toString();
 
     string pretty();

@@ -7,6 +7,67 @@
 Modulation::Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
                         type(type), start(start), end(end), from(from), to(to){
     //todo make subclasses for each modulation type
+    switch(type){
+            /**
+             * The first tonality ends on a perfect cadence. Then the next tonality starts
+             */
+        case PERFECT_CADENCE_MODULATION:
+            if(end - start != 1)
+                throw std::invalid_argument("A perfect cadence modulation must last exactly 2 chords");
+            perfect_cadence_modulation(home);
+            break;
+            /**
+             * A pivot chord (common to both tonalities) is introduced in the first tonality. Then, the rules for both
+             * tonalities are applied until there is a perfect cadence in the new tonality
+             */
+        case PIVOT_CHORD_MODULATION: //todo check that chromatic chords are accepted as well)
+            if(end - start < 2)
+                throw std::invalid_argument("A pivot chord modulation must last at least 3 chords");
+            pivot_chord_modulation(home);
+            break;
+            /**
+             * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
+             * It must be followed by the V chord in the new tonality
+             */
+        case ALTERATION_MODULATION:
+            if(end - start != 1)
+                throw std::invalid_argument("An alteration modulation must last exactly 2 chords");
+            alteration_modulation(home);
+            break;
+        case SECONDARY_DOMINANT_MODULATION:
+            if(end - start != 1)
+                throw std::invalid_argument("A secondary dominant modulation must last exactly 2 chords");
+            secondary_dominant_modulation(home);
+            break;
+        default:
+            throw std::invalid_argument("Invalid modulation type");
+    }
+}
+
+Modulation::Modulation(const Home &home, const Modulation& m){
+    type = m.type;
+    start = m.start;
+    end = m.end;
+    from = new ChordProgression(home, *m.from);
+    to = new ChordProgression(home, *m.to);
+}
+
+void Modulation::perfect_cadence_modulation(const Home &home) {
+    ///Add a perfect cadence constraint to the end of the first tonality
+    cadence(home, from->getDuration()-2, PERFECT_CADENCE, from->getStates(), from->getChords(),
+            from->getHasSeventh());
+}
+
+void Modulation::pivot_chord_modulation(const Home &home) { //todo check that it is ok
+    /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
+    rel(home, from->getChords()[from->getDuration()-1] != SEVENTH_DEGREE);
+    rel(home, from->getChords()[from->getDuration()-1] <= FIVE_OF_SIX);
+    ///The modulation must end on a perfect cadence in the new tonality
+    cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
+            to->getChords(), to->getHasSeventh());
+}
+
+void Modulation::alteration_modulation(Home home) {
     ///this is ok
     vector<int> t1degreeNotes;
     t1degreeNotes.reserve(SEVENTH_DEGREE+1);
@@ -31,71 +92,26 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
 
     IntVar degreeInT1(home, FIRST_DEGREE, SEVENTH_DEGREE);
     IntVar qualityInT1(home, MAJOR_CHORD, AUGMENTED_CHORD);
-
-    switch(type){
-            /**
-             * The first tonality ends on a perfect cadence. Then the next tonality starts
-             */
-        case PERFECT_CADENCE_MODULATION:
-            if(end - start != 1)
-                throw std::invalid_argument("A perfect cadence modulation must last exactly 2 chords");
-            ///Add a perfect cadence constraint to the end of the first tonality
-            cadence(home, from->getDuration()-2, PERFECT_CADENCE, from->getStates(), from->getChords(),
-                    from->getHasSeventh());
-            break;
-            /**
-             * A pivot chord (common to both tonalities) is introduced in the first tonality. Then, the rules for both
-             * tonalities are applied until there is a perfect cadence in the new tonality
-             */
-        case PIVOT_CHORD_MODULATION: //todo check that chromatic chords are accepted as well)
-            if(end - start < 2)
-                throw std::invalid_argument("A pivot chord modulation must last at least 3 chords");
-            /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
-            rel(home, from->getChords()[from->getDuration()-1] != SEVENTH_DEGREE);
-            rel(home, from->getChords()[from->getDuration()-1] <= FIVE_OF_SIX);
-            ///The modulation must end on a perfect cadence in the new tonality
-            cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
-                    to->getChords(), to->getHasSeventh());
-            break;
-            /**
-             * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
-             * It must be followed by the V chord in the new tonality
-             */
-        case ALTERATION_MODULATION:
-            if(end - start != 1)
-                throw std::invalid_argument("An alteration modulation must last exactly 2 chords");
-            /// The first chord of the modulation must be diatonic and not the fifth degree
-            rel(home, to->getChords()[0] <= SIXTH_DEGREE);
-            rel(home, to->getChords()[0] != FIFTH_DEGREE);
-            //todo add the constraint that the V must be heard after the altered chord (maybe not directly but shortly(2 chords max))
-            /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
-            /// it has a fake degree value (above seventh degree)
-            element(home, t1Notes, degreeInT1, expr(home, to->getRootNotes()[0] % PERFECT_OCTAVE));
-            /// link quality and degreeInT1. If the degree is fake, the quality is -1
-            element(home, t1Qualities, degreeInT1, qualityInT1);
-            /// the quality of the chord in the new tonality cannot be the same as the quality for the same note in t1.
-            /// if the note is not in t1, it is always true because quality is -1. Otherwise the constraint is enforced.
-            rel(home, qualityInT1 != to->getQualities()[0]);
-            ///put everything together
-            //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
-
-            break;
-        case SECONDARY_DOMINANT_MODULATION:
-            if(end - start != 1)
-                throw std::invalid_argument("A secondary dominant modulation must last exactly 2 chords");
-            break;
-        default:
-            throw std::invalid_argument("Invalid modulation type");
-    }
+    /// The first chord of the modulation must be diatonic and not the fifth degree
+    rel(home, to->getChords()[0] <= SIXTH_DEGREE);
+    rel(home, to->getChords()[0] != FIFTH_DEGREE);
+    //todo add the constraint that the V must be heard after the altered chord (maybe not directly but shortly(2 chords max))
+    /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
+    /// it has a fake degree value (above seventh degree)
+    element(home, t1Notes, degreeInT1, expr(home, to->getRootNotes()[0] % PERFECT_OCTAVE));
+    /// link quality and degreeInT1. If the degree is fake, the quality is -1
+    element(home, t1Qualities, degreeInT1, qualityInT1);
+    /// the quality of the chord in the new tonality cannot be the same as the quality for the same note in t1.
+    /// if the note is not in t1, it is always true because quality is -1. Otherwise the constraint is enforced.
+    rel(home, qualityInT1 != to->getQualities()[0]);
+    ///put everything together
+    //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
 }
 
-Modulation::Modulation(const Home &home, const Modulation& m){
-    type = m.type;
-    start = m.start;
-    end = m.end;
-    from = new ChordProgression(home, *m.from);
-    to = new ChordProgression(home, *m.to);
+void Modulation::secondary_dominant_modulation(Home home) {
+
 }
+
 
 string Modulation::toString() {
     string txt;
