@@ -30,6 +30,7 @@ private:
     IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X,bII,6te_a)
     IntVarArray states;              /// the states of the chords (fundamental, first inversion, ...)
     IntVarArray qualities;           /// the quality of the chords
+    IntVarArray qualitiesWithoutSeventh; /// the quality of the chords without the seventh
     IntVarArray bassDegrees;         /// the bass notes corresponding to the chord degrees
     IntVarArray rootNotes;           /// the root notes
 
@@ -54,10 +55,10 @@ public:
      * @param maxPercentSeventhChords the maximum percentage of seventh chords in the progression
      * @return a ChordProgression object
      */
-    ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states,
-                     IntVarArray qualities, IntVarArray rootNotes, IntVarArray hasSeventh,
-                     double minPercentChromaticChords, double maxPercentChromaticChords,
-                     double minPercentSeventhChords, double maxPercentSeventhChords);
+    ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
+                     IntVarArray qualitiesWithoutSeventh, IntVarArray rootNotes, IntVarArray hasSeventh,
+                     double minPercentChromaticChords, double maxPercentChromaticChords, double minPercentSeventhChords,
+                     double maxPercentSeventhChords);
 
     /**
      * Copy constructor
@@ -82,6 +83,8 @@ public:
     IntVarArray getStates() { return states; }
 
     IntVarArray getQualities() { return qualities; }
+
+    IntVarArray getQualitiesWithoutSeventh() { return qualitiesWithoutSeventh; }
 
     IntVarArray getRootNotes() { return rootNotes; }
 

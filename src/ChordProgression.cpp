@@ -22,10 +22,10 @@
  * @return a ChordProgression object
  */
 ChordProgression::
-ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states,
-                 IntVarArray qualities, IntVarArray rootNotes, IntVarArray hasSeventh,
-                 double minPercentChromaticChords, double maxPercentChromaticChords,
-                 double minPercentSeventhChords, double maxPercentSeventhChords) {
+ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
+                 IntVarArray qualitiesWithoutSeventh, IntVarArray rootNotes, IntVarArray hasSeventh,
+                 double minPercentChromaticChords, double maxPercentChromaticChords, double minPercentSeventhChords,
+                 double maxPercentSeventhChords) {
 
     this->start                     = start;
     this->duration                  = duration;
@@ -39,6 +39,7 @@ ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarA
     this->chords                    = IntVarArray(home, duration,   FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                    = IntVarArray(home, states          .slice(start, 1, duration));
     this->qualities                 = IntVarArray(home, qualities       .slice(start, 1, duration));
+    this->qualitiesWithoutSeventh   = IntVarArray(home, qualitiesWithoutSeventh   .slice(start, 1, duration));
     this->bassDegrees               = IntVarArray(home, duration,   FIRST_DEGREE, SEVENTH_DEGREE);
     this->rootNotes                 = IntVarArray(home, rootNotes       .slice(start, 1, duration));
 
@@ -79,6 +80,7 @@ ChordProgression::ChordProgression(Home home, ChordProgression &s){
     chords                      .update(home, s.chords);
     states                      .update(home, s.states);
     qualities                   .update(home, s.qualities);
+    qualitiesWithoutSeventh     .update(home, s.qualitiesWithoutSeventh);
     bassDegrees                 .update(home, s.bassDegrees);
     rootNotes                   .update(home, s.rootNotes);
 
@@ -111,7 +113,8 @@ string ChordProgression::toString() const{
     txt += "Chords:\t\t\t"                          + intVarArray_to_string(chords)         + "\n";
     txt += "States:\t\t\t"                          + intVarArray_to_string(states)         + "\n";
     txt += "Qualities:\t\t"                         + intVarArray_to_string(qualities)      + "\n";
-    txt += "Bass degrees:\t\t"                        + intVarArray_to_string(bassDegrees)    + "\n";
+    txt += "Qualities without seventh:\t"           + intVarArray_to_string(qualitiesWithoutSeventh) + "\n";
+    txt += "Bass degrees:\t\t"                      + intVarArray_to_string(bassDegrees)    + "\n";
     txt += "Root notes:\t\t"                        + intVarArray_to_string(rootNotes)      + "\n";
     txt += "Chromatic chords:\t"                    + intVarArray_to_string(isChromatic)    + "\n";
     txt += "Seventh chords:\t\t"                    + intVarArray_to_string(hasSeventh)     + "\n";

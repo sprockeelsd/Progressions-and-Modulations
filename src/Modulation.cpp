@@ -68,34 +68,45 @@ void Modulation::pivot_chord_modulation(const Home &home) { //todo check that it
 }
 
 void Modulation::alteration_modulation(Home home) {
-    ///this is ok
+    /// Get the diatonic note for each degree in the first tonality. Then, add the other notes in the end (they don't
+    /// have a degree, but it is useful to post the constraint. This way all notes are in the array, and we can use an
+    /// element constraint
     vector<int> t1degreeNotes;
-    t1degreeNotes.reserve(SEVENTH_DEGREE+1);
-    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
+    t1degreeNotes.reserve(PERFECT_OCTAVE);
+    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++) { /// Add the degree notes
         t1degreeNotes.push_back(from->getTonality()->get_degree_note(i));
-    for(int i = C; i <= B; i++){
-        if(std::find(t1degreeNotes.begin(), t1degreeNotes.end(), i) == t1degreeNotes.end())
-            t1degreeNotes.push_back(i);
     }
-    IntArgs t1Notes(t1degreeNotes);
-    std::cout << t1Notes << std::endl;
+    for(int i = C; i <= B; i++){ /// Add the other notes
+        /// if the note is not in the array
+        if(std::find(t1degreeNotes.begin(), t1degreeNotes.end(), i) == t1degreeNotes.end()){
+            t1degreeNotes.push_back(i);
+        }
+    }
+    IntArgs t1Notes(t1degreeNotes); /// Create the argument array for the constraint
+    std::cout << "t1Notes: " << t1Notes << std::endl;
 
-    ///this is ok
+    /// Get the quality associated to each degree in the first tonality. Then, add -1 for every note that is not associated
+    /// to a degree in the tonality. This way, we can use an element constraint to link the degree and the quality
     vector<int> t1QualitiesDegrees;
-    t1QualitiesDegrees.reserve(SEVENTH_DEGREE+1);
-    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++)
+    t1QualitiesDegrees.reserve(PERFECT_OCTAVE);
+    for(int i = FIRST_DEGREE; i <= SEVENTH_DEGREE; i++) { /// Add the qualities for the degrees
         t1QualitiesDegrees.push_back(from->getTonality()->get_chord_quality(i));
-    while(t1QualitiesDegrees.size() < t1degreeNotes.size())
+    }
+    while(t1QualitiesDegrees.size() < t1degreeNotes.size()) {
         t1QualitiesDegrees.push_back(-1); /// fake qualities to have the right number of elements
+    }
     IntArgs t1Qualities(t1QualitiesDegrees);
-    std::cout << t1Qualities << std::endl;
+    std::cout << "t1Qualities: " << t1Qualities << std::endl;
 
-    IntVar degreeInT1(home, FIRST_DEGREE, SEVENTH_DEGREE);
-    IntVar qualityInT1(home, MAJOR_CHORD, AUGMENTED_CHORD);
+    /// The corresponding degree in T1 for the note in the new tonality
+    IntVar degreeInT1(home, FIRST_DEGREE, PERFECT_OCTAVE - 1); /// If it is not in the tonality, it is above the seventh degree
+    IntVar qualityInT1(home, -1, AUGMENTED_CHORD); /// Simplified quality without the seventh in T1
+
     /// The first chord of the modulation must be diatonic and not the fifth degree
-    rel(home, to->getChords()[0] <= SIXTH_DEGREE);
+    rel(home, to->getChords()[0] <= SEVENTH_DEGREE);
     rel(home, to->getChords()[0] != FIFTH_DEGREE);
     //todo add the constraint that the V must be heard after the altered chord (maybe not directly but shortly(2 chords max))
+
     /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
     /// it has a fake degree value (above seventh degree)
     element(home, t1Notes, degreeInT1, expr(home, to->getRootNotes()[0] % PERFECT_OCTAVE));
@@ -103,9 +114,11 @@ void Modulation::alteration_modulation(Home home) {
     element(home, t1Qualities, degreeInT1, qualityInT1);
     /// the quality of the chord in the new tonality cannot be the same as the quality for the same note in t1.
     /// if the note is not in t1, it is always true because quality is -1. Otherwise the constraint is enforced.
-    rel(home, qualityInT1 != to->getQualities()[0]);
-    ///put everything together
+    rel(home, qualityInT1 != to->getQualitiesWithoutSeventh()[0]); //todo use the 3note quality array
     //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1));
+
+    //todo some chords cannot be followed by the V, so it should be the third chord
+    //rel(home, to->getChords()[1] == FIFTH_DEGREE); /// The next chord must be the V chord
 }
 
 void Modulation::secondary_dominant_modulation(Home home) {

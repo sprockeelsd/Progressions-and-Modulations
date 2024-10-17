@@ -94,7 +94,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 new ChordProgression(*this,
                                      tonalitiesStarts[i], tonalitiesDurations[i],
                                      this->tonalities[i],
-                                     states, qualities, rootNotes, hasSeventh,
+                                     states, qualities, qualityWithoutSeventh, rootNotes, hasSeventh,
                                      0, 1,
                                      0, 1)
                 );

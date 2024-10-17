@@ -13,9 +13,9 @@ int main(int argc, char **argv) {
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
     vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> modulationTypes = {PERFECT_CADENCE_MODULATION};
-    vector<int> modulationStarts = {3};
-    vector<int> modulationEnds = {4}; //todo change into duration instead of end
+    vector<int> modulationTypes = {ALTERATION_MODULATION};
+    vector<int> modulationStarts = {5};
+    vector<int> modulationEnds = {6}; //todo change into duration instead of end
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
