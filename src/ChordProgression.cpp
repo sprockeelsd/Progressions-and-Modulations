@@ -6,8 +6,7 @@
 
 /**
  * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
- * constraints. It also posts the branching on the chords array. Branching for the other arrays is handled in the
- * TonalPiece class
+ * constraints.
  * @param home the search space
  * @param tonality the tonality of the progression
  * @param start the starting position of the progression in the global piece
@@ -126,7 +125,7 @@ string ChordProgression::toString() const{
  * @brief pretty
  * @return a string representation of the object
  */
-string ChordProgression::pretty() const{ //todo change the representation so that the different tonalities are visible
+string ChordProgression::pretty() const{ //todo change the representation so that it is more clear
     string txt;
     try{
         string degs, stas;

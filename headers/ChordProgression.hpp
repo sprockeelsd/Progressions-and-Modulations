@@ -40,8 +40,7 @@ private:
 public:
     /**
      * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
-     * constraints. It also posts the branching on the chords array. Branching for the other arrays is handled in the
-     * TonalPiece class
+     * constraints.
      * @param home the search space
      * @param tonality the tonality of the progression
      * @param start the starting position of the progression in the global piece

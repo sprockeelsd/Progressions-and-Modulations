@@ -4,9 +4,18 @@
 
 #include "../headers/Modulation.hpp"
 
+/**
+ * Constructor for Modulation objects. It initializes the object with the given parameters, and posts the
+ * constraints based on the type of modulation.
+ * @param home the search space
+ * @param type the type of modulation
+ * @param start the starting position of the modulation
+ * @param end the ending position of the modulation
+ * @param from the chord progression to modulate from
+ * @param to the chord progression to modulate to
+ */
 Modulation::Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
                         type(type), start(start), end(end), from(from), to(to){
-    //todo make subclasses for each modulation type
     switch(type){
             /**
              * The first tonality ends on a perfect cadence. Then the next tonality starts
@@ -27,7 +36,7 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
             break;
             /**
              * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
-             * It must be followed by the V chord in the new tonality
+             * It must be followed by the V chord in the new tonality todo make it so that the V is the second or third chord in the new tonality
              */
         case ALTERATION_MODULATION:
             if(end - start != 1)
@@ -44,6 +53,11 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
     }
 }
 
+/**
+ * Copy constructor
+ * @param home the search space
+ * @param s a Modulation object
+ */
 Modulation::Modulation(const Home &home, const Modulation& m){
     type = m.type;
     start = m.start;
@@ -52,12 +66,23 @@ Modulation::Modulation(const Home &home, const Modulation& m){
     to = new ChordProgression(home, *m.to);
 }
 
+/**
+ * This function posts the constraints for a perfect cadence modulation. It ensures that the first chord progression
+ * ends on a perfect cadence.
+ * @param home the search space
+ */
 void Modulation::perfect_cadence_modulation(const Home &home) {
     ///Add a perfect cadence constraint to the end of the first tonality
     cadence(home, from->getDuration()-2, PERFECT_CADENCE, from->getStates(), from->getChords(),
             from->getHasSeventh());
 }
 
+/**
+ * This function posts the constraints for a pivot chord modulation. It ensures that from the start of the modulation
+ * to the end minus two chords, all chords are in both tonalities. The last two chords of the modulation are a perfect
+ * cadence in the new tonality
+ * @param home the search space
+ */
 void Modulation::pivot_chord_modulation(const Home &home) { //todo check that it is ok
     /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
     rel(home, from->getChords()[from->getDuration()-1] != SEVENTH_DEGREE);

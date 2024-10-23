@@ -239,6 +239,7 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
  *      - V+4->I6 (formula: chords[i] = V & states[i] = 3rd) => chords[i+1] = I & states[i+1] = 1st)
  * todo maybe allow them to go to V/x as well
  * todo test this a lot, for all kinds of variations (also with borrowed chords)
+ * todo express it with quality (dominant seventh chord) and state => resolution
  * @param home the problem space
  * @param size the number of chords
  * @param states the array of chord states

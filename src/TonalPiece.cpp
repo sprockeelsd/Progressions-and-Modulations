@@ -39,6 +39,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     //todo add other chords (9, add6,...)?
     //todo V-> VI can only happen in fund state
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
+    //todo the seventh of a diatonic chord must be prepared, unless the chord is V
 
     if(modulationTypes.size() != tonalities.size()-1)
         throw std::invalid_argument("The number of modulations should be equal to the number of tonalities minus one.");
@@ -100,6 +101,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 );
     }
 
+    /// Create the Modulation objects for each modulation, and post the constraints
     modulations.reserve(modulationTypes.size());
     for(int i = 0; i < modulationTypes.size(); i++){
         modulations.push_back(
