@@ -269,18 +269,17 @@ void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarA
 }
 
 /**
- * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
- * formula: chords[i] == V && qualities[i] < DOMINANT_SEVENTH_CHORD => states[i] != SECOND_INVERSION
+ * Chords that don't have a seventh cannot be in third inversion
+ * formula: chords[i] == V && qualities[i] < DOMINANT_SEVENTH_CHORD => states[i] != SECOND_INVERSION todo update
  * @param home the problem space
  * @param size the number of chords
  * @param states the array of chord states
  * @param qualities the array of chord qualities
- * @param chords the array of chord degrees
  */
-void fifth_degree(const Home &home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords) {
+void chord_states_and_qualities(const Home &home, int size, IntVarArray states, IntVarArray qualities) {
     for(int i = 0; i < size; i++)
-        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP,
-            expr(home, states[i] != SECOND_INVERSION), true);
+        rel(home, expr(home, qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP,
+            expr(home, states[i] < THIRD_INVERSION), true);
 }
 
 

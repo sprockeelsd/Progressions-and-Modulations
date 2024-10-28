@@ -69,6 +69,6 @@ void tonal_progression(const Home &home, int size, Tonality *tonality,
     ///13. Tritone resolutions should be allowed with the states todo rework this and test it extensively
     tritone_resolutions(home, size, states, chords);
 
-    ///14. Fifth degree chord cannot be in second inversion if it is not dominant seventh
-    fifth_degree(home, size, states, qualities, chords);
+    ///14. Fifth degree chord cannot be in second inversion if it is not dominant seventh todo generalize for seventh chords in general. check if they can have any state or the same as perfect chords
+    chord_states_and_qualities(home, size, states, qualities);
 }

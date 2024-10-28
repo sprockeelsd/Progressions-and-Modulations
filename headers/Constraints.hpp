@@ -190,7 +190,7 @@ void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarA
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void fifth_degree(const Home &home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords);
+void chord_states_and_qualities(const Home &home, int size, IntVarArray states, IntVarArray qualities);
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *
