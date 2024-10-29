@@ -112,6 +112,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 
     ///add here any optional constraints
 
+    
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done
      * in order of appearance of the tonalities. Maybe this needs to change? But then it has to be done differently

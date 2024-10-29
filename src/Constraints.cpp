@@ -235,8 +235,8 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
 /**
  * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
  * cases handeld for now:
- *      - V65/-> I5 (formula: chords[i] = V & states[i] = 1st) => chords[i+1] = I & states[i+1] = fund)
- *      - V+4->I6 (formula: chords[i] = V & states[i] = 3rd) => chords[i+1] = I & states[i+1] = 1st)
+ * Dominant chords in fundamental state, first or second inversion must go to a chord in fundamental state to allow for tritone resolution
+ * Dominant chords in third inversion must go to a chord in first inversion to allow for tritone resolution
  * todo maybe allow them to go to V/x as well
  * todo test this a lot, for all kinds of variations (also with borrowed chords)
  * todo express it with quality (dominant seventh chord) and state => resolution
@@ -245,26 +245,24 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
  * @param states the array of chord states
  * @param chords the array of chord degrees
  */
-void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarArray chords) {
+void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords) {
     for(int i = 0; i < size - 1; i++){
-        ///V65/-> I5
-        rel(home, expr(home, chords[i] == FIFTH_DEGREE && states[i] == FIRST_INVERSION), BOT_IMP,
-            expr(home, chords[i+1] == FIRST_DEGREE && states[i+1] == FUNDAMENTAL_STATE), true);
-        ///V+4->I6
-        rel(home, expr(home, chords[i] == FIFTH_DEGREE && states[i] == THIRD_INVERSION), BOT_IMP,
-            expr(home, chords[i+1] == FIRST_DEGREE && states[i+1] == FIRST_INVERSION), true);
-        ///V/x65/->x5
-        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == FIRST_INVERSION
-                            && chords[i+1] <= SIXTH_DEGREE), BOT_IMP,
+        /// Dominant chords
+        BoolVar isDominantChord(home, 0, 1);
+        rel(home, isDominantChord, IRT_EQ,
+            expr(home,
+                expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == MAJOR_CHORD || qualities[i] == DOMINANT_SEVENTH_CHORD) ||
+                expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX)
+            )
+        );
+        ///7+-65/-+6 -> 5
+        rel(home, expr(home, isDominantChord && states[i] < THIRD_INVERSION), BOT_IMP,
             expr(home, states[i+1] == FUNDAMENTAL_STATE), true);
-        ///V/x+4->x6
-        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == THIRD_INVERSION
-                             && chords[i+1] <= SIXTH_DEGREE), BOT_IMP,
+
+
+        /// +4 -> 6
+        rel(home, expr(home, isDominantChord && states[i] == THIRD_INVERSION), BOT_IMP,
             expr(home, states[i+1] == FIRST_INVERSION), true);
-        ///V/x5/7+ -> x5 / V/y 5/7+
-        rel(home, expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX && states[i] == FUNDAMENTAL_STATE),
-            BOT_IMP,expr(home, states[i+1] == FUNDAMENTAL_STATE), true);
-        ///V/x->V/y
     }
 }
 

@@ -179,7 +179,7 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
  * @param states the array of chord states
  * @param chords the array of chord degrees
  */
-void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarArray chords);
+void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords);
 
 /**
  * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
