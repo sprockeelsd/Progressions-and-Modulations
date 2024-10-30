@@ -234,35 +234,30 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
 
 /**
  * Makes sure the state of the chords allows for tritone resolutions in the cases where it is necessary
- * cases handeld for now:
- * Dominant chords in fundamental state, first or second inversion must go to a chord in fundamental state to allow for tritone resolution
- * Dominant chords in third inversion must go to a chord in first inversion to allow for tritone resolution
- * todo maybe allow them to go to V/x as well
- * todo test this a lot, for all kinds of variations (also with borrowed chords)
- * todo express it with quality (dominant seventh chord) and state => resolution
  * @param home the problem space
  * @param size the number of chords
  * @param states the array of chord states
  * @param chords the array of chord degrees
  */
-void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords) {
+void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords,
+                         IntVarArray bassDegrees) {
     for(int i = 0; i < size - 1; i++){
         /// Dominant chords
         BoolVar isDominantChord(home, 0, 1);
         rel(home, isDominantChord, IRT_EQ,
             expr(home,
-                expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == MAJOR_CHORD || qualities[i] == DOMINANT_SEVENTH_CHORD) ||
+                expr(home, chords[i] == FIFTH_DEGREE && (qualities[i] == MAJOR_CHORD || qualities[i] == DOMINANT_SEVENTH_CHORD)) ||
                 expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX)
             )
         );
-        ///7+-65/-+6 -> 5
-        rel(home, expr(home, isDominantChord && states[i] < THIRD_INVERSION), BOT_IMP,
-            expr(home, states[i+1] == FUNDAMENTAL_STATE), true);
+        ///65/ -> 5
+        rel(home, expr(home, isDominantChord && states[i] == FIRST_INVERSION), BOT_IMP,
+            expr(home, bassDegrees[i+1] == expr(home, bassDegrees[i]+1) % 7), true);
 
 
         /// +4 -> 6
         rel(home, expr(home, isDominantChord && states[i] == THIRD_INVERSION), BOT_IMP,
-            expr(home, states[i+1] == FIRST_INVERSION), true);
+            expr(home, bassDegrees[i+1] == expr(home, bassDegrees[i]-1) % 7), true);
     }
 }
 

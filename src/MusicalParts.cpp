@@ -66,9 +66,9 @@ void tonal_progression(const Home &home, int size, Tonality *tonality,
     ///12. The same degree cannot happen more than twice successively
     successive_chords_with_same_degree(home, size, states, qualities, chords);
 
-    ///13. Tritone resolutions should be allowed with the states todo rework this and test it extensively
-    tritone_resolutions(home, size, states, qualities, chords);
+    ///13. Tritone resolutions should be allowed with the states
+    tritone_resolutions(home, size, states, qualities, chords, bassDegrees);
 
-    ///14. Fifth degree chord cannot be in second inversion if it is not dominant seventh todo generalize for seventh chords in general. check if they can have any state or the same as perfect chords
+    ///14. Chords cannot be in third inversion if they don't have a seventh
     chord_states_and_qualities(home, size, states, qualities);
 }

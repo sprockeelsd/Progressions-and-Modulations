@@ -108,7 +108,6 @@ void Modulation::alteration_modulation(Home home) {
         }
     }
     IntArgs t1Notes(t1degreeNotes); /// Create the argument array for the constraint
-    std::cout << "t1Notes: " << t1Notes << std::endl;
 
     /// Get the quality associated to each degree in the first tonality. Then, add -1 for every note that is not associated
     /// to a degree in the tonality. This way, we can use an element constraint to link the degree and the quality
@@ -121,7 +120,6 @@ void Modulation::alteration_modulation(Home home) {
         t1QualitiesDegrees.push_back(-1); /// fake qualities to have the right number of elements
     }
     IntArgs t1Qualities(t1QualitiesDegrees);
-    std::cout << "t1Qualities: " << t1Qualities << std::endl;
 
     /// The corresponding degree in T1 for the note in the new tonality
     IntVar degreeInT1(home, FIRST_DEGREE, PERFECT_OCTAVE - 1); /// If it is not in the tonality, it is above the seventh degree
@@ -130,7 +128,6 @@ void Modulation::alteration_modulation(Home home) {
     /// The first chord of the modulation must be diatonic and not the fifth degree
     rel(home, to->getChords()[0] <= SEVENTH_DEGREE);
     rel(home, to->getChords()[0] != FIFTH_DEGREE);
-    //todo add the constraint that the V must be heard after the altered chord (maybe not directly but shortly(2 chords max))
 
     /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
     /// it has a fake degree value (above seventh degree)

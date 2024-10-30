@@ -37,7 +37,6 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
     //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
     //todo add other chords (9, add6,...)?
-    //todo V-> VI can only happen in fund state
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
     //todo the seventh of a diatonic chord must be prepared, unless the chord is V
 
