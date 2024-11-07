@@ -110,6 +110,10 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
+    rel(*this, progressions[0]->getChords()[0] == FIRST_DEGREE);
+    rel(*this, progressions[0]->getChords()[1] != FOURTH_DEGREE);
+    rel(*this, progressions[0]->getHasSeventh()[1] == 1);
+    rel(*this, progressions[0]->getQualities()[1] != DOMINANT_SEVENTH_CHORD);
 
     
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
