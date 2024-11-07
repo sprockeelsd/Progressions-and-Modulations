@@ -112,7 +112,7 @@ string ChordProgression::toString() const{
     txt += "Chords:\t\t\t"                          + intVarArray_to_string(chords)         + "\n";
     txt += "States:\t\t\t"                          + intVarArray_to_string(states)         + "\n";
     txt += "Qualities:\t\t"                         + intVarArray_to_string(qualities)      + "\n";
-    txt += "Qualities without seventh:\t"           + intVarArray_to_string(qualitiesWithoutSeventh) + "\n";
+    txt += "Qualities (no seventh):\t"           + intVarArray_to_string(qualitiesWithoutSeventh) + "\n";
     txt += "Bass degrees:\t\t"                      + intVarArray_to_string(bassDegrees)    + "\n";
     txt += "Root notes:\t\t"                        + intVarArray_to_string(rootNotes)      + "\n";
     txt += "Chromatic chords:\t"                    + intVarArray_to_string(isChromatic)    + "\n";

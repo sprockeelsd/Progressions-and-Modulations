@@ -24,7 +24,7 @@
  * @param minSeventhChords the minimum number of seventh chords in the progression
  * @param maxSeventhChords the maximum number of seventh chords in the progression
  */
-void tonal_progression(const Home &home, int size, Tonality *tonality,
+void tonal_progression(Home home, int size, Tonality *tonality,
                        IntVarArray &states, IntVarArray &qualities, IntVarArray &rootNotes,
                        IntVarArray &chords, IntVarArray &bassDegrees,
                        IntVarArray &isChromatic, IntVarArray &hasSeventh,
