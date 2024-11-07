@@ -86,6 +86,17 @@ void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarA
         element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + states[i]), bassDegrees[i]);
 }
 
+void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, IntVarArray roots, IntVarArray thirds,
+                          IntVarArray fifths, IntVarArray sevenths) {
+    for(int i = 0; i < duration; i++){
+        element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + FUNDAMENTAL_STATE), roots[i]);
+        element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + FIRST_INVERSION), thirds[i]);
+        element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + SECOND_INVERSION), fifths[i]);
+        element(home, bassBasedOnDegreeAndState, expr(home, chords[i] * nSupportedStates + THIRD_INVERSION), sevenths[i]);
+    }
+}
+
+
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be in the range
  * [minChromaticChords, maxChromaticChords]

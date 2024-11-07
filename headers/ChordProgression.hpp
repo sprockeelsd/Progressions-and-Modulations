@@ -34,6 +34,11 @@ private:
     IntVarArray bassDegrees;         /// the bass notes corresponding to the chord degrees
     IntVarArray rootNotes;           /// the root notes
 
+    IntVarArray                 roots;
+    IntVarArray                 thirds;
+    IntVarArray                 fifths;
+    IntVarArray                 sevenths;
+
     IntVarArray isChromatic;         /// whether the chord is chromatic or not
     IntVarArray hasSeventh;          /// whether the chord has a seventh or not
 

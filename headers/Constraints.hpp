@@ -69,6 +69,9 @@ void link_root_notes_to_degrees(const Home &home, int size, Tonality *tonality, 
 void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarArray states, IntVarArray chords,
                                              IntVarArray bassDegrees);
 
+void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, IntVarArray roots, IntVarArray thirds,
+                          IntVarArray fifths, IntVarArray sevenths);
+
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be in the range
  * [minChromaticChords, maxChromaticChords]

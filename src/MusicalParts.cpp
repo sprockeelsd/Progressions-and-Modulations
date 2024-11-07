@@ -23,13 +23,16 @@ using namespace Gecode;
  * @param minSeventhChords the minimum number of seventh chords in the progression
  * @param maxSeventhChords the maximum number of seventh chords in the progression
  */
-void tonal_progression(const Home &home, int size, Tonality *tonality,
-                       IntVarArray &states, IntVarArray &qualities, IntVarArray &rootNotes,
-                       IntVarArray &chords, IntVarArray &bassDegrees,
-                       IntVarArray &isChromatic, IntVarArray &hasSeventh,
-                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords) {
+void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &states, IntVarArray &qualities,
+                       IntVarArray &rootNotes, IntVarArray &chords, IntVarArray &bassDegrees, IntVarArray &isChromatic,
+                       IntVarArray &hasSeventh, const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths,
+                       const IntVarArray& sevenths, int minChromaticChords, int maxChromaticChords, int minSeventhChords,
+                       int maxSeventhChords) {
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(home, size, chords);
+
+    /// Link notes to degrees
+    link_notes_to_degree(home, size, chords, roots, thirds, fifths, sevenths);
 
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
     link_chords_to_qualities(home, size, qualities, chords);
