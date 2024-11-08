@@ -75,8 +75,6 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     ///14. Chords cannot be in third inversion if they don't have a seventh
     chord_states_and_qualities(home, size, states, qualities);
 
-    for(int i = 1; i < size; i++){ //todo figure out how to allow diminished seventh chord on the VII
-        rel(home, expr(home, hasSeventh[i] == 1 && chords[i] != FIFTH_DEGREE && qualities[i] != DOMINANT_SEVENTH_CHORD), BOT_IMP,
-            expr(home, roots[i-1] == sevenths[i] || thirds[i-1] == sevenths[i] || fifths[i-1] == sevenths[i]), true);
-    }
+    /// 7èmes d'espèces doivent être préparées
+    seventh_chords_preparation(home, size, hasSeventh, qualities, chords, roots, thirds, fifths, sevenths);
 }

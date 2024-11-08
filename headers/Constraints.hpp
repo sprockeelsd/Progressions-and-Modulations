@@ -196,6 +196,21 @@ void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qu
  */
 void chord_states_and_qualities(const Home &home, int size, IntVarArray states, IntVarArray qualities);
 
+/**
+ *
+ * @param home
+ * @param size
+ * @param hasSeventh
+ * @param qualities
+ * @param chords
+ * @param roots
+ * @param thirds
+ * @param fifths
+ * @param sevenths
+ */
+void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, IntVarArray chords,
+                                const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths, const IntVarArray& sevenths);
+
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *
  ***********************************************************************************************************************/

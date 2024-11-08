@@ -286,6 +286,29 @@ void chord_states_and_qualities(const Home &home, int size, IntVarArray states, 
             expr(home, states[i] < THIRD_INVERSION), true);
 }
 
+/**
+ *
+ * @param home
+ * @param size
+ * @param hasSeventh
+ * @param qualities
+ * @param chords
+ * @param roots
+ * @param thirds
+ * @param fifths
+ * @param sevenths
+ */
+void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, IntVarArray chords,
+                                const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths, const IntVarArray& sevenths) {
+    for (int i = 1; i < size; i++) {
+        rel(home,
+            expr(home, hasSeventh[i] == 1 && qualities[i] != DOMINANT_SEVENTH_CHORD && chords[i] <= SEVENTH_DEGREE),
+            BOT_IMP,
+            expr(home, roots[i - 1] == sevenths[i] || thirds[i - 1] == sevenths[i] || fifths[i - 1] == sevenths[i]),
+            true);
+    }
+}
+
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *
