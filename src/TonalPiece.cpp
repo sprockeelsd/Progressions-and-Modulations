@@ -31,14 +31,16 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     ///constraint
     link_qualities_to_3note_version(*this, size, qualities, qualityWithoutSeventh);
 
+    //todo check modulations
+    //todo add marche harmoniques (diatoniques/modulantes/chromatiques/par quinte/par quarte/...)
+
+    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
+
     //todo make an options object that has a field for every parameter
     //todo link with Diatony
-    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
-    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
-    //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
     //todo add other chords (9, add6,...)?
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
-    //todo the seventh of a diatonic chord must be prepared, unless the chord is V
 
     if(modulationTypes.size() != tonalities.size()-1)
         throw std::invalid_argument("The number of modulations should be equal to the number of tonalities minus one.");
@@ -74,7 +76,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 break;
             case SECONDARY_DOMINANT_MODULATION: /// The modulation lasts 2 chords, and the next tonality starts on the second chord
                 tonalitiesStarts        .push_back(this->modulationStarts[i]);
-                tonalitiesDurations     .push_back(this->modulationEnds[i] - tonalitiesStarts[i] + 1);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]);
                 break;
             default:
                 throw std::invalid_argument("The modulation type is not recognized.");

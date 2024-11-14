@@ -92,6 +92,14 @@ public:
 
     IntVarArray getRootNotes() { return rootNotes; }
 
+    IntVarArray getRoots() { return roots; }
+
+    IntVarArray getThirds() { return thirds; }
+
+    IntVarArray getFifths() { return fifths; }
+
+    IntVarArray getSevenths() { return sevenths; }
+
     IntVarArray getBassDegrees() { return bassDegrees; }
 
     IntVarArray getIsChromatic() { return isChromatic; }

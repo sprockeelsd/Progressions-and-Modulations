@@ -60,7 +60,7 @@ public:
 
     void alteration_modulation(Home home);
 
-    void secondary_dominant_modulation(Home home);
+    void secondary_dominant_modulation(const Home& home);
 
     string toString();
 

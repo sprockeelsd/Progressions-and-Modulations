@@ -9,13 +9,17 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 2;
+    int size = 15;
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
-    vector<Tonality*> tonalities = {Cmajor};
-    vector<int> modulationTypes = {};
-    vector<int> modulationStarts = {};
-    vector<int> modulationEnds = {}; //todo change into duration instead of end
+    Tonality* Cminor = new MinorTonality(C);
+    Tonality *Fmajor = new MajorTonality(F);
+    Tonality *Emajor = new MajorTonality(E);
+    Tonality *Aminor = new MinorTonality(A);
+    vector<Tonality*> tonalities = {Cmajor, Aminor};
+    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
+    vector<int> modulationStarts = {7};
+    vector<int> modulationEnds = {8};
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
@@ -24,16 +28,21 @@ int main(int argc, char **argv) {
     delete tonalPiece;
 
     int n_sols = 0;
+    auto start = std::chrono::high_resolution_clock::now();     /// start time
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
         std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
-        //if(n_sols >= 1) break;
+        if(n_sols >= 1) break;
         delete sol;
     }
     if (n_sols == 0)
         std::cout << "No solution found." << std::endl;
     else
         std::cout << "Number of solutions: " << n_sols << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();     /// start time
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "time taken: " << duration.count() << " seconds and " << n_sols << " solutions found.\n" << std::endl;
 
 //    auto sol   = solve_chord_progression_problem_best(size, tonalities, tonalitiesStarts, tonalitiesDurations,
 //                                                      modulationTypes, modulationStarts);
