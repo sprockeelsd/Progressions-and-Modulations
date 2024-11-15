@@ -23,16 +23,19 @@ using namespace Gecode;
  * @param minSeventhChords the minimum number of seventh chords in the progression
  * @param maxSeventhChords the maximum number of seventh chords in the progression
  */
-void tonal_progression(const Home &home, int size, Tonality *tonality,
-                       IntVarArray &states, IntVarArray &qualities, IntVarArray &rootNotes,
-                       IntVarArray &chords, IntVarArray &bassDegrees,
-                       IntVarArray &isChromatic, IntVarArray &hasSeventh,
-                       int minChromaticChords, int maxChromaticChords, int minSeventhChords, int maxSeventhChords) {
+void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &states, IntVarArray &qualities,
+                       IntVarArray &rootNotes, IntVarArray &chords, IntVarArray &bassDegrees, IntVarArray &isChromatic,
+                       IntVarArray &hasSeventh, const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths,
+                       const IntVarArray& sevenths, int minChromaticChords, int maxChromaticChords, int minSeventhChords,
+                       int maxSeventhChords) {
     ///1. chord[i] -> chord[i+1] is possible (matrix)
     chord_transitions(home, size, chords);
 
+    /// Link notes to degrees
+    link_notes_to_degree(home, size, chords, roots, thirds, fifths, sevenths);
+
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
-    link_chords_to_qualities(home, size, qualities, chords);
+    link_chords_to_qualities(home, size, tonality, qualities, chords);
 
     ///3. The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
     link_chords_to_states(home, size, states, chords);
@@ -66,9 +69,12 @@ void tonal_progression(const Home &home, int size, Tonality *tonality,
     ///12. The same degree cannot happen more than twice successively
     successive_chords_with_same_degree(home, size, states, qualities, chords);
 
-    ///13. Tritone resolutions should be allowed with the states todo rework this and test it extensively
-    tritone_resolutions(home, size, states, chords);
+    ///13. Tritone resolutions should be allowed with the states
+    tritone_resolutions(home, size, states, qualities, chords, bassDegrees);
 
-    ///14. Fifth degree chord cannot be in second inversion if it is not dominant seventh
-    fifth_degree(home, size, states, qualities, chords);
+    ///14. Chords cannot be in third inversion if they don't have a seventh
+    chord_states_and_qualities(home, size, states, qualities);
+
+    /// 7èmes d'espèces doivent être préparées
+    seventh_chords_preparation(home, size, hasSeventh, qualities, chords, roots, thirds, fifths, sevenths);
 }

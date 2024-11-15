@@ -39,3 +39,6 @@ out/main
 .DS_Store
 .idea/*
 
+out/main.dSYM/Contents/Info.plist
+out/main.dSYM/Contents/Resources/DWARF/main
+out/main.dSYM/Contents/Resources/Relocations/aarch64/main.yml

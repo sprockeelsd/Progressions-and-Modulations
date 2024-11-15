@@ -30,8 +30,14 @@ private:
     IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X,bII,6te_a)
     IntVarArray states;              /// the states of the chords (fundamental, first inversion, ...)
     IntVarArray qualities;           /// the quality of the chords
+    IntVarArray qualitiesWithoutSeventh; /// the quality of the chords without the seventh
     IntVarArray bassDegrees;         /// the bass notes corresponding to the chord degrees
     IntVarArray rootNotes;           /// the root notes
+
+    IntVarArray                 roots;
+    IntVarArray                 thirds;
+    IntVarArray                 fifths;
+    IntVarArray                 sevenths;
 
     IntVarArray isChromatic;         /// whether the chord is chromatic or not
     IntVarArray hasSeventh;          /// whether the chord has a seventh or not
@@ -39,8 +45,7 @@ private:
 public:
     /**
      * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
-     * constraints. It also posts the branching on the chords array. Branching for the other arrays is handled in the
-     * TonalPiece class
+     * constraints.
      * @param home the search space
      * @param tonality the tonality of the progression
      * @param start the starting position of the progression in the global piece
@@ -55,8 +60,9 @@ public:
      * @return a ChordProgression object
      */
     ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
-                     IntVarArray rootNotes, double minPercentChromaticChords, double maxPercentChromaticChords,
-                     double minPercentSeventhChords, double maxPercentSeventhChords);
+                     IntVarArray qualitiesWithoutSeventh, IntVarArray rootNotes, IntVarArray hasSeventh,
+                     double minPercentChromaticChords, double maxPercentChromaticChords, double minPercentSeventhChords,
+                     double maxPercentSeventhChords);
 
     /**
      * Copy constructor
@@ -82,7 +88,17 @@ public:
 
     IntVarArray getQualities() { return qualities; }
 
+    IntVarArray getQualitiesWithoutSeventh() { return qualitiesWithoutSeventh; }
+
     IntVarArray getRootNotes() { return rootNotes; }
+
+    IntVarArray getRoots() { return roots; }
+
+    IntVarArray getThirds() { return thirds; }
+
+    IntVarArray getFifths() { return fifths; }
+
+    IntVarArray getSevenths() { return sevenths; }
 
     IntVarArray getBassDegrees() { return bassDegrees; }
 

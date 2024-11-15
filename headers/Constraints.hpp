@@ -21,7 +21,8 @@
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void link_chords_to_qualities(const Home &home, int size, IntVarArray qualities, IntVarArray chords);
+void
+link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarArray qualities, IntVarArray chords);
 
 /**
  * Links chord states to the degrees
@@ -69,6 +70,9 @@ void link_root_notes_to_degrees(const Home &home, int size, Tonality *tonality, 
 void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarArray states, IntVarArray chords,
                                              IntVarArray bassDegrees);
 
+void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, IntVarArray roots, IntVarArray thirds,
+                          IntVarArray fifths, IntVarArray sevenths);
+
 /**
  * Link the chromatic chords array to the chords array, and constraints the number of chromatic chords to be in the range
  * [minChromaticChords, maxChromaticChords]
@@ -97,6 +101,16 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
  */
 void seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray hasSeventh, int minSeventhChords,
                     int maxSeventhChords);
+
+/**
+ * Links the qualities array to the quality_without_seventh array. This is useful when you need to know the general
+ * quality of the chord but don't need to know if it has a seventh
+ * @param home the problem space
+ * @param size the number of chords in the progression
+ * @param qualities the array of chord qualities
+ * @param qualityWithoutSeventh the array of chord qualities without the seventh
+ */
+void link_qualities_to_3note_version(const Home &home, int size, IntVarArray qualities, IntVarArray qualityWithoutSeventh);
 
 /***********************************************************************************************************************
  *                                                   Constraints                                                       *
@@ -169,7 +183,8 @@ void successive_chords_with_same_degree(const Home &home, int size, IntVarArray 
  * @param states the array of chord states
  * @param chords the array of chord degrees
  */
-void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarArray chords);
+void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords,
+                         IntVarArray bassDegrees);
 
 /**
  * The fifth degree chord cannot be in second inversion if it is not a dominant seventh chord
@@ -180,7 +195,22 @@ void tritone_resolutions(const Home &home, int size, IntVarArray states, IntVarA
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void fifth_degree(const Home &home, int size, IntVarArray states, IntVarArray qualities, IntVarArray chords);
+void chord_states_and_qualities(const Home &home, int size, IntVarArray states, IntVarArray qualities);
+
+/**
+ *
+ * @param home
+ * @param size
+ * @param hasSeventh
+ * @param qualities
+ * @param chords
+ * @param roots
+ * @param thirds
+ * @param fifths
+ * @param sevenths
+ */
+void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, IntVarArray chords,
+                                const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths, const IntVarArray& sevenths);
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *

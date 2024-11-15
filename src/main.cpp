@@ -9,33 +9,40 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
+    int size = 15;
     Tonality* Cmajor = new MajorTonality(C);
     Tonality* Gmajor = new MajorTonality(G);
-    vector<Tonality*> tonalities = {Cmajor, Gmajor};
-    vector<int> tonalitiesStarts = {0, 9};
-    vector<int> tonalitiesDurations = {10, 11};
+    Tonality* Cminor = new MinorTonality(C);
+    Tonality *Fmajor = new MajorTonality(F);
+    Tonality *Emajor = new MajorTonality(E);
+    Tonality *Aminor = new MinorTonality(A);
+    vector<Tonality*> tonalities = {Cmajor, Fmajor};
     vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
-    vector<int> modulationStarts = {9};
-    vector<int> modulationEnds = {11};
-    int size = tonalitiesStarts[tonalitiesStarts.size()-1] + tonalitiesDurations[tonalitiesDurations.size()-1];
+    vector<int> modulationStarts = {6};
+    vector<int> modulationEnds = {9};
 
-    auto tonalPiece = new TonalPiece(size, tonalities, tonalitiesStarts, tonalitiesDurations, modulationTypes,
+    auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
 
     DFS<TonalPiece> engine(tonalPiece);
     delete tonalPiece;
 
     int n_sols = 0;
+    auto start = std::chrono::high_resolution_clock::now();     /// start time
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
-        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << std::endl;
-        if(n_sols >= 100) break;
+        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
+        if(n_sols >= 1) break;
         delete sol;
     }
     if (n_sols == 0)
         std::cout << "No solution found." << std::endl;
     else
         std::cout << "Number of solutions: " << n_sols << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();     /// start time
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "time taken: " << duration.count() << " seconds and " << n_sols << " solutions found.\n" << std::endl;
 
 //    auto sol   = solve_chord_progression_problem_best(size, tonalities, tonalitiesStarts, tonalitiesDurations,
 //                                                      modulationTypes, modulationStarts);

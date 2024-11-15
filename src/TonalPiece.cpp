@@ -2,8 +2,6 @@
 // Created by Damien Sprockeels on 30/09/2024.
 //
 
-#include <utility>
-
 #include "../headers/TonalPiece.hpp"
 
 /**
@@ -19,40 +17,92 @@
  * @return a TonalPiece object
  */
 TonalPiece::
-TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
-           vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
-           vector<int> modulationEnds) :
-           size(size), tonalities(tonalities), tonalitiesStarts(tonalitiesStarts),
-           tonalitiesDurations(tonalitiesDurations), modulationTypes(modulationTypes), modulationStarts(modulationStarts),
-           modulationEnds(modulationEnds){
+TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
+           vector<int> modulationStarts, vector<int> modulationEnds) :
+           size(size), tonalities(tonalities),
+           modulationTypes(modulationTypes), modulationStarts(modulationStarts), modulationEnds(modulationEnds){
 
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
     this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
     this->rootNotes             = IntVarArray(*this, size, C,                   B);
+    this->hasSeventh            = IntVarArray(*this, size, 0,                   1);
+    this->qualityWithoutSeventh = IntVarArray(*this, size, MAJOR_CHORD,         AUGMENTED_CHORD);
+
+    ///constraint
+    link_qualities_to_3note_version(*this, size, qualities, qualityWithoutSeventh);
+
+    //todo check modulations
+    //todo add marche harmoniques (diatoniques/modulantes/chromatiques/par quinte/par quarte/...)
+
+    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
+    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
 
     //todo make an options object that has a field for every parameter
     //todo link with Diatony
-    //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
-    //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
-    //todo check if it is more profitable to remove the seventh chords from the qualities array and to deduce them from the hasSeventh array in post-processing
     //todo add other chords (9, add6,...)?
-    //todo V-> VI can only happen in fund state
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
+
+    if(modulationTypes.size() != tonalities.size()-1)
+        throw std::invalid_argument("The number of modulations should be equal to the number of tonalities minus one.");
+
+    ///Compute tonality starts and durations
+    tonalitiesStarts.reserve(tonalities.size());
+    tonalitiesDurations.reserve(tonalities.size());
+
+    tonalitiesStarts.push_back(0);
+
+    for(int i = 0; i < modulationTypes.size(); i++){
+        switch (modulationTypes[i]){
+                /**
+                 * The modulation lasts 2 chords, and the next tonality starts on the chord after the modulation
+                 * example: C Major (I ... V I) (I ...) G Major
+                 */
+            case PERFECT_CADENCE_MODULATION:    /// The modulation lasts 2 chords, and the next tonality starts on the next chord
+                tonalitiesStarts        .push_back(this->modulationEnds[i] + 1);                       ///start of the next tonality
+                tonalitiesDurations     .push_back(this->modulationEnds[i] - tonalitiesStarts[i] + 1); ///duration of the current tonality
+                break;
+                /**
+                 * The modulation lasts at least 3 chords, and the next tonality starts on the first chord while the
+                 * first tonality ends just before the perfect cadence, so there is an overlap of the tonalities
+                 * example: C Major (I ... (VI) V I ...) G Major
+                 */
+            case PIVOT_CHORD_MODULATION:
+                tonalitiesStarts        .push_back( this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationEnds[i] -2 - tonalitiesStarts[i] + 1);
+                break;
+            case ALTERATION_MODULATION:         /// The modulation lasts 2 chords, and the next tonality starts on the first chord
+                tonalitiesStarts        .push_back(this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]);
+                break;
+            case SECONDARY_DOMINANT_MODULATION: /// The modulation lasts 2 chords, and the next tonality starts on the second chord
+                tonalitiesStarts        .push_back(this->modulationStarts[i]);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]+1);
+                break;
+            default:
+                throw std::invalid_argument("The modulation type is not recognized.");
+        }
+    }
+    ///last duration
+    tonalitiesDurations.push_back(size - tonalitiesStarts[tonalitiesStarts.size()-1]);
+
+    std::cout << "tonalitiesStarts: " << int_vector_to_string(tonalitiesStarts) << std::endl;
+    std::cout << "tonalitiesDurations: " << int_vector_to_string(tonalitiesDurations) << std::endl;
+
 
     /// Create the ChordProgression objects for each tonality, and post the constraints
     progressions.reserve(tonalities.size());
     for (int i = 0; i < tonalities.size(); i++){
         progressions.push_back(
                 new ChordProgression(*this,
-                                     this->tonalitiesStarts[i],
-                                     this->tonalitiesDurations[i],
+                                     tonalitiesStarts[i], tonalitiesDurations[i],
                                      this->tonalities[i],
-                                     states, qualities, rootNotes,
+                                     states, qualities, qualityWithoutSeventh, rootNotes, hasSeventh,
                                      0, 1,
                                      0, 1)
                 );
     }
 
+    /// Create the Modulation objects for each modulation, and post the constraints
     modulations.reserve(modulationTypes.size());
     for(int i = 0; i < modulationTypes.size(); i++){
         modulations.push_back(
@@ -62,8 +112,8 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitie
     }
 
     ///add here any optional constraints
-    rel(*this, progressions[0]->getChords()[tonalitiesDurations[0]-1] != FIFTH_DEGREE);
 
+    
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done
      * in order of appearance of the tonalities. Maybe this needs to change? But then it has to be done differently
@@ -74,8 +124,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitie
         branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
     branch(*this, states,       INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    //todo move sevenths here because it is not tonality dependent
+//    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 }
 
 /**
@@ -94,6 +143,8 @@ TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
     states                      .update(*this, s.states);
     qualities                   .update(*this, s.qualities);
     rootNotes                   .update(*this, s.rootNotes);
+    hasSeventh                  .update(*this, s.hasSeventh);
+    qualityWithoutSeventh       .update(*this, s.qualityWithoutSeventh);
 
     for (auto p : s.progressions)
         progressions.push_back(new ChordProgression(*this, *p));
@@ -132,9 +183,11 @@ string TonalPiece::toString() const {
         txt += to_string(t) + " ";
     txt += "\n";
 
-    txt += "States:\t\t" + intVarArray_to_string(states) + "\n";
-    txt += "Qualities:\t" + intVarArray_to_string(qualities) + "\n";
-    txt += "Root notes:\t" + intVarArray_to_string(rootNotes) + "\n";
+    txt += "States:\t\t\t"              + intVarArray_to_string(states) + "\n";
+    txt += "Qualities:\t\t"             + intVarArray_to_string(qualities) + "\n";
+    txt += "Quality (no seventh):\t"    + intVarArray_to_string(qualityWithoutSeventh) + "\n";
+    txt += "Root notes:\t\t"            + intVarArray_to_string(rootNotes) + "\n";
+    txt += "Has seventh:\t\t"           + intVarArray_to_string(hasSeventh) + "\n";
 
     txt += "\nChord Progressions for each tonality:\n";
     for(auto p : progressions)

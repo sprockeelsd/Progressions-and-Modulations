@@ -34,6 +34,8 @@ private:
     IntVarArray                 states;              /// the states of the chords (fundamental, first inversion, ...)
     IntVarArray                 qualities;           /// the quality of the chords (major, minor, ...)
     IntVarArray                 rootNotes;           /// the root notes corresponding to the chord degrees
+    IntVarArray                 hasSeventh;          /// whether the chord has a seventh or not
+    IntVarArray                 qualityWithoutSeventh; /// the quality of the chords without the seventh
 
     vector<ChordProgression *>  progressions;        /// the chord progression objects for each tonality
     vector<Modulation *>        modulations;         /// the modulation objects for each modulation
@@ -51,9 +53,8 @@ public:
      * @param modulationStarts a vector of integers representing the starting position of each modulation
      * @return a TonalPiece object
      */
-    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> tonalitiesStarts,
-               vector<int> tonalitiesDurations, vector<int> modulationTypes, vector<int> modulationStarts,
-               vector<int> modulationEnds);
+    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
+               vector<int> modulationStarts, vector<int> modulationEnds);
 
     /**
      * @brief Copy constructor

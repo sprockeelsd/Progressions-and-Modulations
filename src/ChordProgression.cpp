@@ -6,8 +6,7 @@
 
 /**
  * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
- * constraints. It also posts the branching on the chords array. Branching for the other arrays is handled in the
- * TonalPiece class
+ * constraints.
  * @param home the search space
  * @param tonality the tonality of the progression
  * @param start the starting position of the progression in the global piece
@@ -21,10 +20,11 @@
  * @param maxPercentSeventhChords the maximum percentage of seventh chords in the progression
  * @return a ChordProgression object
  */
- ChordProgression::
+ChordProgression::
 ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
-IntVarArray rootNotes, double minPercentChromaticChords, double maxPercentChromaticChords,
-double minPercentSeventhChords, double maxPercentSeventhChords) {
+                 IntVarArray qualitiesWithoutSeventh, IntVarArray rootNotes, IntVarArray hasSeventh,
+                 double minPercentChromaticChords, double maxPercentChromaticChords, double minPercentSeventhChords,
+                 double maxPercentSeventhChords) {
 
     this->start                     = start;
     this->duration                  = duration;
@@ -38,18 +38,27 @@ double minPercentSeventhChords, double maxPercentSeventhChords) {
     this->chords                    = IntVarArray(home, duration,   FIRST_DEGREE, AUGMENTED_SIXTH);
     this->states                    = IntVarArray(home, states          .slice(start, 1, duration));
     this->qualities                 = IntVarArray(home, qualities       .slice(start, 1, duration));
+    this->qualitiesWithoutSeventh   = IntVarArray(home, qualitiesWithoutSeventh   .slice(start, 1, duration));
     this->bassDegrees               = IntVarArray(home, duration,   FIRST_DEGREE, SEVENTH_DEGREE);
     this->rootNotes                 = IntVarArray(home, rootNotes       .slice(start, 1, duration));
 
+    this->roots                 = IntVarArray(home, duration, FIRST_DEGREE,             SEVENTH_DEGREE);
+    this->thirds                = IntVarArray(home, duration, FIRST_DEGREE,             SEVENTH_DEGREE);
+    this->fifths                = IntVarArray(home, duration, FIRST_DEGREE,             SEVENTH_DEGREE);
+    this->sevenths              = IntVarArray(home, duration, FIRST_DEGREE,             SEVENTH_DEGREE);
+
     this->isChromatic               = IntVarArray (home, duration, 0, 1);
-    this->hasSeventh                = IntVarArray (home, duration, 0, 1);
+    this->hasSeventh                = IntVarArray (home, hasSeventh.slice(start, 1, duration));
 
     /// constraints
     tonal_progression(home, this->duration, this->tonality, this->states, this->qualities, this->rootNotes,
-                      chords,bassDegrees, isChromatic,hasSeventh,
+                      chords, bassDegrees, isChromatic, this->hasSeventh, roots, thirds, fifths,
+                      sevenths,
                       minChromaticChords, maxChromaticChords, minSeventhChords, maxSeventhChords);
 
+
     /// Optional constraints
+//    rel(home, qualities[3] == DOMINANT_SEVENTH_CHORD);
     /// cadences
 //    rel(home, chords[0], IRT_EQ, SECOND_DEGREE);
 //    cadence(home, duration / 2, HALF_CADENCE, states, chords, hasSeventh);
@@ -77,8 +86,14 @@ ChordProgression::ChordProgression(Home home, ChordProgression &s){
     chords                      .update(home, s.chords);
     states                      .update(home, s.states);
     qualities                   .update(home, s.qualities);
+    qualitiesWithoutSeventh     .update(home, s.qualitiesWithoutSeventh);
     bassDegrees                 .update(home, s.bassDegrees);
     rootNotes                   .update(home, s.rootNotes);
+
+    roots                       .update(home, s.roots);
+    thirds                      .update(home, s.thirds);
+    fifths                      .update(home, s.fifths);
+    sevenths                    .update(home, s.sevenths);
 
     isChromatic                 .update(home, s.isChromatic);
     hasSeventh                  .update(home, s.hasSeventh);
@@ -109,10 +124,16 @@ string ChordProgression::toString() const{
     txt += "Chords:\t\t\t"                          + intVarArray_to_string(chords)         + "\n";
     txt += "States:\t\t\t"                          + intVarArray_to_string(states)         + "\n";
     txt += "Qualities:\t\t"                         + intVarArray_to_string(qualities)      + "\n";
-    txt += "Bass degrees:\t\t"                        + intVarArray_to_string(bassDegrees)    + "\n";
+    txt += "Qualities (no seventh):\t"           + intVarArray_to_string(qualitiesWithoutSeventh) + "\n";
+    txt += "Bass degrees:\t\t"                      + intVarArray_to_string(bassDegrees)    + "\n";
     txt += "Root notes:\t\t"                        + intVarArray_to_string(rootNotes)      + "\n";
     txt += "Chromatic chords:\t"                    + intVarArray_to_string(isChromatic)    + "\n";
     txt += "Seventh chords:\t\t"                    + intVarArray_to_string(hasSeventh)     + "\n";
+
+    txt += "Roots:\t\t\t"                           + intVarArray_to_string(roots)          + "\n";
+    txt += "Thirds:\t\t\t"                          + intVarArray_to_string(thirds)         + "\n";
+    txt += "Fifths:\t\t\t"                          + intVarArray_to_string(fifths)         + "\n";
+    txt += "Sevenths:\t\t"                        + intVarArray_to_string(sevenths)       + "\n";
     return txt;
 }
 
@@ -121,7 +142,7 @@ string ChordProgression::toString() const{
  * @brief pretty
  * @return a string representation of the object
  */
-string ChordProgression::pretty() const{ //todo change the representation so that the different tonalities are visible
+string ChordProgression::pretty() const{ //todo change the representation so that it is more clear
     string txt;
     try{
         string degs, stas;
