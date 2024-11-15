@@ -18,9 +18,16 @@
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void link_chords_to_qualities(const Home &home, int size, IntVarArray qualities, IntVarArray chords) {
-    for (int i = 0; i < size; i++)
-        element(home, majorDegreeQualities, expr(home, chords[i] * nSupportedQualities + qualities[i]), 1);
+void
+link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarArray qualities, IntVarArray chords) {
+    for (int i = 0; i < size; i++){
+        if(tonality->get_mode() == MAJOR_MODE){
+            element(home, majorDegreeQualities, expr(home, chords[i] * nSupportedQualities + qualities[i]), 1);
+        }
+        else if(tonality->get_mode() == MINOR_MODE){
+            element(home, minorDegreeQualities, expr(home, chords[i] * nSupportedQualities + qualities[i]), 1);
+        }
+    }
 }
 
 /**

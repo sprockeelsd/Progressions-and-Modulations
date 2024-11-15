@@ -35,7 +35,7 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     link_notes_to_degree(home, size, chords, roots, thirds, fifths, sevenths);
 
     ///2. The quality of each chord is linked to the degree it is (V is major/7, I is major,...)
-    link_chords_to_qualities(home, size, qualities, chords);
+    link_chords_to_qualities(home, size, tonality, qualities, chords);
 
     ///3. The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
     link_chords_to_states(home, size, states, chords);

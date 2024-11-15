@@ -16,10 +16,10 @@ int main(int argc, char **argv) {
     Tonality *Fmajor = new MajorTonality(F);
     Tonality *Emajor = new MajorTonality(E);
     Tonality *Aminor = new MinorTonality(A);
-    vector<Tonality*> tonalities = {Cmajor, Aminor};
-    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
-    vector<int> modulationStarts = {7};
-    vector<int> modulationEnds = {8};
+    vector<Tonality*> tonalities = {Cmajor, Fmajor};
+    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<int> modulationStarts = {6};
+    vector<int> modulationEnds = {9};
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);

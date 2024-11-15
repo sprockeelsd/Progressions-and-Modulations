@@ -83,10 +83,11 @@ void Modulation::perfect_cadence_modulation(const Home &home) {
  * cadence in the new tonality
  * @param home the search space
  */
-void Modulation::pivot_chord_modulation(const Home &home) { //todo check that it is ok, probably it has to be a diatonic chord
+void Modulation::pivot_chord_modulation(const Home &home) {
     /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
-    rel(home, from->getChords()[from->getDuration()-1] != SEVENTH_DEGREE);
-    rel(home, from->getChords()[from->getDuration()-1] <= FIVE_OF_SIX);
+    //todo this is wrong, the pivot chord is not the last chord of the first tonality, but the first chord of the second tonality. It has to be a diatonic chord in the first tonality
+    int mod_start_in_from = start - from->getStart();
+    rel(home, from->getChords()[mod_start_in_from] != SEVENTH_DEGREE); //todo check pb V/II into Vda
     ///The modulation must end on a perfect cadence in the new tonality
     cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
             to->getChords(), to->getHasSeventh());
@@ -152,6 +153,7 @@ void Modulation::alteration_modulation(Home home) {
 }
 
 /// The note below the leading tone of the new tonality must be present in the chord before the V, which is the first chord of the new tonality
+//todo make an overlap between the tonalities that is the secondary dominant chord
 void Modulation::secondary_dominant_modulation(const Home& home) {
     rel(home, to->getChords()[0] == FIFTH_DEGREE); /// The first chord of the new tonality must be the V chord
 
@@ -184,17 +186,16 @@ void Modulation::secondary_dominant_modulation(const Home& home) {
         default:
             break;
     }
-    std::cout << "absolute tonic intervals: " << absolute_tonics_interval << std::endl;
+    //std::cout << "absolute tonic intervals: " << absolute_tonics_interval << std::endl;
 
     int degree_of_new_seventh_in_from = (absolute_tonics_interval + 6) % 7;
-    std::cout << "degree of new seventh in from: " << degree_of_new_seventh_in_from << std::endl;
+    //std::cout << "degree of new seventh in from: " << degree_of_new_seventh_in_from << std::endl;
 
     /// this degree must be in the last chord of the first tonality
-    rel(home, expr(home, from->getRoots()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
-                            from->getThirds()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
-                            from->getFifths()[from->getDuration()-1] == degree_of_new_seventh_in_from));
+    rel(home, expr(home, from->getRoots()[from->getDuration()-2] == degree_of_new_seventh_in_from ||
+                            from->getThirds()[from->getDuration()-2] == degree_of_new_seventh_in_from ||
+                            from->getFifths()[from->getDuration()-2] == degree_of_new_seventh_in_from));
 }
-
 
 string Modulation::toString() {
     string txt;

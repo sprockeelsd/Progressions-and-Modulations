@@ -21,7 +21,8 @@
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void link_chords_to_qualities(const Home &home, int size, IntVarArray qualities, IntVarArray chords);
+void
+link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarArray qualities, IntVarArray chords);
 
 /**
  * Links chord states to the degrees
