@@ -58,7 +58,7 @@ const IntArgs tonalTransitions = {
          */
 ///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,  VIId,   bII, 6te_a
         1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
-        0,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     1,     0,     0,    /// II
+        1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     1,     0,     0,    /// II
         0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    /// III
         1,     1,     0,     1,     1,     0,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,     1,    /// IV
         1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,    /// V
@@ -71,7 +71,7 @@ const IntArgs tonalTransitions = {
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
         0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
         0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,    ///V/VII
-        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
+        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId todo remove
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
 };
@@ -99,7 +99,7 @@ const IntArgs majorDegreeStates = { //todo probably this is also good for minor 
                         1,                  1,                  1,                  1,    /// V/V
                         1,                  1,                  1,                  1,    /// V/VI
                         1,                  1,                  1,                  1,    /// V/VII
-                        1,                  1,                  1,                  1,    /// VIId
+                        1,                  1,                  1,                  1,    /// VIId todo remove
                         1,                  1,                  0,                  0,    /// bII
                         1,                  0,                  0,                  0,    /// 6te_a   todo check
 };
@@ -115,17 +115,17 @@ const IntArgs majorDegreeQualities = {
         0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// II
         0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// III
         1,  0,    0,      0,    0,   1,      0,        0,        0,      0,    /// IV
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V
         0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// VI
-        0,  0,    1,      0,    0,   0,      0,        0,        0,      0,    /// VII
+        0,  0,    1,      0,    0,   0,      0,        0,        1,      0,    /// VII
         1,  0,    0,      0,    0,   0,      0,        0,        0,      0,    /// Vda
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/VII
-        0,  0,    0,      0,    0,   0,      0,        1,        0,      0,    /// VIId
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/II
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/III
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/IV
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/V
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/VII
+        0,  0,    0,      0,    0,   0,      0,        1,        0,      0,    /// VIId todo remove
         1,  0,    0,      0,    0,   0,      0,        0,        0,      0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,        0,      0,    /// 6te_a   todo make this correct, this is not right
 };
@@ -136,41 +136,42 @@ const IntArgs minorDegreeQualities = {
         0,  0,    1,      0,    0,   0,      0,        0,        1,     0,    /// II
         1,  0,    0,      1,    0,   1,      0,        0,        0,     0,    /// III
         0,  1,    0,      0,    0,   0,      1,        0,        0,     0,    /// IV
-        1,  1,    0,      0,    1,   0,      0,        0,        0,     0,    /// V
+        1,  1,    0,      0,    1,   0,      0,        1,        0,     0,    /// V
         1,  0,    0,      0,    0,   1,      0,        0,        0,     0,    /// VI
-        0,  0,    1,      0,    0,   0,      0,        0,        0,     0,    /// VII
+        0,  0,    1,      0,    0,   0,      0,        1,        0,     0,    /// VII
         0,  1,    0,      0,    0,   0,      0,        0,        0,     0,    /// IVda
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/VII
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/II
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/III
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/IV
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/V
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VII
         1,  0,    0,      0,    0,   0,      0,        0,        0,     0,    /// bII
-        0,  0,    0,      0,    0,   0,      0,        1,        0,     0,    /// VIId
+        0,  0,    0,      0,    0,   0,      0,        1,        0,     0,    /// VIId todo remove
         0,  0,    0,      1,    0,   0,      0,        0,        0,     0,    /// 6te_a   todo make this correct, this is not right
 };
 
 //todo put this in Tonality
-const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient this way or with a formula (degree + state*2)%7. Though that would cause problems for non diatonic chords
-///     fundamental state,    first inversion,   second inversion,    third inversion
-             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// I
-            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// II
-             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// III
-            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,        /// IV
-             FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,        /// V
-             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// VI
-           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VII
-             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// Vda
-             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// V/II
-           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// V/III
-             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// V/IV
-            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// V/V
-             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// V/VI
-            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,        /// V/VII
-           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
-            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// bII
-             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       SIXTH_DEGREE,        /// 6te_a
+const IntArgs bassBasedOnDegreeAndState = {
+///                  root,              third,              fifth,            seventh,                nineth
+///     fundamental state,    first inversion,   second inversion,    third inversion,      fourth inversion
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,         SECOND_DEGREE,         /// I
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,          THIRD_DEGREE,         /// II
+             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,         FOURTH_DEGREE,         /// III
+            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,          FIFTH_DEGREE,         /// IV
+             FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,          SIXTH_DEGREE,         /// V
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        SEVENTH_DEGREE,         /// VI
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,          FIRST_DEGREE,         /// VII
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,         SECOND_DEGREE,         /// Vda
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        SEVENTH_DEGREE,         /// V/II
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,          FIRST_DEGREE,         /// V/III
+             FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,         SECOND_DEGREE,         /// V/IV
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,          THIRD_DEGREE,         /// V/V
+             THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,         FOURTH_DEGREE,         /// V/VI
+            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,          FIFTH_DEGREE,         /// V/VII
+           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,          FIRST_DEGREE,         /// VIId
+            SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,          THIRD_DEGREE,         /// bII
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,      FOURTH_DEGREE,         SECOND_DEGREE,         /// 6te_a
 };
 
 int* IntVarArray_to_int_pointer(IntVarArray vars);

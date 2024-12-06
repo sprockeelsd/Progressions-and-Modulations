@@ -82,4 +82,12 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     if(tonality->get_mode() == MAJOR_MODE)
         for(int i = 0; i < size; i++)
             rel(home, chords[i] != FIVE_OF_SEVEN);
+
+    ///17. Diminished seventh chords
+    for(int i = 0; i < size; i++){
+        rel(home, expr(home, qualities[i] == DIMINISHED_SEVENTH_CHORD && chords[i] != SEVENTH_DEGREE), BOT_IMP,
+            expr(home, states[i] == FIRST_INVERSION), true);
+        /// + has Seventh = 1 + check that
+        //todo problème quand c'est un accord chromatique qui est septième diminuée
+    }
 }

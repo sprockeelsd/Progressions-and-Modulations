@@ -116,20 +116,24 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
-    for (auto p : progressions){
-        for(int i = 0; i < p->getDuration(); i++){
-            //rel(*this, p->getChords()[i] <= FIVE_OF_SIX);
-            rel(*this, p->getChords()[i] != SEVENTH_DEGREE);
-            rel(*this, p->getChords()[i] != THIRD_DEGREE);
-        }
-    }
+    rel(*this, progressions[0]->getChords()[2] < SEVENTH_DEGREE);
+    rel(*this, progressions[0]->getQualities()[2] == DIMINISHED_SEVENTH_CHORD);
 
-    /// first chord progression
-    rel(*this, progressions[0]->getChords()[0] == FIRST_DEGREE);
-    rel(*this, progressions[0]->getChords()[4] != FIFTH_DEGREE);
-    rel(*this, progressions[0]->getChords()[4] != FIRST_DEGREE);
-    rel(*this, progressions[0]->getIsChromatic()[5] == 0);
-    rel(*this, progressions[0]->getIsChromatic()[6] == 0);
+    /// For the CPAIOR example
+//    for (auto p : progressions){
+//        for(int i = 0; i < p->getDuration(); i++){
+//            //rel(*this, p->getChords()[i] <= FIVE_OF_SIX);
+//            rel(*this, p->getChords()[i] != SEVENTH_DEGREE);
+//            rel(*this, p->getChords()[i] != THIRD_DEGREE);
+//        }
+//    }
+//
+//    /// first chord progression
+//    rel(*this, progressions[0]->getChords()[0] == FIRST_DEGREE);
+//    rel(*this, progressions[0]->getChords()[4] != FIFTH_DEGREE);
+//    rel(*this, progressions[0]->getChords()[4] != FIRST_DEGREE);
+//    rel(*this, progressions[0]->getIsChromatic()[5] == 0);
+//    rel(*this, progressions[0]->getIsChromatic()[6] == 0);
 
     for(auto p : progressions){
         for(int i = 0; i < p->getDuration(); i++){
