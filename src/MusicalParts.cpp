@@ -75,6 +75,11 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     ///14. Chords cannot be in third inversion if they don't have a seventh
     chord_states_and_qualities(home, size, states, qualities);
 
-    /// 7èmes d'espèces doivent être préparées
+    ///15. 7èmes d'espèces doivent être préparées
     seventh_chords_preparation(home, size, hasSeventh, qualities, chords, roots, thirds, fifths, sevenths);
+
+    ///16. V/VII can only be used in minor mode
+    if(tonality->get_mode() == MAJOR_MODE)
+        for(int i = 0; i < size; i++)
+            rel(home, chords[i] != FIVE_OF_SEVEN);
 }
