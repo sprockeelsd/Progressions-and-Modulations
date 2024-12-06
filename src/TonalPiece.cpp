@@ -31,12 +31,16 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     ///constraint
     link_qualities_to_3note_version(*this, size, qualities, qualityWithoutSeventh);
 
-    //todo check modulations
-    //todo add marche harmoniques (diatoniques/modulantes/chromatiques/par quinte/par quarte/...)
+    //todo check alteration modulations, it should last 3 chords because the V might not be directly available. If it is, the third chord is not constrained and is just in the new tonality
+    //todo add half diminished chords for the II in minor
+    //todo make it possible to post constraints on the whole piece in the main -> make getters for the tonal piece class
+    //todo add V/VII pcq en mineur ça a plus de sens pour les modulations
+    //todo add control over states (% of fund state, % of inversions,...)
 
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
     //todo add some measure of variety (number of chords used, max % of chord based on degree, ...)
 
+    //todo add marche harmoniques (diatoniques/modulantes/chromatiques/par quinte/par quarte/...)
     //todo make an options object that has a field for every parameter
     //todo link with Diatony
     //todo add other chords (9, add6,...)?
@@ -76,7 +80,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 break;
             case SECONDARY_DOMINANT_MODULATION: /// The modulation lasts 2 chords, and the next tonality starts on the second chord
                 tonalitiesStarts        .push_back(this->modulationStarts[i]);
-                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i]+1);
+                tonalitiesDurations     .push_back(this->modulationStarts[i] - tonalitiesStarts[i] +1);
                 break;
             default:
                 throw std::invalid_argument("The modulation type is not recognized.");
@@ -97,7 +101,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                                      tonalitiesStarts[i], tonalitiesDurations[i],
                                      this->tonalities[i],
                                      states, qualities, qualityWithoutSeventh, rootNotes, hasSeventh,
-                                     0, 1,
+                                     0, 0.1,
                                      0, 1)
                 );
     }
@@ -112,8 +116,31 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
+    for (auto p : progressions){
+        for(int i = 0; i < p->getDuration(); i++){
+            //rel(*this, p->getChords()[i] <= FIVE_OF_SIX);
+            rel(*this, p->getChords()[i] != SEVENTH_DEGREE);
+            rel(*this, p->getChords()[i] != THIRD_DEGREE);
+        }
+    }
 
-    
+    /// first chord progression
+    rel(*this, progressions[0]->getChords()[0] == FIRST_DEGREE);
+    rel(*this, progressions[0]->getChords()[4] != FIFTH_DEGREE);
+    rel(*this, progressions[0]->getChords()[4] != FIRST_DEGREE);
+    rel(*this, progressions[0]->getIsChromatic()[5] == 0);
+    rel(*this, progressions[0]->getIsChromatic()[6] == 0);
+
+    for(auto p : progressions){
+        for(int i = 0; i < p->getDuration(); i++){
+            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE), BOT_IMP, expr(*this, p->getHasSeventh()[i] == 0), true);
+        }
+        for(int i = 0; i < p->getDuration()-1; i++){
+            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE || p->getChords()[i] != FIRST_DEGREE),
+                BOT_IMP, expr(*this, p->getChords()[i+1] != p->getChords()[i]), true);
+        }
+    }
+
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done
      * in order of appearance of the tonalities. Maybe this needs to change? But then it has to be done differently

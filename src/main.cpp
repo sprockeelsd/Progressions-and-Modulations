@@ -9,20 +9,21 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 15;
-    Tonality* Cmajor = new MajorTonality(C);
-    Tonality* Gmajor = new MajorTonality(G);
+    int size = 14;
     Tonality* Cminor = new MinorTonality(C);
-    Tonality *Fmajor = new MajorTonality(F);
-    Tonality *Emajor = new MajorTonality(E);
-    Tonality *Aminor = new MinorTonality(A);
-    vector<Tonality*> tonalities = {Cmajor, Fmajor};
+    Tonality *Ebmajor = new MajorTonality(E_FLAT);
+    Tonality *Bbmajor = new MajorTonality(B_FLAT);
+    // size = 19
+    vector<Tonality*> tonalities = {Ebmajor, Bbmajor};
     vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
-    vector<int> modulationStarts = {6};
-    vector<int> modulationEnds = {9};
+    vector<int> modulationStarts = {4};
+    vector<int> modulationEnds = {8};
+
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
                                      modulationStarts, modulationEnds);
+
+    /// Optional constraints
 
     DFS<TonalPiece> engine(tonalPiece);
     delete tonalPiece;

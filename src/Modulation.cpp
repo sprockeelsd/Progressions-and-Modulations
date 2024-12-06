@@ -85,9 +85,8 @@ void Modulation::perfect_cadence_modulation(const Home &home) {
  */
 void Modulation::pivot_chord_modulation(const Home &home) {
     /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
-    //todo this is wrong, the pivot chord is not the last chord of the first tonality, but the first chord of the second tonality. It has to be a diatonic chord in the first tonality
     int mod_start_in_from = start - from->getStart();
-    rel(home, from->getChords()[mod_start_in_from] != SEVENTH_DEGREE); //todo check pb V/II into Vda
+    rel(home, from->getChords()[mod_start_in_from] != SEVENTH_DEGREE);
     ///The modulation must end on a perfect cadence in the new tonality
     cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
             to->getChords(), to->getHasSeventh());
@@ -143,7 +142,6 @@ void Modulation::alteration_modulation(Home home) {
     rel(home, qualityInT1 != to->getQualitiesWithoutSeventh()[0]);
     //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1)); old version, not working
 
-    //todo some chords cannot be followed by the V, so it should be the third chord. Depending on the first chord, it should be as soon as possible but a chord that can be followed by V directly is not better than one that needs a transition chord to V
     BoolVar canNextChordBeV(home, 0, 1); /// If the next chord can be the V chord
     element(home, tonalTransitions, expr(home, to->getChords()[0] * nSupportedChords + FIFTH_DEGREE), canNextChordBeV);
     /// If the next chord can be the V, then it is

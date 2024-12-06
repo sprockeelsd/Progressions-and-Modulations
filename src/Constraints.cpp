@@ -324,7 +324,7 @@ void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeven
 /**
  * Enforces different cadence types at a given position
  * @param home the problem space
- * @param position the position of the first chord of the cadence
+ * @param position the position of the first chord of the cadence in the section
  * @param type the type of cadence
  * @param states the array of chord states
  * @param chords the array of chord degrees
