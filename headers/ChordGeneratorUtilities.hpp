@@ -105,50 +105,50 @@ const IntArgs majorDegreeStates = { //todo probably this is also good for minor 
 };
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
-const int nSupportedQualities = 9;
+const int nSupportedQualities = 10;
 ///Defines which qualities can be taken by chords based on their degree
 //todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
 //todo move this to major tonality and do the same for minor tonality
 const IntArgs majorDegreeQualities = {
-///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
-        1,  0,    0,      0,    0,   1,      0,        0,     0,    /// I
-        0,  1,    0,      0,    0,   0,      1,        0,     0,    /// II
-        0,  1,    0,      0,    0,   0,      1,        0,     0,    /// III
-        1,  0,    0,      0,    0,   1,      0,        0,     0,    /// IV
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V
-        0,  1,    0,      0,    0,   0,      1,        0,     0,    /// VI
-        0,  0,    1,      0,    0,   0,      0,        0,     0,    /// VII
-        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// Vda
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VII
-        0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
-        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// bII
-        0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
+///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7, half dim,    mM7
+        1,  0,    0,      0,    0,   1,      0,        0,        0,      0,    /// I
+        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// II
+        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// III
+        1,  0,    0,      0,    0,   1,      0,        0,        0,      0,    /// IV
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V
+        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,    /// VI
+        0,  0,    1,      0,    0,   0,      0,        0,        0,      0,    /// VII
+        1,  0,    0,      0,    0,   0,      0,        0,        0,      0,    /// Vda
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/II
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/III
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/IV
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/V
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        0,        0,      0,    /// V/VII
+        0,  0,    0,      0,    0,   0,      0,        1,        0,      0,    /// VIId
+        1,  0,    0,      0,    0,   0,      0,        0,        0,      0,    /// bII
+        0,  0,    0,      1,    0,   0,      0,        0,        0,      0,    /// 6te_a   todo make this correct, this is not right
 };
 
 const IntArgs minorDegreeQualities = {
-///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7,   mM7
-        0,  1,    0,      0,    0,   0,      1,        0,     0,    /// I
-        0,  0,    1,      0,    0,   0,      0,        0,     1,    /// II
-        1,  0,    0,      1,    0,   1,      0,        0,     0,    /// III
-        0,  1,    0,      0,    0,   0,      1,        0,     0,    /// IV
-        1,  1,    0,      0,    1,   0,      0,        0,     0,    /// V
-        1,  0,    0,      0,    0,   1,      0,        0,     0,    /// VI
-        0,  0,    1,      0,    0,   0,      0,        0,     0,    /// VII
-        0,  1,    0,      0,    0,   0,      0,        0,     0,    /// IVda
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VII
-        1,  0,    0,      0,    0,   0,      0,        0,     0,    /// bII
-        0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
-        0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
+///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7, half dim,    mM7
+        0,  1,    0,      0,    0,   0,      1,        0,        0,     0,    /// I
+        0,  0,    1,      0,    0,   0,      0,        0,        1,     0,    /// II
+        1,  0,    0,      1,    0,   1,      0,        0,        0,     0,    /// III
+        0,  1,    0,      0,    0,   0,      1,        0,        0,     0,    /// IV
+        1,  1,    0,      0,    1,   0,      0,        0,        0,     0,    /// V
+        1,  0,    0,      0,    0,   1,      0,        0,        0,     0,    /// VI
+        0,  0,    1,      0,    0,   0,      0,        0,        0,     0,    /// VII
+        0,  1,    0,      0,    0,   0,      0,        0,        0,     0,    /// IVda
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/II
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/III
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/IV
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/V
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        0,        0,     0,    /// V/VII
+        1,  0,    0,      0,    0,   0,      0,        0,        0,     0,    /// bII
+        0,  0,    0,      0,    0,   0,      0,        1,        0,     0,    /// VIId
+        0,  0,    0,      1,    0,   0,      0,        0,        0,     0,    /// 6te_a   todo make this correct, this is not right
 };
 
 //todo put this in Tonality

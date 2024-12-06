@@ -156,13 +156,13 @@ void seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArr
  * @param qualityWithoutSeventh the array of chord qualities without the seventh
  */
 void link_qualities_to_3note_version(const Home &home, int size, IntVarArray qualities, IntVarArray qualityWithoutSeventh) {
+    IntArgs qualities_to_simple_version = {
+            ///   Major        Minor        Diminished        Augmented    Dominant7
+            MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, AUGMENTED_CHORD, MAJOR_CHORD,
+            ///  Major7       Minor7       Diminished7    Half diminished,      MinorMajor
+            MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD,  DIMINISHED_CHORD,     MINOR_CHORD,
+    };
     for (int i = 0; i < size; i++) {
-        IntArgs qualities_to_simple_version = {
-                ///Major            Minor       Diminished        Augmented    Dominant7
-                MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, AUGMENTED_CHORD, MAJOR_CHORD,
-                ///  Major7       Minor7       Diminished7        MinorMajor
-                MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, MINOR_CHORD,
-        };
         element(home, qualities_to_simple_version, qualities[i], qualityWithoutSeventh[i]);
     }
 }
