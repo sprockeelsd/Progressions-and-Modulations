@@ -170,7 +170,7 @@ const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient
             FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,        /// V/VII
            SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// bII
-             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// 6te_a todo check this, it is wrong
+             SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       SIXTH_DEGREE,        /// 6te_a
 };
 
 int* IntVarArray_to_int_pointer(IntVarArray vars);
