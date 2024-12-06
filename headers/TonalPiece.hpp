@@ -62,6 +62,34 @@ public:
      */
     TonalPiece(TonalPiece &s);
 
+    int getSize() const { return size; };
+
+    Tonality *getTonality(int pos) const { return tonalities[pos]; };
+
+    int getTonalityStart(int pos) const { return tonalitiesStarts[pos]; };
+
+    int getTonalityDuration(int pos) const { return tonalitiesDurations[pos]; };
+
+    int getModulationType(int pos) const { return modulationTypes[pos]; };
+
+    int getModulationStart(int pos) const { return modulationStarts[pos]; };
+
+    int getModulationEnd(int pos) const { return modulationEnds[pos]; };
+
+    IntVarArray getStates() const { return states; };
+
+    IntVarArray getQualities() const { return qualities; };
+
+    IntVarArray getRootNotes() const { return rootNotes; };
+
+    IntVarArray getHasSeventh() const { return hasSeventh; };
+
+    IntVarArray getQualityWithoutSeventh() const { return qualityWithoutSeventh; };
+
+    ChordProgression *getChordProgression(int pos) const { return progressions[pos]; };
+
+    Modulation *getModulation(int pos) const { return modulations[pos]; };
+
     /**
      * Returns a string with each of the object's field values as integers. For debugging
      * @brief toString
