@@ -9,15 +9,15 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 20;
+    int size = 14;
     Tonality* Cminor = new MinorTonality(C);
     Tonality *Ebmajor = new MajorTonality(E_FLAT);
-    Tonality *Abmajor = new MajorTonality(A_FLAT);
+    Tonality *Bbmajor = new MajorTonality(B_FLAT);
     // size = 19
-    vector<Tonality*> tonalities = {Cminor, Ebmajor, Cminor, Abmajor};
-    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION, PERFECT_CADENCE_MODULATION, ALTERATION_MODULATION};
-    vector<int> modulationStarts = {3, 8, 14};
-    vector<int> modulationEnds = {5, 9, 15};
+    vector<Tonality*> tonalities = {Ebmajor, Bbmajor};
+    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<int> modulationStarts = {4};
+    vector<int> modulationEnds = {8};
 
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
