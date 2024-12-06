@@ -23,7 +23,7 @@ const vector<string> modulation_type_names = {
 };
 
 ///The number of supported chords, which is the size of the tonalTransitions matrix
-const int nSupportedChords = 16;
+const int nSupportedChords = 17;
 ///Defines possible chord successions. This enforces the following rules:
 ///1. The degree succession is correct
 ///2. Tension chords must resolve (V, V/X, VIId)
@@ -37,41 +37,43 @@ const IntArgs tonalTransitions = {
         //todo add the rules that are enforced with this
         //todo move this to tonality
         /**
-         * ///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI,  VIId,   bII, 6te_a
-        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
-        1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     1,     0,     0,    /// II
-        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    /// III
-        1,     1,     0,     1,     1,     1,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,    /// IV
-        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     1,     0,     0,     0,    /// V
-        1,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     1,     0,    /// VI
-        1,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     1,     0,     0,    /// VII
-        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
-        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/II
-        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/III
-        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/IV
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
-        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
-        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,     0,    ///bII
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
+        I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,  VIId,   bII, 6te_a
+        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
+        1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     1,     0,     0,     0,    /// II
+        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    /// III
+        1,     1,     0,     1,     1,     1,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,     1,    /// IV
+        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     1,     0,     0,     0,     0,    /// V
+        1,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     0,     1,     0,    /// VI
+        1,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,    /// VII
+        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
+        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,    ///V/II
+        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/III
+        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,    ///V/IV
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
+        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
+        0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,    ///V/VII
+        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,     0,     0,    ///bII
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
          */
-///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI,  VIId,   bII, 6te_a
-        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
-        0,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     1,     0,     0,    /// II
-        0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    /// III
-        1,     1,     0,     1,     1,     0,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,    /// IV
-        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,    /// V
-        0,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     1,     1,    /// VI
-        0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,    /// VII
-        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
-        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/II
-        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/III
-        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/IV
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
-        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
-        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
+///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,  VIId,   bII, 6te_a
+        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
+        0,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     1,     0,     0,    /// II
+        0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    /// III
+        1,     1,     0,     1,     1,     0,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,     1,    /// IV
+        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,    /// V
+        0,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     0,     1,     1,    /// VI
+        0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    /// VII
+        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
+        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,    ///V/II
+        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/III
+        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/IV
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
+        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
+        0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,    ///V/VII
+        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
 };
 
 ///The number of supported states, which is the size of the majorDegreeStates matrix
@@ -96,6 +98,7 @@ const IntArgs majorDegreeStates = { //todo probably this is also good for minor 
                         1,                  1,                  1,                  1,    /// V/IV
                         1,                  1,                  1,                  1,    /// V/V
                         1,                  1,                  1,                  1,    /// V/VI
+                        1,                  1,                  1,                  1,    /// V/VII
                         1,                  1,                  1,                  1,    /// VIId
                         1,                  1,                  0,                  0,    /// bII
                         1,                  0,                  0,                  0,    /// 6te_a   todo check
@@ -121,6 +124,7 @@ const IntArgs majorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/V
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VII
         0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
@@ -141,6 +145,7 @@ const IntArgs minorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/IV
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/V
         1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VI
+        1,  0,    0,      0,    1,   0,      0,        0,     0,    /// V/VII
         1,  0,    0,      0,    0,   0,      0,        0,     0,    /// bII
         0,  0,    0,      0,    0,   0,      0,        1,     0,    /// VIId
         0,  0,    0,      1,    0,   0,      0,        0,     0,    /// 6te_a   todo make this correct, this is not right
@@ -162,6 +167,7 @@ const IntArgs bassBasedOnDegreeAndState = { //todo check if it is more efficient
              FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,        /// V/IV
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// V/V
              THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,        /// V/VI
+            FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,        /// V/VII
            SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,        /// VIId
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,        /// bII
              SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,       FIFTH_DEGREE,        /// 6te_a todo check this, it is wrong

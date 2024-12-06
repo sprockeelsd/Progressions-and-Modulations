@@ -56,17 +56,7 @@ ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarA
                       sevenths,
                       minChromaticChords, maxChromaticChords, minSeventhChords, maxSeventhChords);
 
-
     /// Optional constraints
-//    rel(home, qualities[3] == DOMINANT_SEVENTH_CHORD);
-    /// cadences
-//    rel(home, chords[0], IRT_EQ, SECOND_DEGREE);
-//    cadence(home, duration / 2, HALF_CADENCE, states, chords, hasSeventh);
-    //cadence(home, startPosition + size - 2, PERFECT_CADENCE, chords, states, hasSeventh);
-
-    /// branching
-    Rnd r(1U);
-    //branch(home, chords, INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
 }
 
 /**
