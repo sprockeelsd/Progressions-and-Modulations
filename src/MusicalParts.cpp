@@ -88,6 +88,6 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
         rel(home, expr(home, qualities[i] == DIMINISHED_SEVENTH_CHORD && chords[i] != SEVENTH_DEGREE), BOT_IMP,
             expr(home, states[i] == FIRST_INVERSION), true);
         /// + has Seventh = 1 + check that
-        //todo problème quand c'est un accord chromatique qui est septième diminuée
+        //todo problème quand c'est un accord chromatique qui est septième diminuée + make sure tritone resolution is ok
     }
 }

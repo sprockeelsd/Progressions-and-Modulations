@@ -77,31 +77,31 @@ const IntArgs tonalTransitions = {
 };
 
 ///The number of supported states, which is the size of the majorDegreeStates matrix
-const int nSupportedStates = 4;
+const int nSupportedStates = 5;
 ///Defines which states can be taken by chords based on their degree
 //todo modify this to allow seventh chords in the future
 //todo check with karim
 //todo move this to majorTonality and do the same for minor tonality
 //todo add bVII
 const IntArgs majorDegreeStates = { //todo probably this is also good for minor chords, to check
-///     fundamental state,    first inversion,   second inversion,    third inversion
-                        1,                  1,                  0,                  0,    /// I
-                        1,                  1,                  0,                  0,    /// II
-                        1,                  0,                  0,                  0,    /// III
-                        1,                  1,                  0,                  0,    /// IV
-                        1,                  1,                  1,                  1,    /// V
-                        1,                  0,                  0,                  0,    /// VI
-                        1,                  1,                  1,                  0,    /// VII
-                        0,                  0,                  1,                  0,    /// Vda
-                        1,                  1,                  1,                  1,    /// V/II
-                        1,                  1,                  1,                  1,    /// V/III
-                        1,                  1,                  1,                  1,    /// V/IV
-                        1,                  1,                  1,                  1,    /// V/V
-                        1,                  1,                  1,                  1,    /// V/VI
-                        1,                  1,                  1,                  1,    /// V/VII
-                        1,                  1,                  1,                  1,    /// VIId todo remove
-                        1,                  1,                  0,                  0,    /// bII
-                        1,                  0,                  0,                  0,    /// 6te_a   todo check
+///     fundamental state,    first inversion,   second inversion,    third inversion,      fourth inversion
+                        1,                  1,                  0,                  0,                     0,    /// I
+                        1,                  1,                  0,                  0,                     0,    /// II
+                        1,                  0,                  0,                  0,                     0,    /// III
+                        1,                  1,                  0,                  0,                     9,    /// IV
+                        1,                  1,                  1,                  1,                     0,    /// V
+                        1,                  0,                  0,                  0,                     0,    /// VI
+                        1,                  1,                  1,                  0,                     0,    /// VII
+                        0,                  0,                  1,                  0,                     0,    /// Vda
+                        1,                  1,                  1,                  1,                     0,    /// V/II
+                        1,                  1,                  1,                  1,                     0,    /// V/III
+                        1,                  1,                  1,                  1,                     0,    /// V/IV
+                        1,                  1,                  1,                  1,                     0,    /// V/V
+                        1,                  1,                  1,                  1,                     0,    /// V/VI
+                        1,                  1,                  1,                  1,                     0,    /// V/VII
+                        1,                  1,                  1,                  1,                     0,    /// VIId todo remove
+                        1,                  1,                  0,                  0,                     0,    /// bII
+                        1,                  0,                  0,                  0,                     0,    /// 6te_a   todo check
 };
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix

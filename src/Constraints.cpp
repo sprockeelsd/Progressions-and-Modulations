@@ -264,8 +264,9 @@ void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qu
         BoolVar isDominantChord(home, 0, 1);
         rel(home, isDominantChord, IRT_EQ,
             expr(home,
-                expr(home, chords[i] == FIFTH_DEGREE && (qualities[i] == MAJOR_CHORD || qualities[i] == DOMINANT_SEVENTH_CHORD)) ||
-                expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SIX)
+                expr(home, chords[i] == FIFTH_DEGREE && (qualities[i] == MAJOR_CHORD || qualities[i] == DOMINANT_SEVENTH_CHORD
+                || qualities[i] == DIMINISHED_SEVENTH_CHORD)) ||
+                expr(home, FIVE_OF_TWO <= chords[i] && chords[i] <= FIVE_OF_SEVEN)
             )
         );
         ///65/ -> 5
@@ -276,6 +277,8 @@ void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qu
         /// +4 -> 6
         rel(home, expr(home, isDominantChord && states[i] == THIRD_INVERSION), BOT_IMP,
             expr(home, bassDegrees[i+1] == expr(home, bassDegrees[i]-1) % 7), true);
+
+        /// Diminished seventh chords
     }
 }
 
