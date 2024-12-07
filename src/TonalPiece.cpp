@@ -116,8 +116,6 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
-    rel(*this, progressions[0]->getChords()[2] > SEVENTH_DEGREE); //todo check this still works
-    rel(*this, progressions[0]->getQualities()[2] == DIMINISHED_SEVENTH_CHORD);
 
     /// For the CPAIOR example
 //    for (auto p : progressions){

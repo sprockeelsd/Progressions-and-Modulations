@@ -23,7 +23,7 @@ const vector<string> modulation_type_names = {
 };
 
 ///The number of supported chords, which is the size of the tonalTransitions matrix
-const int nSupportedChords = 17;
+const int nSupportedChords = 16;
 ///Defines possible chord successions. This enforces the following rules:
 ///1. The degree succession is correct
 ///2. Tension chords must resolve (V, V/X, VIId)
@@ -56,24 +56,23 @@ const IntArgs tonalTransitions = {
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     1,     0,     0,     0,     0,     0,    ///bII
         0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
          */
-///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,  VIId,   bII, 6te_a
-        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
-        1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     1,     0,     0,    /// II
-        0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    /// III
-        1,     1,     0,     1,     1,     0,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,     1,    /// IV
-        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,    /// V
-        0,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     0,     1,     1,    /// VI
-        0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    /// VII
-        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
-        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,    ///V/II
-        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/III
-        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/IV
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
-        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
-        0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,    ///V/VII
-        1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///VIId todo remove
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
-        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
+///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,   bII, 6te_a
+        1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
+        1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     0,     0,    /// II
+        0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    /// III
+        1,     1,     0,     1,     1,     0,     1,     1,     1,     0,     0,     1,     1,     1,     1,     1,    /// IV
+        1,     0,     0,     1,     1,     1,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,    /// V
+        0,     1,     0,     1,     1,     0,     0,     1,     1,     0,     1,     1,     0,     0,     1,     1,    /// VI
+        0,     0,     1,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,    /// VII
+        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,    ///Vda
+        0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,     0,    ///V/II
+        0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     0,    ///V/III
+        0,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,     0,     1,     0,     0,    ///V/IV
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///V/V
+        0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,    ///V/VI
+        0,     0,     0,     0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,    ///V/VII
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///bII
+        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,     0,     0,     0,     0,     0,     0,    ///6te_a
 };
 
 ///The number of supported states, which is the size of the majorDegreeStates matrix
@@ -99,7 +98,6 @@ const IntArgs majorDegreeStates = { //todo probably this is also good for minor 
                         1,                  1,                  1,                  1,                     0,    /// V/V
                         1,                  1,                  1,                  1,                     0,    /// V/VI
                         1,                  1,                  1,                  1,                     0,    /// V/VII
-                        1,                  1,                  1,                  1,                     0,    /// VIId todo remove
                         1,                  1,                  0,                  0,                     0,    /// bII
                         1,                  0,                  0,                  0,                     0,    /// 6te_a   todo check
 };
@@ -125,7 +123,6 @@ const IntArgs majorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/V
         1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/VI
         1,  0,    0,      0,    1,   0,      0,        1,        0,      0,    /// V/VII
-        0,  0,    0,      0,    0,   0,      0,        1,        0,      0,    /// VIId todo remove
         1,  0,    0,      0,    0,   0,      0,        0,        0,      0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,        0,      0,    /// 6te_a   todo make this correct, this is not right
 };
@@ -146,7 +143,6 @@ const IntArgs minorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/V
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VI
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VII
-        0,  0,    0,      0,    0,   0,      0,        1,        0,     0,    /// VIId todo remove
         1,  0,    0,      0,    0,   0,      0,        0,        0,     0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,        0,     0,    /// 6te_a   todo make this correct, this is not right
 };
@@ -169,7 +165,6 @@ const IntArgs bassBasedOnDegreeAndState = {
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,          THIRD_DEGREE,         /// V/V
              THIRD_DEGREE,       FIFTH_DEGREE,     SEVENTH_DEGREE,      SECOND_DEGREE,         FOURTH_DEGREE,         /// V/VI
             FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,          FIFTH_DEGREE,         /// V/VII
-           SEVENTH_DEGREE,      SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,          FIRST_DEGREE,         /// VIId
             SECOND_DEGREE,      FOURTH_DEGREE,       SIXTH_DEGREE,       FIRST_DEGREE,          THIRD_DEGREE,         /// bII
              SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,      FOURTH_DEGREE,         SECOND_DEGREE,         /// 6te_a
 };

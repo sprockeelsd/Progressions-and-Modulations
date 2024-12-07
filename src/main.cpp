@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 5;
+    int size = 14;
     Tonality* Cminor = new MinorTonality(C);
     Tonality* Cmajor = new MajorTonality(C);
     Tonality *Ebmajor = new MajorTonality(E_FLAT);

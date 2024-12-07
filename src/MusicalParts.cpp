@@ -79,15 +79,8 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     seventh_chords_preparation(home, size, hasSeventh, qualities, chords, roots, thirds, fifths, sevenths);
 
     ///16. V/VII can only be used in minor mode
-    if(tonality->get_mode() == MAJOR_MODE)
-        for(int i = 0; i < size; i++)
-            rel(home, chords[i] != FIVE_OF_SEVEN);
+    five_of_seven(home, size, chords, tonality);
 
     ///17. Diminished seventh chords
-    for(int i = 0; i < size; i++){
-        rel(home, expr(home, qualities[i] == DIMINISHED_SEVENTH_CHORD && chords[i] != SEVENTH_DEGREE), BOT_IMP,
-            expr(home, states[i] == FIRST_INVERSION), true);
-        /// + has Seventh = 1 + check that
-        //todo problème quand c'est un accord chromatique qui est septième diminuée + make sure tritone resolution is ok
-    }
+    diminished_seventh_chords(home, size, qualities, chords, states);
 }

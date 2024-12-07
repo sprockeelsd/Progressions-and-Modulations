@@ -71,7 +71,7 @@ void link_states_to_qualities(const Home &home, int size, IntVarArray states, In
  */
 void link_root_notes_to_degrees(const Home &home, int size, Tonality *tonality, IntVarArray rootNotes, IntVarArray chords) {
     vector<int> notes;
-    for (int i = FIRST_DEGREE; i <= AUGMENTED_SIXTH; i++)
+    for (int i = FIRST_DEGREE; i <= nSupportedChords; i++)
         notes.push_back(tonality->get_degree_note(i));
     IntArgs tonality_notes(notes);
     for (int i = 0; i < size; i++)
@@ -281,8 +281,6 @@ void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qu
         /// +4 -> 6
         rel(home, expr(home, isDominantChord && states[i] == THIRD_INVERSION), BOT_IMP,
             expr(home, bassDegrees[i+1] == expr(home, bassDegrees[i]-1) % 7), true);
-
-        /// Diminished seventh chords
     }
 }
 
@@ -321,6 +319,33 @@ void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeven
             expr(home, roots[i - 1] == sevenths[i] || thirds[i - 1] == sevenths[i] || fifths[i - 1] == sevenths[i]),
             true);
     }
+}
+
+/**
+ * V/VII can only be used in minor mode
+ * @param home
+ * @param size
+ * @param chords
+ * @param tonality
+ */
+void five_of_seven(const Home& home, int size, IntVarArray chords, Tonality* tonality) {
+    if (tonality->get_mode() == MAJOR_MODE)
+        for (int i = 0; i < size; i++)
+            rel(home, chords[i] != FIVE_OF_SEVEN);
+}
+
+/**
+ * Diminished seventh chords must be in first inversion (that means fund. state but since it is technically a V chord without fundamental it is 1st inversion)
+ * @param home
+ * @param size
+ * @param qualities
+ * @param chords
+ * @param states
+ */
+void diminished_seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states) {
+    for (int i = 0; i < size; i++)
+        rel(home, expr(home, qualities[i] == DIMINISHED_SEVENTH_CHORD && chords[i] != SEVENTH_DEGREE), BOT_IMP,
+            expr(home, states[i] == FIRST_INVERSION), true);
 }
 
 

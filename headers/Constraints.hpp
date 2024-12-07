@@ -212,6 +212,25 @@ void chord_states_and_qualities(const Home &home, int size, IntVarArray states, 
 void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, IntVarArray chords,
                                 const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths, const IntVarArray& sevenths);
 
+/**
+ * V/VII can only be used in minor mode
+ * @param home
+ * @param size
+ * @param chords
+ * @param tonality
+ */
+void five_of_seven(const Home& home, int size, IntVarArray chords, Tonality* tonality);
+
+/**
+ * Diminished seventh chords must be in first inversion (that means fund. state but since it is technically a V chord without fundamental it is 1st inversion)
+ * @param home
+ * @param size
+ * @param qualities
+ * @param chords
+ * @param states
+ */
+void diminished_seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states);
+
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *
  ***********************************************************************************************************************/
