@@ -85,8 +85,8 @@ void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, In
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
-                      int maxChromaticChords);
+void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray qualities, IntVarArray isChromatic,
+                      int minChromaticChords, int maxChromaticChords);
 
 /**
  * Link the seventh chords and constraints the number of seventh chords to be in the range [minSeventhChords, maxSeventhChords]

@@ -50,7 +50,7 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     link_bass_degrees_to_degrees_and_states(home, size, states, chords, bassDegrees);
 
     ///7. Link the chromatic chords and count them so that they are in the appropriate range
-    chromatic_chords(home, size, chords, isChromatic, minChromaticChords, maxChromaticChords);
+    chromatic_chords(home, size, chords, qualities, isChromatic, minChromaticChords, maxChromaticChords);
 
     ///8. Link the seventh chords and count them so that they are in the appropriate range
     seventh_chords(home, size, qualities, hasSeventh, minSeventhChords, maxSeventhChords);

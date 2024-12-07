@@ -116,11 +116,14 @@ void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, In
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
-                      int maxChromaticChords) {
+void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray qualities, IntVarArray isChromatic,
+                      int minChromaticChords, int maxChromaticChords) {
     ///link the chromatic chords
-    for (int i = 0; i < size; i++)
-        rel(home, expr(home, isChromatic[i] == 1),BOT_EQV,expr(home, chords[i] >= FIVE_OF_TWO), true);
+    for (int i = 0; i < size; i++){
+        rel(home, expr(home, chords[i] >= FIVE_OF_TWO), BOT_IMP, expr(home, isChromatic[i] == 1), true);
+        rel(home, expr(home, chords[i] <= SEVENTH_DEGREE && chords[i] != FIFTH_DEGREE), BOT_EQV, expr(home, isChromatic[i] == 0), true);
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == DIMINISHED_SEVENTH_CHORD), BOT_EQV, expr(home, isChromatic[i] == 1), true);
+    }
     ///count the number of chromatic chords
     rel(home, sum(isChromatic) <= maxChromaticChords);
     rel(home, sum(isChromatic) >= minChromaticChords);
