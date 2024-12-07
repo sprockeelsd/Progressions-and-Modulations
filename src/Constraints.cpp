@@ -33,7 +33,7 @@ link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarA
 /**
  * Links chord states to the degrees
  * The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
- * formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
+ * formula: degreeStates[chords[i] * nSupportedStates + states[i]] = 1
  * todo also make it work for minor tonalities
  * @param home the problem space
  * @param size the number of chords in the progression
@@ -42,7 +42,7 @@ link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarA
  */
 void link_chords_to_states(const Home &home, int size, IntVarArray states, IntVarArray chords) {
     for(int i = 0; i < size; i++)
-        element(home, majorDegreeStates, expr(home, chords[i] * nSupportedStates + states[i]), 1);
+        element(home, degreeStates, expr(home, chords[i] * nSupportedStates + states[i]), 1);
 }
 
 /**
