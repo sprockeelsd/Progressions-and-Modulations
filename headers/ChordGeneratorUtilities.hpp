@@ -146,8 +146,8 @@ const IntArgs minorDegreeQualities = {
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/V
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VI
         1,  0,    0,      0,    1,   0,      0,        1,        0,     0,    /// V/VII
-        1,  0,    0,      0,    0,   0,      0,        0,        0,     0,    /// bII
         0,  0,    0,      0,    0,   0,      0,        1,        0,     0,    /// VIId todo remove
+        1,  0,    0,      0,    0,   0,      0,        0,        0,     0,    /// bII
         0,  0,    0,      1,    0,   0,      0,        0,        0,     0,    /// 6te_a   todo make this correct, this is not right
 };
 

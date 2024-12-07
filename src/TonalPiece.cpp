@@ -101,7 +101,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                                      tonalitiesStarts[i], tonalitiesDurations[i],
                                      this->tonalities[i],
                                      states, qualities, qualityWithoutSeventh, rootNotes, hasSeventh,
-                                     0, 0.1,
+                                     0, 1,
                                      0, 1)
                 );
     }
@@ -116,7 +116,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     }
 
     ///add here any optional constraints
-    rel(*this, progressions[0]->getChords()[2] < SEVENTH_DEGREE);
+    rel(*this, progressions[0]->getChords()[2] > SEVENTH_DEGREE); //todo check this still works
     rel(*this, progressions[0]->getQualities()[2] == DIMINISHED_SEVENTH_CHORD);
 
     /// For the CPAIOR example
@@ -135,15 +135,15 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 //    rel(*this, progressions[0]->getIsChromatic()[5] == 0);
 //    rel(*this, progressions[0]->getIsChromatic()[6] == 0);
 
-    for(auto p : progressions){
-        for(int i = 0; i < p->getDuration(); i++){
-            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE), BOT_IMP, expr(*this, p->getHasSeventh()[i] == 0), true);
-        }
-        for(int i = 0; i < p->getDuration()-1; i++){
-            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE || p->getChords()[i] != FIRST_DEGREE),
-                BOT_IMP, expr(*this, p->getChords()[i+1] != p->getChords()[i]), true);
-        }
-    }
+//    for(auto p : progressions){
+//        for(int i = 0; i < p->getDuration(); i++){
+//            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE), BOT_IMP, expr(*this, p->getHasSeventh()[i] == 0), true);
+//        }
+//        for(int i = 0; i < p->getDuration()-1; i++){
+//            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE || p->getChords()[i] != FIRST_DEGREE),
+//                BOT_IMP, expr(*this, p->getChords()[i+1] != p->getChords()[i]), true);
+//        }
+//    }
 
     /** The branching on chord degrees is performed first, through the ChordProgression objects.
      * Then it is performed on the global arrays if it is necessary. That means that the branching on degrees is done

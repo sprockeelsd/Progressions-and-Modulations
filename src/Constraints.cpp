@@ -122,7 +122,8 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
     for (int i = 0; i < size; i++){
         rel(home, expr(home, chords[i] >= FIVE_OF_TWO), BOT_IMP, expr(home, isChromatic[i] == 1), true);
         rel(home, expr(home, chords[i] <= SEVENTH_DEGREE && chords[i] != FIFTH_DEGREE), BOT_EQV, expr(home, isChromatic[i] == 0), true);
-        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == DIMINISHED_SEVENTH_CHORD), BOT_EQV, expr(home, isChromatic[i] == 1), true);
+        /// /!\ this cannot be EQV, otherwise no other chromatic chords are allowed
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == DIMINISHED_SEVENTH_CHORD), BOT_IMP, expr(home, isChromatic[i] == 1), true);
     }
     ///count the number of chromatic chords
     rel(home, sum(isChromatic) <= maxChromaticChords);

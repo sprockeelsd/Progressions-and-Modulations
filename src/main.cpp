@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 14;
+    int size = 5;
     Tonality* Cminor = new MinorTonality(C);
     Tonality* Cmajor = new MajorTonality(C);
     Tonality *Ebmajor = new MajorTonality(E_FLAT);
@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
         std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
+        //std::cout << sol->pretty() << std::endl;
         if(n_sols >= 1) break;
         delete sol;
     }
