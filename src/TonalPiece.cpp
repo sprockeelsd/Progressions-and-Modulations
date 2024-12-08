@@ -23,7 +23,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
            modulationTypes(modulationTypes), modulationStarts(modulationStarts), modulationEnds(modulationEnds){
 
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
-    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_MAJOR_SEVENTH_CHORD);
+    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         AUGMENTED_SIXTH_CHORD);
     this->rootNotes             = IntVarArray(*this, size, C,                   B);
     this->hasSeventh            = IntVarArray(*this, size, 0,                   1);
     this->qualityWithoutSeventh = IntVarArray(*this, size, MAJOR_CHORD,         AUGMENTED_CHORD);
@@ -131,7 +131,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 //    rel(*this, progressions[0]->getChords()[4] != FIRST_DEGREE);
 //    rel(*this, progressions[0]->getIsChromatic()[5] == 0);
 //    rel(*this, progressions[0]->getIsChromatic()[6] == 0);
-
+//
 //    for(auto p : progressions){
 //        for(int i = 0; i < p->getDuration(); i++){
 //            rel(*this, expr(*this,p->getChords()[i] != FIFTH_DEGREE), BOT_IMP, expr(*this, p->getHasSeventh()[i] == 0), true);
@@ -149,7 +149,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 
     Rnd r(1U);
     for(auto p : progressions)
-        branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
     branch(*this, states,       INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 //    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());

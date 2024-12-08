@@ -83,4 +83,7 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
 
     ///17. Diminished seventh chords
     diminished_seventh_chords(home, size, qualities, chords, states);
+
+    ///18. Augmented sixth chords should be in fundamental state + todo maybe other rules? Check in the syllabus
+
 }

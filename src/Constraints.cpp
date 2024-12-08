@@ -121,9 +121,10 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
     ///link the chromatic chords
     for (int i = 0; i < size; i++){
         rel(home, expr(home, chords[i] >= FIVE_OF_TWO), BOT_IMP, expr(home, isChromatic[i] == 1), true);
-        rel(home, expr(home, chords[i] <= SEVENTH_DEGREE && chords[i] != FIFTH_DEGREE), BOT_EQV, expr(home, isChromatic[i] == 0), true);
+        rel(home, expr(home, chords[i] <= SEVENTH_DEGREE && chords[i] != FIFTH_DEGREE), BOT_IMP, expr(home, isChromatic[i] == 0), true);
         /// /!\ this cannot be EQV, otherwise no other chromatic chords are allowed
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == DIMINISHED_SEVENTH_CHORD), BOT_IMP, expr(home, isChromatic[i] == 1), true);
+        rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] != DIMINISHED_SEVENTH_CHORD), BOT_IMP, expr(home, isChromatic[i] == 0), true);
     }
     ///count the number of chromatic chords
     rel(home, sum(isChromatic) <= maxChromaticChords);
@@ -163,8 +164,8 @@ void link_qualities_to_3note_version(const Home &home, int size, IntVarArray qua
     IntArgs qualities_to_simple_version = {
             ///   Major        Minor        Diminished        Augmented    Dominant7
             MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD, AUGMENTED_CHORD, MAJOR_CHORD,
-            ///  Major7       Minor7       Diminished7    Half diminished,      MinorMajor
-            MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD,  DIMINISHED_CHORD,     MINOR_CHORD,
+            ///  Major7       Minor7       Diminished7    Half diminished,      MinorMajor,           Augmented sixth
+            MAJOR_CHORD, MINOR_CHORD, DIMINISHED_CHORD,  DIMINISHED_CHORD,     MINOR_CHORD,           AUGMENTED_CHORD
     };
     for (int i = 0; i < size; i++) {
         element(home, qualities_to_simple_version, qualities[i], qualityWithoutSeventh[i]);

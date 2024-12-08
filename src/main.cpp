@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     Tonality *Ebmajor = new MajorTonality(E_FLAT);
     Tonality *Bbmajor = new MajorTonality(B_FLAT);
     // size = 19
-    vector<Tonality*> tonalities = {Cminor};
+    vector<Tonality*> tonalities = {Cmajor};
     vector<int> modulationTypes = {};
     vector<int> modulationStarts = {};
     vector<int> modulationEnds = {};
@@ -38,9 +38,9 @@ int main(int argc, char **argv) {
     auto start = std::chrono::high_resolution_clock::now();     /// start time
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
-        //std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
-        std::cout << sol->pretty() << std::endl;
-        //if(n_sols >= 1) break;
+        std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
+        //std::cout << sol->pretty() << std::endl;
+        if(n_sols >= 1) break;
         delete sol;
     }
     if (n_sols == 0)
