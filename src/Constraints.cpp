@@ -71,7 +71,7 @@ void link_states_to_qualities(const Home &home, int size, IntVarArray states, In
  */
 void link_root_notes_to_degrees(const Home &home, int size, Tonality *tonality, IntVarArray rootNotes, IntVarArray chords) {
     vector<int> notes;
-    for (int i = FIRST_DEGREE; i <= nSupportedChords; i++)
+    for (int i = FIRST_DEGREE; i <= AUGMENTED_SIXTH; i++)
         notes.push_back(tonality->get_degree_note(i));
     IntArgs tonality_notes(notes);
     for (int i = 0; i < size; i++)
@@ -376,7 +376,7 @@ void cadence(const Home &home, int position, int type, IntVarArray states, IntVa
             rel(home, chords[position] == FIFTH_DEGREE && states[position] == FUNDAMENTAL_STATE);
             break;
         case DECEPTIVE_CADENCE:      /// V-VI. The dominant chord can have a 7th but it is not mandatory, the VI chord cannot
-            rel(home, (chords[position] == FIFTH_DEGREE || chords[position] == SEVEN_DIMINISHED) && states[position] == FUNDAMENTAL_STATE);
+            rel(home, chords[position] == FIFTH_DEGREE && states[position] == FUNDAMENTAL_STATE);
             rel(home, chords[position + 1] == SIXTH_DEGREE && states[position + 1] == FUNDAMENTAL_STATE && hasSeventh[position + 1] == 0);
             break;
         default:                     /// Ignore unknown types

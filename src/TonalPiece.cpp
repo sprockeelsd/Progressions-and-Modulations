@@ -32,9 +32,6 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
     link_qualities_to_3note_version(*this, size, qualities, qualityWithoutSeventh);
 
     //todo check alteration modulations, it should last 3 chords because the V might not be directly available. If it is, the third chord is not constrained and is just in the new tonality
-    //todo add half diminished chords for the II in minor
-    //todo make it possible to post constraints on the whole piece in the main -> make getters for the tonal piece class
-    //todo add V/VII pcq en mineur ça a plus de sens pour les modulations
     //todo add control over states (% of fund state, % of inversions,...)
 
     //todo add preference for state based on the chord degree (e.g. I should be often used in fund, sometimes 1st inversion, 2nd should be often in 1st inversion, ...)
@@ -115,7 +112,9 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
                 );
     }
 
+
     ///add here any optional constraints
+    rel(*this, progressions[0]->getChords()[2] == AUGMENTED_SIXTH);
 
     /// For the CPAIOR example
 //    for (auto p : progressions){
@@ -150,7 +149,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 
     Rnd r(1U);
     for(auto p : progressions)
-        branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_RND(r));
+        branch(*this, p->getChords(), INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, states,       INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     branch(*this, qualities,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 //    branch(*this, rootNotes,    INT_VAR_SIZE_MIN(), INT_VAL_MIN());
