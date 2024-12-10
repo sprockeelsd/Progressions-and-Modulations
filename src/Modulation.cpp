@@ -36,11 +36,11 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
             break;
             /**
              * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
-             * It must be followed by the V chord in the new tonality todo make it so that the V is the second or third chord in the new tonality
+             * It must be followed by the V chord in the new tonality
              */
         case ALTERATION_MODULATION:
-            if(end - start != 1)
-                throw std::invalid_argument("An alteration modulation must last exactly 2 chords");
+            if(end - start != 2)
+                throw std::invalid_argument("An alteration modulation must last exactly 3 chords");
             alteration_modulation(home);
             break;
         case SECONDARY_DOMINANT_MODULATION:
@@ -151,7 +151,6 @@ void Modulation::alteration_modulation(Home home) {
 }
 
 /// The note below the leading tone of the new tonality must be present in the chord before the V, which is the first chord of the new tonality
-//todo make an overlap between the tonalities that is the secondary dominant chord
 void Modulation::secondary_dominant_modulation(const Home& home) {
     rel(home, to->getChords()[0] == FIFTH_DEGREE); /// The first chord of the new tonality must be the V chord
 

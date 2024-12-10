@@ -229,7 +229,7 @@ void five_of_seven(const Home& home, int size, IntVarArray chords, Tonality* ton
  * @param chords
  * @param states
  */
-void diminished_seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states);
+void diminished_seventh_dominant_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states);
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *

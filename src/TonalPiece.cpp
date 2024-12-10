@@ -114,7 +114,7 @@ TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulatio
 
 
     ///add here any optional constraints
-    rel(*this, progressions[0]->getChords()[2] == AUGMENTED_SIXTH);
+    //rel(*this, progressions[0]->getChords()[2] == AUGMENTED_SIXTH);
 
     /// For the CPAIOR example
 //    for (auto p : progressions){

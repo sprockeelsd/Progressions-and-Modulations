@@ -82,8 +82,8 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     five_of_seven(home, size, chords, tonality);
 
     ///17. Diminished seventh chords
-    diminished_seventh_chords(home, size, qualities, chords, states);
+    diminished_seventh_dominant_chords(home, size, qualities, chords, states);
 
-    ///18. Augmented sixth chords should be in fundamental state + todo maybe other rules? Check in the syllabus
+    ///18. todo add that in minor mode, the only accepted secondary dominants are V/IV and V/V. V/II is never allowed, other secondary dominants can only be used to modulate to the relative major
 
 }

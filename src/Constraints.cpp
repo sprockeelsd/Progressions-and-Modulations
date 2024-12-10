@@ -121,7 +121,7 @@ void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArra
     ///link the chromatic chords
     for (int i = 0; i < size; i++){
         rel(home, expr(home, chords[i] >= FIVE_OF_TWO), BOT_IMP, expr(home, isChromatic[i] == 1), true);
-        rel(home, expr(home, chords[i] <= SEVENTH_DEGREE && chords[i] != FIFTH_DEGREE), BOT_IMP, expr(home, isChromatic[i] == 0), true);
+        rel(home, expr(home, chords[i] <= FIFTH_DEGREE_APPOGIATURA && chords[i] != FIFTH_DEGREE), BOT_IMP, expr(home, isChromatic[i] == 0), true);
         /// /!\ this cannot be EQV, otherwise no other chromatic chords are allowed
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] == DIMINISHED_SEVENTH_CHORD), BOT_IMP, expr(home, isChromatic[i] == 1), true);
         rel(home, expr(home, chords[i] == FIFTH_DEGREE && qualities[i] != DIMINISHED_SEVENTH_CHORD), BOT_IMP, expr(home, isChromatic[i] == 0), true);
@@ -343,7 +343,7 @@ void five_of_seven(const Home& home, int size, IntVarArray chords, Tonality* ton
  * @param chords
  * @param states
  */
-void diminished_seventh_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states) {
+void diminished_seventh_dominant_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states) {
     for (int i = 0; i < size; i++)
         rel(home, expr(home, qualities[i] == DIMINISHED_SEVENTH_CHORD && chords[i] != SEVENTH_DEGREE), BOT_IMP,
             expr(home, states[i] == FIRST_INVERSION), true);

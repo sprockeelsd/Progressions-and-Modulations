@@ -9,16 +9,17 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 5;
+    int size = 10;
     Tonality* Cminor = new MinorTonality(C);
     Tonality* Cmajor = new MajorTonality(C);
+    Tonality* Gmajor = new MajorTonality(G);
     Tonality *Ebmajor = new MajorTonality(E_FLAT);
     Tonality *Bbmajor = new MajorTonality(B_FLAT);
     // size = 19
-    vector<Tonality*> tonalities = {Cmajor};
-    vector<int> modulationTypes = {};
-    vector<int> modulationStarts = {};
-    vector<int> modulationEnds = {};
+    vector<Tonality*> tonalities = {Cmajor, Gmajor};
+    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
+    vector<int> modulationStarts = {4};
+    vector<int> modulationEnds = {5};
     /// For the CPAIOR example
 //    vector<Tonality*> tonalities = {Ebmajor, Bbmajor};
 //    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};

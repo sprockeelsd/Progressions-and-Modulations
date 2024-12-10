@@ -30,7 +30,6 @@ const int nSupportedChords = 16;
 ///3. Chords that can go to V can also go to Vda
 ///4. Chords that can go to X can also go to V/X
 const IntArgs tonalTransitions = {
-        //todo check for bII and 6te aug
         //todo move this to tonality
         /**
         I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,  VIId,   bII, 6te_a
@@ -74,8 +73,7 @@ const IntArgs tonalTransitions = {
 ///The number of supported states, which is the size of the degreeStates matrix
 const int nSupportedStates = 5;
 ///Defines which states can be taken by chords based on their degree
-//todo add bVII
-const IntArgs degreeStates = { //todo probably this is also good for minor chords, to check
+const IntArgs degreeStates = {
 ///     fundamental state,    first inversion,   second inversion,    third inversion,      fourth inversion
                         1,                  1,                  0,                  0,                     0,    /// I
                         1,                  1,                  0,                  0,                     0,    /// II
