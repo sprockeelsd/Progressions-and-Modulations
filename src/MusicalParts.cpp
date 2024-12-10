@@ -50,7 +50,7 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     link_bass_degrees_to_degrees_and_states(home, size, states, chords, bassDegrees);
 
     ///7. Link the chromatic chords and count them so that they are in the appropriate range
-    chromatic_chords(home, size, chords, isChromatic, minChromaticChords, maxChromaticChords);
+    chromatic_chords(home, size, chords, qualities, isChromatic, minChromaticChords, maxChromaticChords);
 
     ///8. Link the seventh chords and count them so that they are in the appropriate range
     seventh_chords(home, size, qualities, hasSeventh, minSeventhChords, maxSeventhChords);
@@ -75,6 +75,15 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     ///14. Chords cannot be in third inversion if they don't have a seventh
     chord_states_and_qualities(home, size, states, qualities);
 
-    /// 7èmes d'espèces doivent être préparées
+    ///15. 7èmes d'espèces doivent être préparées
     seventh_chords_preparation(home, size, hasSeventh, qualities, chords, roots, thirds, fifths, sevenths);
+
+    ///16. V/VII can only be used in minor mode
+    five_of_seven(home, size, chords, tonality);
+
+    ///17. Diminished seventh chords
+    diminished_seventh_dominant_chords(home, size, qualities, chords, states);
+
+    ///18. todo add that in minor mode, the only accepted secondary dominants are V/IV and V/V. V/II is never allowed, other secondary dominants can only be used to modulate to the relative major
+
 }

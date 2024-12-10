@@ -9,15 +9,22 @@
 
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
-    int size = 14;
+    int size = 10;
     Tonality* Cminor = new MinorTonality(C);
+    Tonality* Cmajor = new MajorTonality(C);
+    Tonality* Gmajor = new MajorTonality(G);
     Tonality *Ebmajor = new MajorTonality(E_FLAT);
     Tonality *Bbmajor = new MajorTonality(B_FLAT);
     // size = 19
-    vector<Tonality*> tonalities = {Ebmajor, Bbmajor};
-    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+    vector<Tonality*> tonalities = {Cmajor, Gmajor};
+    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
     vector<int> modulationStarts = {4};
-    vector<int> modulationEnds = {8};
+    vector<int> modulationEnds = {5};
+    /// For the CPAIOR example
+//    vector<Tonality*> tonalities = {Ebmajor, Bbmajor};
+//    vector<int> modulationTypes = {PIVOT_CHORD_MODULATION};
+//    vector<int> modulationStarts = {4};
+//    vector<int> modulationEnds = {8};
 
 
     auto tonalPiece = new TonalPiece(size, tonalities, modulationTypes,
@@ -33,6 +40,7 @@ int main(int argc, char **argv) {
     while(TonalPiece* sol = engine.next()) {
         n_sols += 1;
         std::cout << "Solution:" << n_sols<< "\n" << sol->toString() << "\nPrettier version:\n" << sol->pretty() << std::endl;
+        //std::cout << sol->pretty() << std::endl;
         if(n_sols >= 1) break;
         delete sol;
     }

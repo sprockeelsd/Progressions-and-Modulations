@@ -27,7 +27,7 @@ link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarA
 /**
  * Links chord states to the degrees
  * The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
- * formula: majorDegreeStates[chords[i] * nSupportedStates + states[i]] = 1
+ * formula: degreeStates[chords[i] * nSupportedStates + states[i]] = 1
  * todo also make it work for minor tonalities
  * @param home the problem space
  * @param size the number of chords in the progression
@@ -85,8 +85,8 @@ void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, In
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
  */
-void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray isChromatic, int minChromaticChords,
-                      int maxChromaticChords);
+void chromatic_chords(const Home &home, int size, IntVarArray chords, IntVarArray qualities, IntVarArray isChromatic,
+                      int minChromaticChords, int maxChromaticChords);
 
 /**
  * Link the seventh chords and constraints the number of seventh chords to be in the range [minSeventhChords, maxSeventhChords]
@@ -211,6 +211,25 @@ void chord_states_and_qualities(const Home &home, int size, IntVarArray states, 
  */
 void seventh_chords_preparation(const Home &home, int size, IntVarArray hasSeventh, IntVarArray qualities, IntVarArray chords,
                                 const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths, const IntVarArray& sevenths);
+
+/**
+ * V/VII can only be used in minor mode
+ * @param home
+ * @param size
+ * @param chords
+ * @param tonality
+ */
+void five_of_seven(const Home& home, int size, IntVarArray chords, Tonality* tonality);
+
+/**
+ * Diminished seventh chords must be in first inversion (that means fund. state but since it is technically a V chord without fundamental it is 1st inversion)
+ * @param home
+ * @param size
+ * @param qualities
+ * @param chords
+ * @param states
+ */
+void diminished_seventh_dominant_chords(const Home &home, int size, IntVarArray qualities, IntVarArray chords, IntVarArray states);
 
 /***********************************************************************************************************************
  *                                            Optional Constraints (preferences)                                       *
