@@ -17,50 +17,62 @@
  * communicate with each other, for modulations for example.
  * It instantiates a ChordProgression object for each tonality, which will post the constraints for chord progressions
  * in a single tonality.
- * Modulations objects will be added in the future to allow for modulations between tonalities.
+ * It also instantiates a Modulation object for each modulation, which will post the constraints for the modulation based
+ * on its type.
+ *
+ * The following input is required to create the model: the size of the piece, the tonalities, the starting position and
+ * ending position of each modulation, as well a their type.
  */
 class TonalPiece : public Space {
 private:
-    int                         size;                /// the total number of chords to be generated
+    /// input parameters
+    int                             size;                        /// the total number of chords to be generated
+    vector<Tonality*>               tonalities;                  /// the tonalities of each section in the piece
+    vector<int>                     modulationTypes;             /// the type of modulations that occurs between tonalities
+    vector<int>                     modulationStarts;            /// the starting position of each modulation
+    vector<int>                     modulationEnds;              /// the ending position of each modulation
 
-    vector<Tonality*>           tonalities;          /// the tonalities of the piece
-    vector<int>                 tonalitiesStarts;    /// the starting position of each tonality
-    vector<int>                 tonalitiesDurations; /// the duration of each tonality
-    vector<int>                 modulationTypes;     /// the type of modulations that occurs between tonalities
-    vector<int>                 modulationStarts;    /// the starting position of each modulation
-    vector<int>                 modulationEnds;      /// the ending position of each modulation
+    /// computed based on input parameters
+    vector<int>                     tonalitiesStarts;            /// the starting position of each tonality
+    vector<int>                     tonalitiesDurations;         /// the duration of each tonality
 
-    /// These are general, not tonality specific.
-    IntVarArray                 states;              /// the states of the chords (fundamental, first inversion, ...)
-    IntVarArray                 qualities;           /// the quality of the chords (major, minor, ...)
-    IntVarArray                 rootNotes;           /// the root notes corresponding to the chord degrees
-    IntVarArray                 hasSeventh;          /// whether the chord has a seventh or not
-    IntVarArray                 qualityWithoutSeventh; /// the quality of the chords without the seventh
 
-    vector<ChordProgression *>  progressions;        /// the chord progression objects for each tonality
-    vector<Modulation *>        modulations;         /// the modulation objects for each modulation
+    /// General variable arrays for the piece
+    IntVarArray                     states;                      /// the states of the chords (fundamental, first inversion, ...)
+    IntVarArray                     qualities;                   /// the quality of the chords (major, minor, ...)
+    IntVarArray                     rootNotes;                   /// the root notes corresponding to the chord degrees
+    IntVarArray                     hasSeventh;                  /// whether the chord has a seventh or not
+
+    /// Auxiliary variable array
+    IntVarArray                     qualitiesWithoutSeventh;       /// the quality of the chords without the seventh
+
+    /// Problem objects for sections and modulations
+    vector<ChordProgression *>      progressions;                /// the chord progression objects for each tonality
+    vector<Modulation *>            modulations;                 /// the modulation objects for each modulation
 
 public:
     /**
-     * Constructor for TonalPiece objects. It initializes the object with the given parameters, as well as the other
-     * objects that post constraints. It also posts the branching for the global arrays. That branching is posted after
-     * the ChordProgression objects have posted theirs.
-     * @param size the total size of the piece in terms of number of chords
-     * @param tonalities a vector of Tonality objects for each tonality of the piece
-     * @param tonalitiesStarts a vector of integers representing the starting position of each tonality. They can overlap (modulations)
-     * @param tonalitiesDurations a vector of integers representing the duration of each tonality
+     * Constructor for TonalPiece objects.
+     * It initialises the variable arrays, and links the auxiliary array to the main ones. Assuming the parameters are
+     * correct, it computes the starting position and duration of each tonality, and creates the ChordProgression and
+     * Modulation objects. It also posts the branching. It is done in this order: First, branch on the chord degrees
+     * for each tonality, then branch on states and qualities if necessary.
+     * @param size the total number of chords in the piece
+     * @param tonalities a vector of Tonality objects for each section of the piece
      * @param modulationTypes a vector of integers representing the type of modulation between the tonalities
      * @param modulationStarts a vector of integers representing the starting position of each modulation
-     * @return a TonalPiece object
+     * @param modulationEnds a vector of integers representing the ending position of each modulation
      */
     TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
                vector<int> modulationStarts, vector<int> modulationEnds);
 
     /**
      * @brief Copy constructor
-     * @param s a ChordProgression object
+     * @param s a ChordProgression object pointer
+     * Returns a TonalPiece object that is equivalent to s
      */
     TonalPiece(TonalPiece &s);
+
 
     int getSize() const { return size; };
 
@@ -84,19 +96,24 @@ public:
 
     IntVarArray getHasSeventh() const { return hasSeventh; };
 
-    IntVarArray getQualityWithoutSeventh() const { return qualityWithoutSeventh; };
+    IntVarArray getQualityWithoutSeventh() const { return qualitiesWithoutSeventh; };
 
     ChordProgression *getChordProgression(int pos) const { return progressions[pos]; };
 
     Modulation *getModulation(int pos) const { return modulations[pos]; };
 
     /**
-     * Returns a string with each of the object's field values as integers. For debugging
+     * Returns a string with each of the object's field values as integers.
      * @brief toString
      * @return a string representation of the object
      */
     string toString() const;
 
+    /**
+     * Returns a string representing the piece in a prettier format, more readable.
+     * @brief pretty function
+     * @return a string representation of the object
+     */
     string pretty() const;
 
     /**
