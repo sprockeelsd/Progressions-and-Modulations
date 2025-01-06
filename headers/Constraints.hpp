@@ -14,21 +14,19 @@
 /**
  * Links the chord qualities to the degrees
  * The quality of each chord is linked to its degree (V is major/7, I is major,...)
- * formula: majorDegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
- * todo also make it work for minor tonalities
+ * formula: DegreeQualities[chords[i] * nSupportedQualities + qualities[i]] = 1
  * @param home the problem space
  * @param size the number of chords in the progression
+ * @param tonality the tonality of the progression
  * @param qualities the array of chord qualities
  * @param chords the array of chord degrees
  */
-void
-link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarArray qualities, IntVarArray chords);
+void link_chords_to_qualities(const Home &home, int size, Tonality *tonality, IntVarArray qualities, IntVarArray chords);
 
 /**
  * Links chord states to the degrees
  * The state of each chord is linked to its degree (I can be in fund/1st inversion, VI can be in fund,...)
  * formula: degreeStates[chords[i] * nSupportedStates + states[i]] = 1
- * todo also make it work for minor tonalities
  * @param home the problem space
  * @param size the number of chords in the progression
  * @param states the array of chord states
@@ -70,6 +68,17 @@ void link_root_notes_to_degrees(const Home &home, int size, Tonality *tonality, 
 void link_bass_degrees_to_degrees_and_states(const Home &home, int size, IntVarArray states, IntVarArray chords,
                                              IntVarArray bassDegrees);
 
+/**
+ * Links the notes constituting the chord to the chord degree
+ * formula: roots[i] = bassBasedOnDegreeAndState[chords[i] * nSupportedStates + FUNDAMENTAL_STATE] etc.
+ * @param home the problem space
+ * @param duration the number of chords in the progression
+ * @param chords the array of chord degrees
+ * @param roots the array of root notes
+ * @param thirds the array of third notes
+ * @param fifths the array of fifth notes
+ * @param sevenths the array of seventh notes
+ */
 void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, IntVarArray roots, IntVarArray thirds,
                           IntVarArray fifths, IntVarArray sevenths);
 
@@ -81,6 +90,7 @@ void link_notes_to_degree(const Home &home, int duration, IntVarArray chords, In
  * @param home the problem space
  * @param size the number of chords in the progression
  * @param chords the array of chord degrees
+ * @param qualities the array of chord qualities
  * @param isChromatic the array of chromatic chords
  * @param minChromaticChords the min number of chromatic chords we want
  * @param maxChromaticChords the max number of chromatic chords we want
