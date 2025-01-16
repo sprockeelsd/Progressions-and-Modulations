@@ -92,6 +92,12 @@ void Modulation::pivot_chord_modulation(const Home &home) {
             to->getChords(), to->getHasSeventh());
 }
 
+/**
+ * This function posts the constraints for an alteration modulation. It ensures that the first tonality ends on a diatonic
+ * chord, and that the first chord of the new tonality contains at least one note that is not in the first tonality. It also
+ * enforces that the V chord of the new tonality must be at the second or third position in the new tonality's section.
+ * @param home the search space
+ */
 void Modulation::alteration_modulation(Home home) {
     /// The last chord of the first tonality must be diatonic and not the seventh degree without a seventh
     rel(home, from->getChords()[from->getDuration()-1] < SEVENTH_DEGREE);
@@ -150,7 +156,11 @@ void Modulation::alteration_modulation(Home home) {
     rel(home, expr(home, !canNextChordBeV), BOT_IMP, expr(home, to->getChords()[2] == FIFTH_DEGREE), true);
 }
 
-/// The note below the leading tone of the new tonality must be present in the chord before the V, which is the first chord of the new tonality
+/**
+ * This function posts the constraints for a secondary dominant modulation. It ensures that the first chord of the new tonality
+ * is the V chord, and that the last chord of the first tonality contains the note below the leading tone of the new tonality.
+ * @param home the search space
+ */
 void Modulation::secondary_dominant_modulation(const Home& home) {
     rel(home, to->getChords()[0] == FIFTH_DEGREE); /// The first chord of the new tonality must be the V chord
 
@@ -194,6 +204,10 @@ void Modulation::secondary_dominant_modulation(const Home& home) {
                             from->getFifths()[from->getDuration()-2] == degree_of_new_seventh_in_from));
 }
 
+/**
+ * Returns a string with each of the object's field values as integers.
+ * @return
+ */
 string Modulation::toString() {
     string txt;
     txt += "------------------------Modulation object------------------------\n";
@@ -206,6 +220,10 @@ string Modulation::toString() {
     return txt;
 }
 
+/**
+ * Returns a string representing the piece in a prettier format, more readable.
+ * @return
+ */
 string Modulation::pretty() {
     string txt;
     try{

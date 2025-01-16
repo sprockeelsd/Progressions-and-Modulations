@@ -5,15 +5,17 @@
 #include "../headers/ChordProgression.hpp"
 
 /**
- * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
- * constraints.
+ * Constructor for ChordProgression objects. It initializes the object with the given parameters, links the subset arrays
+ * to the main arrays in the TonalPiece class, and posts the constraints.
  * @param home the search space
- * @param tonality the tonality of the progression
  * @param start the starting position of the progression in the global piece
  * @param duration the duration of the progression
+ * @param tonality the tonality of the progression
  * @param states the states of the chords
  * @param qualities the qualities of the chords
+ * @param qualitiesWithoutSeventh the qualities of the chords without the seventh
  * @param rootNotes the root notes of the chords
+ * @param hasSeventh whether the chord has a seventh or not
  * @param minPercentChromaticChords the minimum percentage of chromatic chords in the progression
  * @param maxPercentChromaticChords the maximum percentage of chromatic chords in the progression
  * @param minPercentSeventhChords the minimum percentage of seventh chords in the progression

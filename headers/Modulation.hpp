@@ -58,12 +58,31 @@ public:
      */
     void pivot_chord_modulation(const Home &home);
 
+    /**
+     * This function posts the constraints for an alteration modulation. It ensures that the first tonality ends on a diatonic
+     * chord, and that the first chord of the new tonality contains at least one note that is not in the first tonality. It also
+     * enforces that the V chord of the new tonality must be at the second or third position in the new tonality's section.
+     * @param home the search space
+     */
     void alteration_modulation(Home home);
 
+    /**
+     * This function posts the constraints for a secondary dominant modulation. It ensures that the first chord of the new tonality
+     * is the V chord, and that the last chord of the first tonality contains the note below the leading tone of the new tonality.
+     * @param home the search space
+     */
     void secondary_dominant_modulation(const Home& home);
 
+    /**
+     * Returns a string with each of the object's field values as integers.
+     * @return
+     */
     string toString();
 
+    /**
+     * Returns a string representing the piece in a prettier format, more readable.
+     * @return
+     */
     string pretty();
 };
 

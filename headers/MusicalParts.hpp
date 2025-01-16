@@ -19,6 +19,10 @@
  * @param bassDegrees the degree of the note at the bass
  * @param isChromatic whether each chord is chromatic or not
  * @param hasSeventh whether each chord has a seventh or not
+ * @param roots the root notes of the chords
+ * @param thirds the third notes of the chords
+ * @param fifths the fifth notes of the chords
+ * @param sevenths the seventh notes of the chords
  * @param minChromaticChords the minimum number of chromatic chords in the progression
  * @param maxChromaticChords the maximum number of chromatic chords in the progression
  * @param minSeventhChords the minimum number of seventh chords in the progression

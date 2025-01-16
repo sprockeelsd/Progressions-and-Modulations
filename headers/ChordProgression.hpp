@@ -10,49 +10,62 @@
 
 /**
  * This class represents a chord progression of tonal music in a given tonality. It takes as argument a search space
- * in the form of a Home object. It posts constraints to ensure that the rules of tonal harmony are respected.
+ * in the form of a Home object. It posts constraints to ensure that the rules of tonal harmony inside a tonality are
+ * respected.
  *
- * It contains a series of parameters, as well as variable arrays. The states, qualities and rootNotes are slices of the
- * TonalPiece object that creates this object, while the chords and bassDegrees are specific to this object.
- * It also has auxiliary variables arrays, isChromatic and hasSeventh, that are used for preferences.
+ * It contains a variable arrays for chord degrees in the tonality. Additionally, it also contains subsets of the global
+ * variable arrays for states, qualities and root notes of the chords that are tied to this section. It also contains
+ * auxiliary variable arrays for the bass notes, whether the chord is chromatic or has a seventh, and each degree
+ * constituting the chords.
+ *
+ * It requires as argument a starting position in the global piece, a duration, a tonality, and the global variable
+ * arrays. It can take optional parameters for the minimum and maximum number of chromatic and seventh chords in the
+ * piece.
  */
 class ChordProgression {
 private:
-    int start;                       /// the starting position of the progression in the global piece
-    int duration;                    /// the number of chords to be generated in this tonality
-    int minChromaticChords;          /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
-    int maxChromaticChords;          /// the max number of chromatic chords that are allowed in the progression
-    int minSeventhChords;            /// the min number of seventh chords that are allowed in the progression todo maybe dissociate V and V/X chords from others
-    int maxSeventhChords;            /// the max number of seventh chords that are allowed in the progression
+    int start;                                   /// the starting position of the progression in the global piece
+    int duration;                                /// the number of chords to be generated in this tonality
+    Tonality* tonality;                          /// the tonality of the piece
 
-    Tonality* tonality;              /// the tonality of the piece
+    /// optional parameters
+    int minChromaticChords;                      /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
+    int maxChromaticChords;                      /// the max number of chromatic chords that are allowed in the progression
+    int minSeventhChords;                        /// the min number of seventh chords that are allowed in the progression
+    int maxSeventhChords;                        /// the max number of seventh chords that are allowed in the progression
 
-    IntVarArray chords;              /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X,bII,6te_a)
-    IntVarArray states;              /// the states of the chords (fundamental, first inversion, ...)
-    IntVarArray qualities;           /// the quality of the chords
-    IntVarArray qualitiesWithoutSeventh; /// the quality of the chords without the seventh
-    IntVarArray bassDegrees;         /// the bass notes corresponding to the chord degrees
-    IntVarArray rootNotes;           /// the root notes
+    /// Decision variable array
+    IntVarArray chords;                          /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X,bII,6te_a)
 
-    IntVarArray                 roots;
-    IntVarArray                 thirds;
-    IntVarArray                 fifths;
-    IntVarArray                 sevenths;
+    /// Subsets of global variable arrays
+    IntVarArray states;                          /// the states of the chords (fundamental, first inversion, ...)
+    IntVarArray qualities;                       /// the quality of the chords
+    IntVarArray qualitiesWithoutSeventh;         /// the quality of the chords without the seventh
+    IntVarArray rootNotes;                       /// the root notes
+    IntVarArray hasSeventh;                      /// whether the chord has a seventh or not
 
-    IntVarArray isChromatic;         /// whether the chord is chromatic or not
-    IntVarArray hasSeventh;          /// whether the chord has a seventh or not
+    /// Auxiliary variable arrays
+    IntVarArray bassDegrees;                     /// the bass notes corresponding to the chord degrees
+    IntVarArray roots;                           /// the root notes corresponding to the chord degrees
+    IntVarArray thirds;                          /// the third notes corresponding to the chord degrees
+    IntVarArray fifths;                          /// the fifth notes corresponding to the chord degrees
+    IntVarArray sevenths;                        /// the seventh notes corresponding to the chord degrees
+    IntVarArray isChromatic;                     /// whether the chord is chromatic or not
+
 
 public:
     /**
-     * Constructor for ChordProgression objects. It initializes the object with the given parameters, and posts the
-     * constraints.
+     * Constructor for ChordProgression objects. It initializes the object with the given parameters, links the subset arrays
+     * to the main arrays in the TonalPiece class, and posts the constraints.
      * @param home the search space
-     * @param tonality the tonality of the progression
      * @param start the starting position of the progression in the global piece
      * @param duration the duration of the progression
+     * @param tonality the tonality of the progression
      * @param states the states of the chords
      * @param qualities the qualities of the chords
+     * @param qualitiesWithoutSeventh the qualities of the chords without the seventh
      * @param rootNotes the root notes of the chords
+     * @param hasSeventh whether the chord has a seventh or not
      * @param minPercentChromaticChords the minimum percentage of chromatic chords in the progression
      * @param maxPercentChromaticChords the maximum percentage of chromatic chords in the progression
      * @param minPercentSeventhChords the minimum percentage of seventh chords in the progression
@@ -71,10 +84,6 @@ public:
      */
     ChordProgression(Home home, ChordProgression &s);
 
-    /**
-     * getters
-     * @return the attributes of the object
-     */
 
     int getStart() const { return start; }
 
