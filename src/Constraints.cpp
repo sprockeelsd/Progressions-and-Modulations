@@ -302,9 +302,14 @@ void tritone_resolutions(Home home, int size, IntVarArray states, IntVarArray qu
  * @param qualities the array of chord qualities
  */
 void chord_states_and_qualities(const Home &home, int size, IntVarArray states, IntVarArray qualities) {
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < size; i++) {
+        /// chords that don't have a seventh cannot be in third inversion
         rel(home, expr(home, qualities[i] < DOMINANT_SEVENTH_CHORD), BOT_IMP,
             expr(home, states[i] < THIRD_INVERSION), true);
+        /// chords that don't have a ninth cannot be in fourth inversion
+        rel(home, expr(home, qualities[i] < MINOR_NINTH_DOMINANT_CHORD), BOT_IMP,
+            expr(home, states[i] < FOURTH_INVERSION), true);
+    }
 }
 
 /**

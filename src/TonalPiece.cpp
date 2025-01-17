@@ -22,10 +22,10 @@ TonalPiece:: TonalPiece(int size, const vector<Tonality *> &tonalities, vector<i
            modulationTypes(modulationTypes), modulationStarts(modulationStarts), modulationEnds(modulationEnds){
 
     this->states                = IntVarArray(*this, size, FUNDAMENTAL_STATE,   THIRD_INVERSION);
-    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         AUGMENTED_SIXTH_CHORD);
+    this->qualities             = IntVarArray(*this, size, MAJOR_CHORD,         MINOR_NINTH_DOMINANT_CHORD);
     this->rootNotes             = IntVarArray(*this, size, C,                   B);
     this->hasSeventh            = IntVarArray(*this, size, 0,                   1);
-    this->qualitiesWithoutSeventh = IntVarArray(*this, size, MAJOR_CHORD, AUGMENTED_CHORD);
+    this->qualitiesWithoutSeventh = IntVarArray(*this, size, MAJOR_CHORD, AUGMENTED_CHORD); //todo modify this since augmented sixth are also 3 note chords
 
     ///constraint
     link_qualities_to_3note_version(*this, size, qualities, qualitiesWithoutSeventh);
