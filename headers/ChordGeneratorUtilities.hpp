@@ -74,13 +74,13 @@ const IntArgs degreeStates = {
 };
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
-const int nSupportedQualities = 11;
+const int nSupportedQualities = 13;
 ///Defines which qualities can be taken by chords based on their degree
 //todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
 //todo move this to major tonality and do the same for minor tonality
 //todo add 9th etc
 const IntArgs majorDegreeQualities = {
-///     M,  m,  dim,    aug, Augmented Sixth    7,  M7,     m7,     dim7, half dim,    mM7,   major_ninth_dom, minor_ninth_dom
+///     M,  m,  dim,    aug, Augmented Sixth,   7,  M7,     m7,     dim7, half dim,    mM7,   major_ninth_dom, minor_ninth_dom
         1,  0,    0,      0,               0,   0,   1,      0,        0,        0,      0,                 0,              0,    /// I
         0,  1,    0,      0,               0,   0,   0,      1,        0,        0,      0,                 0,              0,    /// II
         0,  1,    0,      0,               0,   0,   0,      1,        0,        0,      0,                 0,              0,    /// III
