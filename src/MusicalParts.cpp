@@ -35,6 +35,7 @@ void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &sta
     ///1. chord[i] -> chord[i+1] is possible
     chord_transitions(home, size, chords);
 
+
     ///2. Link notes to degrees
     link_notes_to_degree(home, size, chords, roots, thirds, fifths, sevenths);
 

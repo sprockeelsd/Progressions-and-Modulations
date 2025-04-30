@@ -8,19 +8,7 @@
 #include "../Diatony/c++/headers/diatony/FourVoiceTexture.hpp"
 #include "../Diatony/c++/headers/diatony/SolveDiatony.hpp"
 
-enum modulations{
-    PERFECT_CADENCE_MODULATION,         ///0
-    PIVOT_CHORD_MODULATION,             ///1
-    ALTERATION_MODULATION,              ///2, sudden change of the tonality by using a chord from the new key that contains a note that is not in the previous key
-    SECONDARY_DOMINANT_MODULATION,      ///3, introducing the sensitive note of the new tonality
-};
 
-const vector<string> modulation_type_names = {
-        "Perfect Cadence",
-        "Pivot Chord",
-        "Alteration",
-        "Secondary Dominant",
-};
 
 ///The number of supported chords, which is the size of the tonalTransitions matrix
 const int nSupportedChords = 16;
@@ -74,49 +62,49 @@ const IntArgs degreeStates = {
 };
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
-const int nSupportedQualities = 11;
+const int nSupportedQualities = 13;
 ///Defines which qualities can be taken by chords based on their degree
 //todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
 //todo move this to major tonality and do the same for minor tonality
 //todo add 9th etc
 const IntArgs majorDegreeQualities = {
-///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7, half dim,    mM7,       Augmented Sixth
-        1,  0,    0,      0,    0,   1,      0,        0,        0,      0,                     0,    /// I
-        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,                     0,    /// II
-        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,                     0,    /// III
-        1,  0,    0,      0,    0,   1,      0,        0,        0,      0,                     0,    /// IV
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V
-        0,  1,    0,      0,    0,   0,      1,        0,        0,      0,                     0,    /// VI
-        0,  0,    1,      0,    0,   0,      0,        0,        1,      0,                     0,    /// VII
-        1,  0,    0,      0,    0,   0,      0,        0,        0,      0,                     0,    /// Vda
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        1,        0,      0,                     0,    /// V/VII
-        1,  0,    0,      0,    0,   0,      0,        0,        0,      0,                     0,    /// bII
-        0,  0,    0,      0,    0,   0,      0,        0,        0,      0,                     1,    /// 6te_a
+///     M,  m,  dim,    aug, Augmented Sixth,   7,  M7,     m7,     dim7, half dim,    mM7,   major_ninth_dom, minor_ninth_dom
+        1,  0,    0,      0,               0,   0,   1,      0,        0,        0,      0,                 0,              0,    /// I
+        0,  1,    0,      0,               0,   0,   0,      1,        0,        0,      0,                 0,              0,    /// II
+        0,  1,    0,      0,               0,   0,   0,      1,        0,        0,      0,                 0,              0,    /// III
+        1,  0,    0,      0,               0,   0,   1,      0,        0,        0,      0,                 0,              0,    /// IV
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V
+        0,  1,    0,      0,               0,   0,   0,      1,        0,        0,      0,                 0,              0,    /// VI
+        0,  0,    1,      0,               0,   0,   0,      0,        0,        1,      0,                 0,              0,    /// VII
+        1,  0,    0,      0,               0,   0,   0,      0,        0,        0,      0,                 0,              0,    /// Vda
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/II
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/III
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/IV
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/V
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/VI
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,      0,                 1,              1,    /// V/VII
+        1,  0,    0,      0,               0,   0,   0,      0,        0,        0,      0,                 0,              0,    /// bII
+        0,  0,    0,      0,               1,   0,   0,      0,        0,        0,      0,                 0,              0,    /// 6te_a
 };
 
 const IntArgs minorDegreeQualities = {
-///     M,  m,  dim,    aug,    7,  M7,     m7,     dim7, half dim,    mM7,       Augmented Sixth
-        0,  1,    0,      0,    0,   0,      1,        0,        0,     0,                     0,    /// I
-        0,  0,    1,      0,    0,   0,      0,        0,        1,     0,                     0,    /// II
-        1,  0,    0,      1,    0,   1,      0,        0,        0,     0,                     0,    /// III
-        0,  1,    0,      0,    0,   0,      1,        0,        0,     0,                     0,    /// IV
-        1,  1,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V
-        1,  0,    0,      0,    0,   1,      0,        0,        0,     0,                     0,    /// VI
-        1,  0,    1,      0,    0,   0,      0,        1,        0,     0,                     0,    /// VII
-        0,  1,    0,      0,    0,   0,      0,        0,        0,     0,                     0,    /// Vda
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/II
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/III
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/IV
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/V
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/VI
-        1,  0,    0,      0,    1,   0,      0,        1,        0,     0,                     0,    /// V/VII
-        1,  0,    0,      0,    0,   0,      0,        0,        0,     0,                     0,    /// bII
-        0,  0,    0,      0,    0,   0,      0,        0,        0,     0,                     1,    /// 6te_a
+///     M,  m,  dim,    aug, Augmented Sixth,   7,  M7,     m7,     dim7, half dim,    mM7,  major_ninth_dom, minor_ninth_dom
+        0,  1,    0,      0,               0,   0,   0,      1,        0,        0,     0,                 0,              0,    /// I
+        0,  0,    1,      0,               0,   0,   0,      0,        0,        1,     0,                 0,              0,    /// II
+        1,  0,    0,      1,               0,   0,   1,      0,        0,        0,     0,                 0,              0,    /// III
+        0,  1,    0,      0,               0,   0,   0,      1,        0,        0,     0,                 0,              0,    /// IV
+        1,  1,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V
+        1,  0,    0,      0,               0,   0,   1,      0,        0,        0,     0,                 0,              0,    /// VI
+        1,  0,    1,      0,               0,   0,   0,      0,        1,        0,     0,                 0,              0,    /// VII
+        0,  1,    0,      0,               0,   0,   0,      0,        0,        0,     0,                 0,              0,    /// Vda
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/II
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/III
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/IV
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/V
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/VI
+        1,  0,    0,      0,               0,   1,   0,      0,        1,        0,     0,                 1,              1,    /// V/VII
+        1,  0,    0,      0,               0,   0,   0,      0,        0,        0,     0,                 0,              0,    /// bII
+        0,  0,    0,      0,               1,   0,   0,      0,        0,        0,     0,                 0,              0,    /// 6te_a
 };
 
 //todo put this in Tonality
