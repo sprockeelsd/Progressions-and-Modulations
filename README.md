@@ -10,6 +10,7 @@ preferences. It is planned to tie this program to an interface in the future to 
 it easier to use by composers. The details of the model along with an explanation can be
 found in **todo add the paper to the repo**
 
+
 ## Structure
 The repository is organised as follows: 
 - The ***Diatony*** folder is a submodule of the repository of the same name. This 
