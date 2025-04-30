@@ -8,19 +8,7 @@
 #include "../Diatony/c++/headers/diatony/FourVoiceTexture.hpp"
 #include "../Diatony/c++/headers/diatony/SolveDiatony.hpp"
 
-enum modulations{
-    PERFECT_CADENCE_MODULATION,         ///0
-    PIVOT_CHORD_MODULATION,             ///1
-    ALTERATION_MODULATION,              ///2, sudden change of the tonality by using a chord from the new key that contains a note that is not in the previous key
-    SECONDARY_DOMINANT_MODULATION,      ///3, introducing the sensitive note of the new tonality
-};
 
-const vector<string> modulation_type_names = {
-        "Perfect Cadence",
-        "Pivot Chord",
-        "Alteration",
-        "Secondary Dominant",
-};
 
 ///The number of supported chords, which is the size of the tonalTransitions matrix
 const int nSupportedChords = 16;

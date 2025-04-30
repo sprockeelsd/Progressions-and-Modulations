@@ -1,32 +1,13 @@
 all: run
 
-# Diatony library directories
-DIATONY_LIB = Diatony
-C++_DIR = c++
-SRC_DIR = src
-AUX_DIR = aux
-MIDI_DIR = midifile
-DIATONY_DIR = diatony
+# import variables from the Diatony repository
+include Diatony/c++/file_variables.mk
 
-#Diatony related files
-DIATONY_FILES = 		$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/Utilities.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/Tonality.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/MajorTonality.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/MinorTonality.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(AUX_DIR)/MidiFileGeneration.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/VoiceLeadingConstraints.cpp	\
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/HarmonicConstraints.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/GeneralConstraints.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/Preferences.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/FourVoiceTexture.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(DIATONY_DIR)/SolveDiatony.cpp
+# add prefix so that the relative path is correct
+DIATONY_PATH := Diatony/c++
 
-MIDI_LIBRARY_FILES = 	$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/Options.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiMessage.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiEvent.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiEventList.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/Binasc.cpp \
-						$(DIATONY_LIB)/$(C++_DIR)/$(SRC_DIR)/$(MIDI_DIR)/MidiFile.cpp
+DIATONY_FILES = $(addprefix $(DIATONY_PATH)/, $(PROBLEM_FILES))
+MIDI_LIBRARY_FILES = $(addprefix $(DIATONY_PATH)/, $(MIDI_FILES))
 
 CHORD_GENERATOR_FILES = $(SRC_DIR)/ChordGeneratorUtilities.cpp \
 						$(SRC_DIR)/Constraints.cpp \

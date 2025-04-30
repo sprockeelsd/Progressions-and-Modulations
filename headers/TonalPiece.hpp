@@ -21,7 +21,7 @@
  * on its type.
  *
  * The following input is required to create the model: the size of the piece, the tonalities, the starting position and
- * ending position of each modulation, as well a their type.
+ * ending position of each modulation, as well as their type.
  */
 class TonalPiece : public Space {
 private:
