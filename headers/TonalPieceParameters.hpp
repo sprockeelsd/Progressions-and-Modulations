@@ -16,15 +16,14 @@ protected:
     const vector<int> modulationStarts;   // The starting position of each modulation
     const vector<int> modulationEnds;     // The ending position of each modulation
 
+    vector<int> progressionsStarts;            // The starting position of each tonality
+    vector<int> progressionsDurations;         // The duration of each tonality
+
 public:
     TonalPieceParameters(int size, int nSections, const vector<Tonality*>& tonalities,
                          const vector<int>& modulationTypes,
                          const vector<int>& modulationStarts,
-                         const vector<int>& modulationEnds) :
-            size(size), nProgressions(nSections), tonalities(tonalities),
-            modulationTypes(modulationTypes),
-            modulationStarts(modulationStarts),
-            modulationEnds(modulationEnds) {}
+                         const vector<int>& modulationEnds);
 
     /**                        getters                        **/
     int get_size() const { return size; }
@@ -38,6 +37,10 @@ public:
     int get_modulationStart(int index) const { return modulationStarts[index]; }
 
     int get_modulationEnd(int index) const { return modulationEnds[index]; }
+
+    int get_progressionStart(int index) const { return progressionsStarts[index]; }
+
+    int get_progressionDuration(int index) const { return progressionsDurations[index]; }
 
 
     /**

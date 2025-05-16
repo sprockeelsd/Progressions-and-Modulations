@@ -29,11 +29,6 @@ private:
     /// input parameters
     TonalPieceParameters* parameters;
 
-    /// computed based on input parameters
-    vector<int>                     progressionsStarts;            /// the starting position of each tonality
-    vector<int>                     progressionsDurations;         /// the duration of each tonality
-
-
     /// General variable arrays for the piece
     IntVarArray                     states;                      /// the states of the chords (fundamental, first inversion, ...)
     IntVarArray                     qualities;                   /// the quality of the chords (major, minor, ...)
@@ -65,10 +60,6 @@ public:
     TonalPiece(TonalPiece &s);
 
     TonalPieceParameters* getParameters() const { return parameters; };
-
-    int getProgressionStart(int pos) const { return progressionsStarts[pos]; };
-
-    int getProgressionDuration(int pos) const { return progressionsDurations[pos]; };
 
     IntVarArray getStates() const { return states; };
 

@@ -36,64 +36,11 @@ TonalPiece:: TonalPiece(TonalPieceParameters* params) : parameters(params) {
     //todo add other chords (9, add6,...)?
     //todo give a range of length for the modulation, so it can have more freedom (extra chords etc)
 
-    ///Compute tonality starts and durations
-    progressionsStarts.reserve(params->get_nProgressions());    progressionsDurations.reserve(params->get_nProgressions());
-    /// the first tonality starts at the beginning
-    progressionsStarts.push_back(0);
-    for(int i = 0; i < params->get_nProgressions() - 1; i++){
-        switch (params->get_modulationType(i)){
-                /**
-                 * The modulation lasts 2 chords, and the next tonality starts on the chord after the modulation
-                 * example: C Major (I ... V I) (I ...) G Major
-                 */
-            case PERFECT_CADENCE_MODULATION:
-                progressionsStarts        .push_back(parameters->get_modulationEnd(i) + 1);                       ///start of the next tonality
-                progressionsDurations     .push_back(parameters->get_modulationEnd(i) - progressionsStarts[i] + 1); ///duration of the current tonality
-                break;
-                /**
-                 * The modulation lasts at least 3 chords, and the next tonality starts on the first chord while the
-                 * first tonality ends just before the perfect cadence, so there is an overlap of the tonalities
-                 * example: C Major (I ... (VI) V I ...) G Major
-                 */
-            case PIVOT_CHORD_MODULATION:
-                progressionsStarts        .push_back( parameters->get_modulationStart(i));
-                progressionsDurations     .push_back(parameters->get_modulationEnd(i) -2 - progressionsStarts[i] + 1);
-                break;
-                /**
-                 * The modulation lasts 3 chords, and the next tonality starts on the first chord while the first
-                 * tonality ends just before the modulation. That is because the V chord might not be possible right
-                 * after the alteration.
-                 * example: C Major (I ... V I) (IV V ...) F Major
-                 */
-            case ALTERATION_MODULATION:
-                progressionsStarts        .push_back(parameters->get_modulationStart(i));
-                progressionsDurations     .push_back(parameters->get_modulationStart(i) - progressionsStarts[i]);
-                break;
-                /**
-                 * The modulation lasts 2 chords, and the next tonality starts on the first chord while the first
-                 * tonality ends on the first chord. There is a 1 chord overlap, that is a secondary dominant in the
-                 * first tonality and the V chord in the new tonality.
-                 * example: C Major (I ... (V/V) I ...) G Major
-                 */
-            case SECONDARY_DOMINANT_MODULATION:
-                progressionsStarts        .push_back(parameters->get_modulationStart(i));
-                progressionsDurations     .push_back(parameters->get_modulationStart(i) - progressionsStarts[i] +1);
-                break;
-            default:
-                throw std::invalid_argument("The modulation type is not recognized.");
-        }
-    }
-    ///the last section lasts until the end
-    progressionsDurations.push_back(params->get_size() - progressionsStarts[progressionsStarts.size()-1]);
-
-    std::cout << "tonalitiesStarts: " << int_vector_to_string(progressionsStarts) << std::endl;
-    std::cout << "tonalitiesDurations: " << int_vector_to_string(progressionsDurations) << std::endl;
-
     progressions.reserve(params->get_nProgressions());    modulations.reserve(params->get_nProgressions() - 1);
     /// Create the ChordProgression objects for each section, and post the constraints
     for (int i = 0; i < params->get_nProgressions(); i++)
         progressions.push_back(
-                new ChordProgression(*this, progressionsStarts[i], progressionsDurations[i],
+                new ChordProgression(*this, parameters->get_progressionStart(i), parameters->get_progressionDuration(i),
                                      parameters->get_tonality(i), states, qualities,
                                      qualitiesWithoutSeventh, rootNotes, hasSeventh,
                                      0, 1,
@@ -125,8 +72,6 @@ TonalPiece:: TonalPiece(TonalPieceParameters* params) : parameters(params) {
  */
 TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
     parameters                  = s.parameters;
-    progressionsStarts            = s.progressionsStarts;
-    progressionsDurations         = s.progressionsDurations;
     states                      .update(*this, s.states);
     qualities                   .update(*this, s.qualities);
     rootNotes                   .update(*this, s.rootNotes);
@@ -149,10 +94,6 @@ string TonalPiece::toString() const {
     string txt = "------------------------------------------------------TonalPiece object------------------------------"
                  "------------------------\n";
     txt += "Parameters: n" + parameters->toString();
-    txt += "Tonalities starts:\t";
-    for(auto t : progressionsStarts)                  txt += to_string(t) + " ";                     txt += "\n";
-    txt += "Tonalities durations:\t";
-    for(auto t : progressionsDurations)               txt += to_string(t) + " ";                     txt += "\n";
 
     txt += "States:\t\t\t"                  + intVarArray_to_string(states)                         + "\n";
     txt += "Qualities:\t\t"                 + intVarArray_to_string(qualities)                      + "\n";
