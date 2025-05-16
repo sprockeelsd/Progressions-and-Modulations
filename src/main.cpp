@@ -5,6 +5,7 @@
 #include "../headers/ChordGeneratorUtilities.hpp"
 #include "../Diatony/c++/headers/aux/MidiFileGeneration.hpp"
 #include "../headers/TonalPiece.hpp"
+#include "../headers/TonalPieceParameters.hpp"
 
 //todo move this to diatony in the midifile generation file
 void write_midifile(const string& filename, vector<int> notes) {
@@ -66,6 +67,11 @@ int main(int argc, char **argv) {
     vector<int> modulationTypes = {PERFECT_CADENCE_MODULATION};
     vector<int> modulationStarts = {12};
     vector<int> modulationEnds = {13};
+
+    auto params = TonalPieceParameters(size, tonalities.size(), tonalities,
+                                       modulationTypes, modulationStarts, modulationEnds);
+
+    std::cout << params.toString() << std::endl;
 
     vector<int> phrase_starts = {0, 14};
 
