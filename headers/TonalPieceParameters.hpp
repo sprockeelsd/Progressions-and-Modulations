@@ -19,6 +19,9 @@ protected:
     vector<int> progressionsStarts;            // The starting position of each tonality
     vector<int> progressionsDurations;         // The duration of each tonality
 
+    vector<int> phraseStarts;
+    vector<int> phraseEnds;
+
 public:
     TonalPieceParameters(int size, int nSections, const vector<Tonality*>& tonalities,
                          const vector<int>& modulationTypes,
@@ -41,6 +44,10 @@ public:
     int get_progressionStart(int index) const { return progressionsStarts[index]; }
 
     int get_progressionDuration(int index) const { return progressionsDurations[index]; }
+
+    int get_phraseStart(int index) const { return phraseStarts[index]; }
+
+    int get_phraseEnd(int index) const { return phraseEnds[index]; }
 
 
     /**
