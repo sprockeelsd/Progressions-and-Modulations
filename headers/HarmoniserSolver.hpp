@@ -5,4 +5,8 @@
 #ifndef HARMONISERSOLVER_HPP
 #define HARMONISERSOLVER_HPP
 
+#include "TonalPiece.hpp"
+
+TonalPiece* solve_harmoniser(TonalPiece* piece, bool print = false);
+
 #endif //HARMONISERSOLVER_HPP
