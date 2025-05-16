@@ -7,6 +7,7 @@
 
 #include "ChordGeneratorUtilities.hpp"
 #include "Modulation.hpp"
+#include "TonalPieceParameters.hpp"
 
 /**
  * This class represents a tonal piece. It can have multiple tonalities, with modulations between them. It extends
@@ -26,15 +27,11 @@
 class TonalPiece : public Space {
 private:
     /// input parameters
-    int                             size;                        /// the total number of chords to be generated
-    vector<Tonality*>               tonalities;                  /// the tonalities of each section in the piece
-    vector<int>                     modulationTypes;             /// the type of modulations that occurs between tonalities
-    vector<int>                     modulationStarts;            /// the starting position of each modulation
-    vector<int>                     modulationEnds;              /// the ending position of each modulation
+    TonalPieceParameters* parameters;
 
     /// computed based on input parameters
-    vector<int>                     tonalitiesStarts;            /// the starting position of each tonality
-    vector<int>                     tonalitiesDurations;         /// the duration of each tonality
+    vector<int>                     progressionsStarts;            /// the starting position of each tonality
+    vector<int>                     progressionsDurations;         /// the duration of each tonality
 
 
     /// General variable arrays for the piece
@@ -57,14 +54,8 @@ public:
      * correct, it computes the starting position and duration of each tonality, and creates the ChordProgression and
      * Modulation objects. It also posts the branching. It is done in this order: First, branch on the chord degrees
      * for each tonality, then branch on states and qualities if necessary.
-     * @param size the total number of chords in the piece
-     * @param tonalities a vector of Tonality objects for each section of the piece
-     * @param modulationTypes a vector of integers representing the type of modulation between the tonalities
-     * @param modulationStarts a vector of integers representing the starting position of each modulation
-     * @param modulationEnds a vector of integers representing the ending position of each modulation
      */
-    TonalPiece(int size, const vector<Tonality *> &tonalities, vector<int> modulationTypes,
-               vector<int> modulationStarts, vector<int> modulationEnds);
+    TonalPiece(TonalPieceParameters* params);
 
     /**
      * @brief Copy constructor
@@ -73,20 +64,11 @@ public:
      */
     TonalPiece(TonalPiece &s);
 
+    TonalPieceParameters* getParameters() const { return parameters; };
 
-    int getSize() const { return size; };
+    int getProgressionStart(int pos) const { return progressionsStarts[pos]; };
 
-    Tonality *getTonality(int pos) const { return tonalities[pos]; };
-
-    int getTonalityStart(int pos) const { return tonalitiesStarts[pos]; };
-
-    int getTonalityDuration(int pos) const { return tonalitiesDurations[pos]; };
-
-    int getModulationType(int pos) const { return modulationTypes[pos]; };
-
-    int getModulationStart(int pos) const { return modulationStarts[pos]; };
-
-    int getModulationEnd(int pos) const { return modulationEnds[pos]; };
+    int getProgressionDuration(int pos) const { return progressionsDurations[pos]; };
 
     IntVarArray getStates() const { return states; };
 

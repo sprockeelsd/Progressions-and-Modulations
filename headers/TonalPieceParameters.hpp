@@ -10,7 +10,7 @@
 class TonalPieceParameters {
 protected:
     const int size;                       // The number of chords in the piece
-    const int nSections;                 // The number of sections in the piece
+    const int nProgressions;                 // The number of sections in the piece
     const vector<Tonality*> tonalities;   // The tonalities of the piece
     const vector<int> modulationTypes;
     const vector<int> modulationStarts;   // The starting position of each modulation
@@ -21,7 +21,7 @@ public:
                          const vector<int>& modulationTypes,
                          const vector<int>& modulationStarts,
                          const vector<int>& modulationEnds) :
-            size(size), nSections(nSections), tonalities(tonalities),
+            size(size), nProgressions(nSections), tonalities(tonalities),
             modulationTypes(modulationTypes),
             modulationStarts(modulationStarts),
             modulationEnds(modulationEnds) {}
@@ -29,7 +29,7 @@ public:
     /**                        getters                        **/
     int get_size() const { return size; }
 
-    int get_nSections() const { return nSections; }
+    int get_nProgressions() const { return nProgressions; }
 
     Tonality* get_tonality(int index) const { return tonalities[index]; }
 

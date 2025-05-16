@@ -7,7 +7,7 @@
 string TonalPieceParameters::toString() const {
     string message = "Tonal Piece Parameters:\n";
     message += "Number of chords: " + to_string(size) + "\n";
-    message += "Number of sections: " + to_string(nSections) + "\n";
+    message += "Number of sections: " + to_string(nProgressions) + "\n";
     message += "Tonalities: ";
     for (const auto& t : tonalities) {
         message += t->get_name() + " ";
