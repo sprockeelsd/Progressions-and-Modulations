@@ -14,7 +14,9 @@ CHORD_GENERATOR_FILES = $(SRC_DIR)/ChordGeneratorUtilities.cpp \
 						$(SRC_DIR)/MusicalParts.cpp \
 						$(SRC_DIR)/ChordProgression.cpp \
 						$(SRC_DIR)/Modulation.cpp \
-						$(SRC_DIR)/TonalPiece.cpp
+						$(SRC_DIR)/TonalPieceParameters.cpp \
+						$(SRC_DIR)/TonalPiece.cpp \
+						$(SRC_DIR)/HarmoniserSolver.cpp \
 
 compile: clean
 	g++ -std=c++11 -F/Library/Frameworks -framework gecode -o out/main \
