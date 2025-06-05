@@ -12,13 +12,14 @@ int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
 
     // parameters of the layer 2 problem
-    int size = 10;
+    int size = 4;
     Tonality* Cminor = new MinorTonality(C);    Tonality* Ebmajor = new MajorTonality(E_FLAT);
     Tonality* Gmajor = new MajorTonality(G);    Tonality* Bbmajor = new MajorTonality(B_FLAT);
-    vector<Tonality*> tonalities = {Bbmajor, Gmajor};
+    Tonality* Dmajor = new MajorTonality(D);    Tonality* Cmajor = new MajorTonality(C);
+    vector<Tonality*> tonalities = {Cmajor, Dmajor};
     vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
-    vector<int> modulationStarts = {3};
-    vector<int> modulationEnds = {4};
+    vector<int> modulationStarts = {1};
+    vector<int> modulationEnds = {2};
 
     auto params = TonalPieceParameters(size, static_cast<int>(tonalities.size()), tonalities,
                                        modulationTypes, modulationStarts, modulationEnds);
