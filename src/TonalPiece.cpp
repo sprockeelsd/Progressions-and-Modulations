@@ -93,7 +93,7 @@ TonalPiece::TonalPiece(TonalPiece &s) : Space(s){
 string TonalPiece::toString() const {
     string txt = "------------------------------------------------------TonalPiece object------------------------------"
                  "------------------------\n";
-    txt += "Parameters: n" + parameters->toString();
+    txt += "Parameters: \n" + parameters->toString();
 
     txt += "States:\t\t\t"                  + intVarArray_to_string(states)                         + "\n";
     txt += "Qualities:\t\t"                 + intVarArray_to_string(qualities)                      + "\n";

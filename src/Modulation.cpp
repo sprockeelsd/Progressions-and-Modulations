@@ -84,6 +84,7 @@ void Modulation::perfect_cadence_modulation(const Home &home) {
  * @param home the search space
  */
 void Modulation::pivot_chord_modulation(const Home &home) {
+    //todo the pivot chord must be I,II,IV,V,VI in the new tonality
     /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
     int mod_start_in_from = start - from->getStart();
     rel(home, from->getChords()[mod_start_in_from] != SEVENTH_DEGREE);
@@ -163,45 +164,49 @@ void Modulation::alteration_modulation(Home home) {
  */
 void Modulation::secondary_dominant_modulation(const Home& home) {
     rel(home, to->getChords()[0] == FIFTH_DEGREE); /// The first chord of the new tonality must be the V chord
+    rel(home, from->getChords()[from->getDuration() - 1] <= SEVENTH_DEGREE); /// The last chord before the V must be diatonic
 
     /// calculer la distance entre les tonalités ( abs(dest - orig) % 7),
-    int tonics_interval = abs(to->getTonality()->get_tonic() - from->getTonality()->get_tonic()) % PERFECT_OCTAVE;
-    int absolute_tonics_interval = 0;
+    int tonics_interval = (to->getTonality()->get_tonic() - from->getTonality()->get_tonic()) % PERFECT_OCTAVE;
+    //std::cout << "tonics interval: " << tonics_interval << std::endl;
+    if (tonics_interval < 0)
+        tonics_interval = PERFECT_OCTAVE + tonics_interval; /// reverse it -> descending third = ascending sixth
+    int degree_tonics_interval = 0;
     switch (tonics_interval){
         case MINOR_SECOND:
         case MAJOR_SECOND:
-            absolute_tonics_interval = 1;
+            degree_tonics_interval = 1;
             break;
         case MINOR_THIRD:
         case MAJOR_THIRD:
-            absolute_tonics_interval = 2;
+            degree_tonics_interval = 2;
             break;
         case PERFECT_FOURTH:
-            absolute_tonics_interval = 3;
+            degree_tonics_interval = 3;
             break;
         case PERFECT_FIFTH:
-            absolute_tonics_interval = 4;
+            degree_tonics_interval = 4;
             break;
         case MINOR_SIXTH:
         case MAJOR_SIXTH:
-            absolute_tonics_interval = 5;
+            degree_tonics_interval = 5;
             break;
         case MINOR_SEVENTH:
         case MAJOR_SEVENTH:
-            absolute_tonics_interval = 6;
+            degree_tonics_interval = 6;
             break;
         default:
             break;
     }
-    //std::cout << "absolute tonic intervals: " << absolute_tonics_interval << std::endl;
+    //std::cout << "degree tonic intervals: " << degree_tonics_interval << std::endl;
 
-    int degree_of_new_seventh_in_from = (absolute_tonics_interval + 6) % 7;
+    int degree_of_new_seventh_in_from = (degree_tonics_interval + 6) % 7;
     //std::cout << "degree of new seventh in from: " << degree_of_new_seventh_in_from << std::endl;
 
-    /// this degree must be in the last chord of the first tonality
-    rel(home, expr(home, from->getRoots()[from->getDuration()-2] == degree_of_new_seventh_in_from ||
-                            from->getThirds()[from->getDuration()-2] == degree_of_new_seventh_in_from ||
-                            from->getFifths()[from->getDuration()-2] == degree_of_new_seventh_in_from));
+    /// this degree must be in the chord before the V
+    rel(home, expr(home, from->getRoots()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
+                            from->getThirds()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
+                            from->getFifths()[from->getDuration()-1] == degree_of_new_seventh_in_from));
 }
 
 /**
