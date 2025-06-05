@@ -72,8 +72,8 @@ TonalPieceParameters::TonalPieceParameters(int size, int nSections, const vector
                  * example: C Major (I ... (V/V) I ...) G Major
                  */
             case SECONDARY_DOMINANT_MODULATION: {
-                progressionsStarts        .push_back(modulationStarts[i]);
-                progressionsDurations     .push_back(modulationStarts[i] - progressionsStarts[i] +1);
+                progressionsStarts        .push_back(modulationStarts[i] + 1);
+                progressionsDurations     .push_back(modulationStarts[i] - progressionsStarts[i] + 1);
                 // the phrase ends before the first chord of the modulation. This ensures proper voicing for the secondary dominant resolution.
                 int first_chord_of_mod = modulationStarts[i];
                 phraseEnds.push_back(first_chord_of_mod - 1);

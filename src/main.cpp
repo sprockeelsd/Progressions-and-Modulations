@@ -12,16 +12,16 @@ int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
 
     // parameters of the layer 2 problem
-    int size = 20;
+    int size = 10;
     Tonality* Cminor = new MinorTonality(C);    Tonality* Ebmajor = new MajorTonality(E_FLAT);
-    vector<Tonality*> tonalities = {Cminor, Ebmajor};
+    Tonality* Gmajor = new MajorTonality(G);    Tonality* Bbmajor = new MajorTonality(B_FLAT);
+    vector<Tonality*> tonalities = {Bbmajor, Gmajor};
     vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
-    vector<int> modulationStarts = {12};
-    vector<int> modulationEnds = {13};
+    vector<int> modulationStarts = {3};
+    vector<int> modulationEnds = {4};
 
     auto params = TonalPieceParameters(size, static_cast<int>(tonalities.size()), tonalities,
                                        modulationTypes, modulationStarts, modulationEnds);
-
     // Create an instance of the layer 2 problem (progressions and modulations)
     auto tonalPiece = new TonalPiece(&params);
 
@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
 
     // create the parameters for the four voice texture problem
     auto pieceParams = new FourVoiceTextureParameters(size, static_cast<int>(tonalities.size()), sectionParams, modulationParams);
+    std::cout << pieceParams->toString() << std::endl;
 
     // Search options
     Options opts;
