@@ -1,6 +1,6 @@
 # ChordProgression
 This repository is home to a Constraint programming project aiming to generate 
-successions of chords respecting the rules of tonal music. It can produce chord progressions
+successions of chords respecting the rules of tonal music that is part of the ***Harmoniser*** project. It can produce chord progressions
 expressed as chord degrees in a tonality along with a quality and a state, and can account for 
 modulations. 
 It uses [Diatony](https://github.com/sprockeelsd/Diatony) to generate a 4-voice texture 
@@ -10,7 +10,7 @@ that are essential to tonal harmony, as well as optional rules (e.g. forcing cad
 at certain points in the progression) that composers can use to enforce their personal 
 preferences. It is planned to tie this program to an interface in the future to make 
 it easier to use by composers. The details of the model along with a mathematical explanation 
-and the description of the global project can be found in **todo add the paper to the repo**.
+and the description of the global project can be found [here](http://hdl.handle.net/2078.1/301819).
 
 ## Structure
 The repository is organised as follows: 
@@ -18,13 +18,13 @@ The repository is organised as follows:
 allows to control what version of Diatony is used, to make sure that new additions 
 to the former don't break this program.
 - The ***headers*** folder contains all the header files inherent to this project. 
-It contains the code that has no logical function, mainly the music theory matrices.
+It contains the code that has no logical function, mainly the music theory matrices, and the declaration of the different classes and functions.
 - The ***out*** folder contains all the generated files.
 - The ***src*** folder contains the source code for the problem, including the 
 constraints' definition and a main function showing how the model can be used.
 
 ## Makefile
-The makefile compiles all the files from the Diatony Library, and offers different 
+The makefile compiles all the files from the Diatony Library using the variables defined in the Diatony MakeFile, and offers different 
 targets:
 - clean: removes all generated temporary files.
 - compile: executes the "clean" target and compiles all the necessary files, and 
