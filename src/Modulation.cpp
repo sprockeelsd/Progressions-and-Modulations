@@ -14,36 +14,40 @@
  * @param from the chord progression to modulate from
  * @param to the chord progression to modulate to
  */
-Modulation::Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to):
-                        type(type), start(start), end(end), from(from), to(to){
+Modulation::Modulation(const Home& home, const int type, const int start, const int end, ChordProgression *from, ChordProgression *to):
+    type(type), start(start), end(end), from(from), to(to){
+    /// post the constraints based on the type of modulation
     switch(type){
-            /**
-             * The first tonality ends on a perfect cadence. Then the next tonality starts
-             */
+        /**
+         * The first tonality ends on a perfect cadence. Then the next tonality starts
+         */
         case PERFECT_CADENCE_MODULATION:
             if(end - start != 1)
                 throw std::invalid_argument("A perfect cadence modulation must last exactly 2 chords");
             perfect_cadence_modulation(home);
             break;
-            /**
-             * A pivot chord (common to both tonalities) is introduced in the first tonality. Then, the rules for both
-             * tonalities are applied until there is a perfect cadence in the new tonality
-             */
+        /**
+         * A pivot chord (common to both tonalities) is introduced in the first tonality. Then, the rules for both
+         * tonalities are applied until there is a perfect cadence in the new tonality
+         */
         case PIVOT_CHORD_MODULATION: //todo check that chromatic chords are accepted as well)
             if(end - start < 2)
                 throw std::invalid_argument("A pivot chord modulation must last at least 3 chords");
             pivot_chord_modulation(home);
             break;
-            /**
-             * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
-             * It must be followed by the V chord in the new tonality
-             */
+        /**
+         * The tonality changes by using a chord from the new key that contains a note that is not in the previous key.
+         * It must be followed by the V chord in the new tonality
+         */
         case ALTERATION_MODULATION:
             if(end - start != 2)
                 throw std::invalid_argument("An alteration modulation must last exactly 3 chords");
             alteration_modulation(home);
             break;
-        case SECONDARY_DOMINANT_MODULATION:
+        /**
+         * A dominant seventh chord is introduced in the new tonality, that resolves to the I
+         */
+        case CHROMATIC_MODULATION:
             if(end - start != 1)
                 throw std::invalid_argument("A secondary dominant modulation must last exactly 2 chords");
             secondary_dominant_modulation(home);
@@ -56,22 +60,20 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
 /**
  * Copy constructor
  * @param home the search space
- * @param s a Modulation object
+ * @param m a Modulation object
  */
 Modulation::Modulation(const Home &home, const Modulation& m){
-    type = m.type;
-    start = m.start;
-    end = m.end;
+    type = m.type;      start = m.start;        end = m.end;
     from = new ChordProgression(home, *m.from);
     to = new ChordProgression(home, *m.to);
 }
 
 /**
  * This function posts the constraints for a perfect cadence modulation. It ensures that the first chord progression
- * ends on a perfect cadence.
+ * ends in a perfect cadence.
  * @param home the search space
  */
-void Modulation::perfect_cadence_modulation(const Home &home) {
+void Modulation::perfect_cadence_modulation(const Home &home) const {
     ///Add a perfect cadence constraint to the end of the first tonality
     cadence(home, from->getDuration()-2, PERFECT_CADENCE, from->getStates(), from->getChords(),
             from->getHasSeventh());
@@ -83,10 +85,10 @@ void Modulation::perfect_cadence_modulation(const Home &home) {
  * cadence in the new tonality
  * @param home the search space
  */
-void Modulation::pivot_chord_modulation(const Home &home) {
+void Modulation::pivot_chord_modulation(const Home &home) const {
     //todo the pivot chord must be I,II,IV,V,VI in the new tonality
     /// The pivot chord (last from the first tonality and first from the second tonality) must be a diatonic or borrowed chord (not VII)
-    int mod_start_in_from = start - from->getStart();
+    const int mod_start_in_from = start - from->getStart();
     rel(home, from->getChords()[mod_start_in_from] != SEVENTH_DEGREE);
     ///The modulation must end on a perfect cadence in the new tonality
     cadence(home, end-1 - to->getStart(), PERFECT_CADENCE, to->getStates(),
@@ -99,7 +101,7 @@ void Modulation::pivot_chord_modulation(const Home &home) {
  * enforces that the V chord of the new tonality must be at the second or third position in the new tonality's section.
  * @param home the search space
  */
-void Modulation::alteration_modulation(Home home) {
+void Modulation::alteration_modulation(Home home) const {
     /// The last chord of the first tonality must be diatonic and not the seventh degree without a seventh
     rel(home, from->getChords()[from->getDuration()-1] < SEVENTH_DEGREE);
     rel(home, from->getHasSeventh()[from->getDuration()-1] == 0);
@@ -122,7 +124,7 @@ void Modulation::alteration_modulation(Home home) {
             t1degreeNotes.push_back(i); /// add it at the end
         }
     }
-    IntArgs t1Notes(t1degreeNotes); /// Create the argument array for the constraint
+    const IntArgs t1Notes(t1degreeNotes); /// Create the argument array for the constraint
 
     /// Get the quality associated to each degree in the first tonality. Then, add -1 for every note that is not associated
     /// to a degree in the tonality. This way, we can use an element constraint to link the degree and the quality
@@ -133,11 +135,11 @@ void Modulation::alteration_modulation(Home home) {
     while(t1QualitiesDegrees.size() < t1degreeNotes.size()) {
         t1QualitiesDegrees.push_back(-1); /// fake qualities to have the right number of elements
     }
-    IntArgs t1Qualities(t1QualitiesDegrees); /// Create the argument array for the constraint
+    const IntArgs t1Qualities(t1QualitiesDegrees); /// Create the argument array for the constraint
 
     /// The corresponding degree and quality in T1 for the note in the new tonality
-    IntVar degreeInT1(home, FIRST_DEGREE, PERFECT_OCTAVE - 1); /// If it is not in the tonality, it is above the seventh degree
-    IntVar qualityInT1(home, -1, AUGMENTED_CHORD); /// Simplified quality without the seventh in T1
+    const IntVar degreeInT1(home, FIRST_DEGREE, PERFECT_OCTAVE - 1); /// If it is not in the tonality, it is above the seventh degree
+    const IntVar qualityInT1(home, -1, AUGMENTED_CHORD); /// Simplified quality without the seventh in T1
 
     /// degreeInT1 is the degree corresponding to the note in the first tonality. If it does not exist,
     /// it has a fake degree value (above seventh degree)
@@ -147,9 +149,9 @@ void Modulation::alteration_modulation(Home home) {
     /// the quality of the chord in the new tonality cannot be the same as the quality for the same note in t1.
     /// if the note is not in t1, it is always true because quality is -1. Otherwise the constraint is enforced.
     rel(home, qualityInT1 != to->getQualitiesWithoutSeventh()[0]);
-    //element(home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1)); old version, not working
+    // element (home, majorDegreeQualities, expr(home, degreeInT1 * nSupportedQualities + qualityInT1), expr(home,!isRootNoteInT1)); old version, not working
 
-    BoolVar canNextChordBeV(home, 0, 1); /// If the next chord can be the V chord
+    const BoolVar canNextChordBeV(home, 0, 1); /// If the next chord can be the V chord
     element(home, tonalTransitions, expr(home, to->getChords()[0] * nSupportedChords + FIFTH_DEGREE), canNextChordBeV);
     /// If the next chord can be the V, then it is
     rel(home, canNextChordBeV, BOT_EQV, expr(home, to->getChords()[1] == FIFTH_DEGREE), true);
@@ -162,13 +164,12 @@ void Modulation::alteration_modulation(Home home) {
  * is the V chord, and that the last chord of the first tonality contains the note below the leading tone of the new tonality.
  * @param home the search space
  */
-void Modulation::secondary_dominant_modulation(const Home& home) {
+void Modulation::secondary_dominant_modulation(const Home& home) const {
     rel(home, to->getChords()[0] == FIFTH_DEGREE); /// The first chord of the new tonality must be the V chord
     rel(home, from->getChords()[from->getDuration() - 1] <= SEVENTH_DEGREE); /// The last chord before the V must be diatonic
 
     /// calculer la distance entre les tonalités ( abs(dest - orig) % 7),
     int tonics_interval = (to->getTonality()->get_tonic() - from->getTonality()->get_tonic()) % PERFECT_OCTAVE;
-    //std::cout << "tonics interval: " << tonics_interval << std::endl;
     if (tonics_interval < 0)
         tonics_interval = PERFECT_OCTAVE + tonics_interval; /// reverse it -> descending third = ascending sixth
     int degree_tonics_interval = 0;
@@ -198,11 +199,8 @@ void Modulation::secondary_dominant_modulation(const Home& home) {
         default:
             break;
     }
-    //std::cout << "degree tonic intervals: " << degree_tonics_interval << std::endl;
 
-    int degree_of_new_seventh_in_from = (degree_tonics_interval + 6) % 7;
-    //std::cout << "degree of new seventh in from: " << degree_of_new_seventh_in_from << std::endl;
-
+    const int degree_of_new_seventh_in_from = (degree_tonics_interval + 6) % 7;
     /// this degree must be in the chord before the V
     rel(home, expr(home, from->getRoots()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
                             from->getThirds()[from->getDuration()-1] == degree_of_new_seventh_in_from ||
@@ -213,7 +211,7 @@ void Modulation::secondary_dominant_modulation(const Home& home) {
  * Returns a string with each of the object's field values as integers.
  * @return
  */
-string Modulation::toString() {
+string Modulation::toString() const {
     string txt;
     txt += "------------------------Modulation object------------------------\n";
     txt += "Type: " + to_string(type) + "\n";
@@ -221,7 +219,6 @@ string Modulation::toString() {
     txt += "End: " + to_string(end) + "\n";
     txt += "From: " + from->getTonality()->get_name() + "\n";
     txt += "To: " + to->getTonality()->get_name() + "\n";
-
     return txt;
 }
 
@@ -229,12 +226,12 @@ string Modulation::toString() {
  * Returns a string representing the piece in a prettier format, more readable.
  * @return
  */
-string Modulation::pretty() {
+string Modulation::pretty() const {
     string txt;
     try{
         txt += "from " + from->getTonality()->get_name() + " to " + to->getTonality()->get_name() + " (" + modulation_type_names[type] + ")";
     }
-    catch(exception& e){
+    catch(...){
         std::cout << "Some variables are unbound in the modulation object" << std::endl;
     }
     return txt;

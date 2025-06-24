@@ -8,6 +8,7 @@
 #include "../headers/HarmoniserSolver.hpp"
 
 // todo ajouter les 64 de passage (cst en plus du coup)
+// todo rename secondary dominant modulation to chromatic modulation
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
 
@@ -17,7 +18,7 @@ int main(int argc, char **argv) {
     Tonality* Gmajor = new MajorTonality(G);    Tonality* Bbmajor = new MajorTonality(B_FLAT);
     Tonality* Dmajor = new MajorTonality(D);    Tonality* Cmajor = new MajorTonality(C);
     vector<Tonality*> tonalities = {Cmajor, Dmajor};
-    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
+    vector<int> modulationTypes = {CHROMATIC_MODULATION};
     vector<int> modulationStarts = {1};
     vector<int> modulationEnds = {2};
 

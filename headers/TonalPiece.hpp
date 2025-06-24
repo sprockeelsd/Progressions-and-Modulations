@@ -15,7 +15,7 @@
  * but does so by calling other classes (ChordProgression and Modulation).
  *
  * It contains variable arrays for states, qualities and root notes of chords, allowing the different tonalities to
- * communicate with each other, for modulations for example.
+ * communicate with each other, for modulations, for example.
  * It instantiates a ChordProgression object for each tonality, which will post the constraints for chord progressions
  * in a single tonality.
  * It also instantiates a Modulation object for each modulation, which will post the constraints for the modulation based
@@ -45,12 +45,13 @@ private:
 public:
     /**
      * Constructor for TonalPiece objects.
-     * It initialises the variable arrays, and links the auxiliary array to the main ones. Assuming the parameters are
+     * It initializes the variable arrays, and links the auxiliary array to the main ones. Assuming the parameters are
      * correct, it computes the starting position and duration of each tonality, and creates the ChordProgression and
      * Modulation objects. It also posts the branching. It is done in this order: First, branch on the chord degrees
      * for each tonality, then branch on states and qualities if necessary.
+     * @param params a TonalPieceParameters object that contains the parameters for the piece
      */
-    TonalPiece(TonalPieceParameters* params);
+    explicit TonalPiece(TonalPieceParameters* params);
 
     /**
      * @brief Copy constructor

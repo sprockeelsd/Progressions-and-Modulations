@@ -23,17 +23,17 @@
  * @return a ChordProgression object
  */
 ChordProgression::
-ChordProgression(Home home, int start, int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
+ChordProgression(Home home, const int start, const int duration, Tonality *tonality, IntVarArray states, IntVarArray qualities,
                  IntVarArray qualitiesWithoutSeventh, IntVarArray rootNotes, IntVarArray hasSeventh,
-                 double minPercentChromaticChords, double maxPercentChromaticChords, double minPercentSeventhChords,
-                 double maxPercentSeventhChords) {
+                 const double minPercentChromaticChords, const double maxPercentChromaticChords, const double minPercentSeventhChords,
+                 const double maxPercentSeventhChords) {
 
     this->start                     = start;
     this->duration                  = duration;
-    this->minChromaticChords        = (int) (minPercentChromaticChords  * duration);    /// converts % into a number
-    this->maxChromaticChords        = (int) (maxPercentChromaticChords  * duration);
-    this->minSeventhChords          = (int) (minPercentSeventhChords    * duration);
-    this->maxSeventhChords          = (int) (maxPercentSeventhChords    * duration);
+    this->minChromaticChords        = static_cast<int>(minPercentChromaticChords * duration);    /// converts % into a number
+    this->maxChromaticChords        = static_cast<int>(maxPercentChromaticChords * duration);
+    this->minSeventhChords          = static_cast<int>(minPercentSeventhChords * duration);
+    this->maxSeventhChords          = static_cast<int>(maxPercentSeventhChords * duration);
 
     this->tonality                  = tonality;
 
@@ -144,7 +144,7 @@ string ChordProgression::pretty() const{ //todo change the representation so tha
         }
         txt += "Chords: " + degs + "\nStates: " + stas + "\n";
     }
-    catch(exception &e){
+    catch(...){
         std::cout << "Some variables are unbound in the chord progression object" << std::endl;
     }
     return txt;
