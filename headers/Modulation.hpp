@@ -9,19 +9,15 @@
 #include "ChordProgression.hpp"
 
 /**
- * This class represents a modulation between two tonalities. It takes as argument a search space, a type of modulation,
+ * This class represents a modulation between two progressions in two tonalities. It takes as argument a search space, a type of modulation,
  * a start position, and end position as well as two chord progressions to modulate between.
- *
  * It posts constraints based on the type of modulation on the variables from the chord progressions.
  */
 class Modulation {
 private:
-    int type;                   /// the type of modulation
-    int start;                  /// the starting position of the modulation
-    int end;                    /// the ending position of the modulation
+    int type;       int start;      int end;
 
-    ChordProgression* from;     /// the chord progression to modulate from
-    ChordProgression* to;       /// the chord progression to modulate to
+    ChordProgression* from;    ChordProgression* to;
 
 public:
     /**
@@ -34,21 +30,21 @@ public:
      * @param from the chord progression to modulate from
      * @param to the chord progression to modulate to
      */
-    Modulation(Home home, int type, int start, int end, ChordProgression *from, ChordProgression *to);
+    Modulation(const Home& home, int type, int start, int end, ChordProgression *from, ChordProgression *to);
 
     /**
      * Copy constructor
      * @param home the search space
-     * @param s a Modulation object
+     * @param m a Modulation object
      */
     Modulation(const Home &home, const Modulation& m);
 
     /**
      * This function posts the constraints for a perfect cadence modulation. It ensures that the first chord progression
-     * ends on a perfect cadence.
+     * ends in a perfect cadence.
      * @param home the search space
      */
-    void perfect_cadence_modulation(const Home &home);
+    void perfect_cadence_modulation(const Home &home) const;
 
     /**
      * This function posts the constraints for a pivot chord modulation. It ensures that from the start of the modulation
@@ -56,34 +52,34 @@ public:
      * cadence in the new tonality
      * @param home the search space
      */
-    void pivot_chord_modulation(const Home &home);
+    void pivot_chord_modulation(const Home &home) const;
 
     /**
      * This function posts the constraints for an alteration modulation. It ensures that the first tonality ends on a diatonic
-     * chord, and that the first chord of the new tonality contains at least one note that is not in the first tonality. It also
+     * chord, and that the first chord of the new tonality contains at least one note not in the first tonality. It also
      * enforces that the V chord of the new tonality must be at the second or third position in the new tonality's section.
      * @param home the search space
      */
-    void alteration_modulation(Home home);
+    void alteration_modulation(Home home) const;
 
     /**
      * This function posts the constraints for a secondary dominant modulation. It ensures that the first chord of the new tonality
      * is the V chord, and that the last chord of the first tonality contains the note below the leading tone of the new tonality.
      * @param home the search space
      */
-    void secondary_dominant_modulation(const Home& home);
+    void secondary_dominant_modulation(const Home& home) const;
 
     /**
      * Returns a string with each of the object's field values as integers.
      * @return
      */
-    string toString();
+    string toString() const;
 
     /**
      * Returns a string representing the piece in a prettier format, more readable.
      * @return
      */
-    string pretty();
+    string pretty() const;
 };
 
 #endif //CHORDGENERATOR_MODULATION_HPP
