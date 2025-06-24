@@ -43,7 +43,7 @@ Modulation::Modulation(Home home, int type, int start, int end, ChordProgression
                 throw std::invalid_argument("An alteration modulation must last exactly 3 chords");
             alteration_modulation(home);
             break;
-        case SECONDARY_DOMINANT_MODULATION:
+        case CHROMATIC_MODULATION:
             if(end - start != 1)
                 throw std::invalid_argument("A secondary dominant modulation must last exactly 2 chords");
             secondary_dominant_modulation(home);

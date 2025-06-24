@@ -71,7 +71,7 @@ TonalPieceParameters::TonalPieceParameters(int size, int nSections, const vector
                  * first tonality and the V chord in the new tonality.
                  * example: C Major (I ... (V/V) I ...) G Major
                  */
-            case SECONDARY_DOMINANT_MODULATION: {
+            case CHROMATIC_MODULATION: {
                 progressionsStarts        .push_back(modulationStarts[i] + 1);
                 progressionsDurations     .push_back(modulationStarts[i] - progressionsStarts[i] + 1);
                 // the phrase ends before the first chord of the modulation. This ensures proper voicing for the secondary dominant resolution.
