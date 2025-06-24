@@ -27,11 +27,11 @@ using namespace Gecode;
  * @param minSeventhChords the minimum number of seventh chords in the progression
  * @param maxSeventhChords the maximum number of seventh chords in the progression
  */
-void tonal_progression(Home home, int size, Tonality *tonality, IntVarArray &states, IntVarArray &qualities,
-                       IntVarArray &rootNotes, IntVarArray &chords, IntVarArray &bassDegrees, IntVarArray &isChromatic,
-                       IntVarArray &hasSeventh, const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths,
-                       const IntVarArray& sevenths, int minChromaticChords, int maxChromaticChords, int minSeventhChords,
-                       int maxSeventhChords) {
+void tonal_progression(const Home& home, const int size, Tonality *tonality, const IntVarArray &states, const IntVarArray &qualities,
+                       const IntVarArray &rootNotes, const IntVarArray &chords, const IntVarArray &bassDegrees, const IntVarArray &isChromatic,
+                       const IntVarArray &hasSeventh, const IntVarArray& roots, const IntVarArray& thirds, const IntVarArray& fifths,
+                       const IntVarArray& sevenths, const int minChromaticChords, const int maxChromaticChords, const int minSeventhChords,
+                       const int maxSeventhChords) {
     ///1. chord[i] -> chord[i+1] is possible
     chord_transitions(home, size, chords);
 

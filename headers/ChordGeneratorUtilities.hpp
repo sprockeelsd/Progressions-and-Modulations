@@ -8,17 +8,12 @@
 #include "../Diatony/c++/headers/diatony/FourVoiceTexture.hpp"
 #include "../Diatony/c++/headers/diatony/SolveDiatony.hpp"
 
-
+//todo move all this to Tonality classes
 
 ///The number of supported chords, which is the size of the tonalTransitions matrix
-const int nSupportedChords = 16;
-///Defines possible chord successions. This enforces the following rules:
-///1. The degree succession is correct
-///2. Tension chords must resolve (V, V/X, VIId)
-///3. Chords that can go to V can also go to Vda
-///4. Chords that can go to X can also go to V/X
+constexpr int nSupportedChords = 16;
+///Defines possible chord successions.
 const IntArgs tonalTransitions = {
-        //todo move this to tonality
 ///     I,    II,   III,    IV,     V,    VI,   VII,   Vda,  V/II, V/III,  V/IV,   V/V,  V/VI, V/VII,   bII, 6te_a
         1,     1,     1,     1,     1,     1,     1,     0,     1,     1,     1,     1,     1,     1,     1,     1,    /// I
         1,     1,     0,     1,     1,     0,     0,     1,     0,     0,     1,     1,     0,     0,     0,     0,    /// II
@@ -39,7 +34,7 @@ const IntArgs tonalTransitions = {
 };
 
 ///The number of supported states, which is the size of the degreeStates matrix
-const int nSupportedStates = 5;
+constexpr int nSupportedStates = 5;
 ///Defines which states can be taken by chords based on their degree
 const IntArgs degreeStates = {
 ///     fundamental state,    first inversion,   second inversion,    third inversion,      fourth inversion
@@ -62,10 +57,9 @@ const IntArgs degreeStates = {
 };
 
 ///The number of supported qualities, which is the size of the majorDegreeQualities matrix
-const int nSupportedQualities = 13;
+constexpr int nSupportedQualities = 13;
 ///Defines which qualities can be taken by chords based on their degree
-//todo unlock 7 chords when the basis for perfect chords is ok, also add alternative chords like mIV in major or mV in minor
-//todo move this to major tonality and do the same for minor tonality
+//todo add alternative chords like mIV in major or mV in minor
 //todo add 9th etc
 const IntArgs majorDegreeQualities = {
 ///     M,  m,  dim,    aug, Augmented Sixth,   7,  M7,     m7,     dim7, half dim,    mM7,   major_ninth_dom, minor_ninth_dom
@@ -107,7 +101,6 @@ const IntArgs minorDegreeQualities = {
         0,  0,    0,      0,               1,   0,   0,      0,        0,        0,     0,                 0,              0,    /// 6te_a
 };
 
-//todo put this in Tonality
 const IntArgs bassBasedOnDegreeAndState = {
 ///                  root,              third,              fifth,            seventh,                nineth
 ///     fundamental state,    first inversion,   second inversion,    third inversion,      fourth inversion
@@ -129,8 +122,20 @@ const IntArgs bassBasedOnDegreeAndState = {
              SIXTH_DEGREE,       FIRST_DEGREE,       THIRD_DEGREE,      FOURTH_DEGREE,         SECOND_DEGREE,         /// 6te_a
 };
 
+//todo move these functions to the Utility class
+
+/**
+ * Converts an IntVarArray to a pointer to an array of integers.
+ * @param vars The IntVarArray to convert.
+ * @return A pointer to an array of integers representing the values in the IntVarArray.
+ */
 int* IntVarArray_to_int_pointer(IntVarArray vars);
 
-vector<int> IntVarArray_to_int_vector(const IntVarArray& vars);
+/**
+ * Converts an IntVarArray to a vector of integers.
+ * @param vars The IntVarArray to convert.
+ * @return A vector of integers representing the values in the IntVarArray.
+ */
+ vector<int> IntVarArray_to_int_vector(const IntVarArray& vars);
 
 #endif //CHORDGENERATOR_CHORDGENERATORUTILITIES_HPP

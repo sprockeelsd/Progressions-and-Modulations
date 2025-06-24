@@ -8,20 +8,22 @@
 #include "../headers/HarmoniserSolver.hpp"
 
 // todo ajouter les 64 de passage (cst en plus du coup)
+// todo rename secondary dominant modulation to chromatic modulation
 int main(int argc, char **argv) {
     string four_voice = argv[1]; /// true if we want to generate the 4voice chords, false if we just want chords and state
 
     // parameters of the layer 2 problem
-    int size = 20;
+    int size = 4;
     Tonality* Cminor = new MinorTonality(C);    Tonality* Ebmajor = new MajorTonality(E_FLAT);
-    vector<Tonality*> tonalities = {Cminor, Ebmajor};
-    vector<int> modulationTypes = {SECONDARY_DOMINANT_MODULATION};
-    vector<int> modulationStarts = {12};
-    vector<int> modulationEnds = {13};
+    Tonality* Gmajor = new MajorTonality(G);    Tonality* Bbmajor = new MajorTonality(B_FLAT);
+    Tonality* Dmajor = new MajorTonality(D);    Tonality* Cmajor = new MajorTonality(C);
+    vector<Tonality*> tonalities = {Cmajor, Dmajor};
+    vector<int> modulationTypes = {CHROMATIC_MODULATION};
+    vector<int> modulationStarts = {1};
+    vector<int> modulationEnds = {2};
 
     auto params = TonalPieceParameters(size, static_cast<int>(tonalities.size()), tonalities,
                                        modulationTypes, modulationStarts, modulationEnds);
-
     // Create an instance of the layer 2 problem (progressions and modulations)
     auto tonalPiece = new TonalPiece(&params);
 
@@ -62,6 +64,7 @@ int main(int argc, char **argv) {
 
     // create the parameters for the four voice texture problem
     auto pieceParams = new FourVoiceTextureParameters(size, static_cast<int>(tonalities.size()), sectionParams, modulationParams);
+    std::cout << pieceParams->toString() << std::endl;
 
     // Search options
     Options opts;
