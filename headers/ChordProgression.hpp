@@ -18,7 +18,7 @@
  * auxiliary variable arrays for the bass notes, whether the chord is chromatic or has a seventh, and each degree
  * constituting the chords.
  *
- * It requires as argument a starting position in the global piece, a duration, a tonality, and the global variable
+ * It requires an argument a starting position in the global piece, a duration, a tonality, and the global variable
  * arrays. It can take optional parameters for the minimum and maximum number of chromatic and seventh chords in the
  * piece.
  */
@@ -29,13 +29,13 @@ private:
     Tonality* tonality;                          /// the tonality of the piece
 
     /// optional parameters
-    int minChromaticChords;                      /// the min number of chromatic chords that are allowed in the progression(V/x, bII, 6te_a)
+    int minChromaticChords;                      /// the min number of chromatic chords that are allowed in the progression (V/x, bII, 6te_a)
     int maxChromaticChords;                      /// the max number of chromatic chords that are allowed in the progression
     int minSeventhChords;                        /// the min number of seventh chords that are allowed in the progression
     int maxSeventhChords;                        /// the max number of seventh chords that are allowed in the progression
 
     /// Decision variable array
-    IntVarArray chords;                          /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X,bII,6te_a)
+    IntVarArray chords;                          /// the chords of the progression expressed as degrees (I -> VII + Vda, °7, V/X, bII,6te_a)
 
     /// Subsets of global variable arrays
     IntVarArray states;                          /// the states of the chords (fundamental, first inversion, ...)
