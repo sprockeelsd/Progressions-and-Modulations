@@ -4,9 +4,14 @@
 
 #include "../headers/ChordGeneratorUtilities.hpp"
 
+/**
+ * Converts an IntVarArray to a pointer to an array of integers.
+ * @param vars The IntVarArray to convert.
+ * @return A pointer to an array of integers representing the values in the IntVarArray.
+ */
 int* IntVarArray_to_int_pointer(IntVarArray vars){
     try{
-        int* res = new int[vars.size()];
+        const auto res = new int[vars.size()];
         for(int i = 0; i < vars.size(); i++){
             res[i] = vars[i].val();
         }
@@ -17,6 +22,11 @@ int* IntVarArray_to_int_pointer(IntVarArray vars){
     }
 }
 
+/**
+ * Converts an IntVarArray to a vector of integers.
+ * @param vars The IntVarArray to convert.
+ * @return A vector of integers representing the values in the IntVarArray.
+ */
 vector<int> IntVarArray_to_int_vector(const IntVarArray& vars){
     try{
         vector<int> res;
